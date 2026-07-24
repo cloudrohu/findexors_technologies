@@ -1,0 +1,74 @@
+from django.contrib import admin
+from mptt.admin import DraggableMPTTAdmin
+from import_export.admin import ImportExportModelAdmin
+from apps.utility.models import Location,PostalCode
+
+@admin.register(Location)
+class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
+    mptt_indent_field = "name"
+
+    list_display = (
+        "tree_actions",
+        "indented_title",
+        "location_type",
+        "is_top_city",
+        "is_active",
+    )
+
+    list_display_links = (
+        "indented_title",
+    )
+
+    search_fields = (
+        "name",
+        "code",
+        "slug",
+    )
+
+    list_filter = (
+        "location_type",
+        "is_active",
+        "is_top_city",
+    )
+
+    list_editable = (
+        "is_top_city",
+        "is_active",
+    )
+
+    prepopulated_fields = {
+        "slug": ("name",),
+    }
+
+    ordering = (
+        "tree_id",
+        "lft",
+    )
+
+
+@admin.register(PostalCode)
+class PostalCodeAdmin(ImportExportModelAdmin):
+    list_display = (
+        "code",
+        "location",
+        "is_active",
+    )
+
+    search_fields = (
+        "code",
+        "location__name",
+    )
+
+    list_filter = (
+        "is_active",
+    )
+
+    list_editable = (
+        "is_active",
+    )
+
+    ordering = (
+        "code",
+    )
+
+
