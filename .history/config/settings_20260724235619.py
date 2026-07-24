@@ -23,7 +23,7 @@ AUTH_USER_MODEL = "accounts.User"
 # ------------------------------------------------------------------------------
 
 INSTALLED_APPS = [
-    "grappelli",
+    "jet",
 
     # Django Apps
     "django.contrib.admin",
