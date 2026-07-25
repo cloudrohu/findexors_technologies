@@ -1,20 +1,36 @@
 """
-Django settings for Findexors CRM
+Base Django settings for Findexors CRM
 """
+
 from pathlib import Path
+import environ
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+env = environ.Env(
+    DEBUG=(bool, True),
+)
+
+environ.Env.read_env(BASE_DIR / ".env")
 
 # ------------------------------------------------------------------------------
 # SECURITY
 # ------------------------------------------------------------------------------
 
-SECRET_KEY = "django-insecure-5xo63_&z(+gxlh7k7eoxacjgum^0h75kzg2@ze53lf0*kvo#(u"
+SECRET_KEY = env(
+    "SECRET_KEY",
+    default="django-insecure-change-me",
+)
 
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list(
+    "ALLOWED_HOSTS",
+    default=[
+        "127.0.0.1",
+        "localhost",
+    ],
+)
 
 AUTH_USER_MODEL = "accounts.User"
 
@@ -22,26 +38,25 @@ AUTH_USER_MODEL = "accounts.User"
 # APPLICATIONS
 # ------------------------------------------------------------------------------
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     "grappelli",
-
-    # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+]
 
-    # Third Party
+THIRD_PARTY_APPS = [
     "rest_framework",
     "django_filters",
     "crispy_forms",
     "crispy_bootstrap5",
     "import_export",
+]
 
-    # Local Apps
-    
+LOCAL_APPS = [
     "apps.accounts.apps.AccountsConfig",
     "apps.core.apps.CoreConfig",
     "apps.utility.apps.UtilityConfig",
@@ -60,9 +75,9 @@ INSTALLED_APPS = [
     "apps.tasks.apps.TasksConfig",
     "apps.reports.apps.ReportsConfig",
     "apps.dashboard.apps.DashboardConfig",
-    
 ]
 
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # ------------------------------------------------------------------------------
 # MIDDLEWARE
@@ -70,6 +85,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -78,9 +94,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-
 ROOT_URLCONF = "config.urls"
 
+WSGI_APPLICATION = "config.wsgi.application"
 
 # ------------------------------------------------------------------------------
 # TEMPLATES
@@ -89,9 +105,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            BASE_DIR / "templates",
-        ],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -103,24 +117,18 @@ TEMPLATES = [
     },
 ]
 
-
-WSGI_APPLICATION = "config.wsgi.application"
-
-
 # ------------------------------------------------------------------------------
 # DATABASE
 # ------------------------------------------------------------------------------
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": env.db(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
 }
 
-
 # ------------------------------------------------------------------------------
-# PASSWORD VALIDATION
+# PASSWORDS
 # ------------------------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -138,48 +146,60 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # ------------------------------------------------------------------------------
 # INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "Asia/Kolkata"
 
 USE_I18N = True
-
 USE_TZ = True
 
-
 # ------------------------------------------------------------------------------
-# STATIC FILES
+# STATIC
 # ------------------------------------------------------------------------------
 
-STATIC_URL = "static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
-
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-
 # ------------------------------------------------------------------------------
-# MEDIA FILES
+# MEDIA
 # ------------------------------------------------------------------------------
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# ------------------------------------------------------------------------------
+# STORAGES
+# ------------------------------------------------------------------------------
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # ------------------------------------------------------------------------------
-# CRISPY FORMS
+# CRISPY
 # ------------------------------------------------------------------------------
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# ------------------------------------------------------------------------------
+# REST FRAMEWORK
+# ------------------------------------------------------------------------------
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+    ],
+}
 
 # ------------------------------------------------------------------------------
 # LOGIN
@@ -188,10 +208,5 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
-
-
-# ------------------------------------------------------------------------------
-# DEFAULT PRIMARY KEY
-# ------------------------------------------------------------------------------
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
