@@ -7,3 +7,5 @@ staticfiles/
 .env
 .vscode/
 .idea/
+.history/
+sql.txt
