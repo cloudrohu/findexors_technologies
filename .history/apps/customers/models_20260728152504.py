@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.models import BaseModel
+from apps.core.base import BaseModel
 
 from apps.utility.models import Location, PostalCode
 from apps.accounts.models import User

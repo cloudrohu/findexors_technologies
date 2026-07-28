@@ -1,7 +1,6 @@
 from django.db import models
 
-from apps.core.models import BaseModel
-
+from apps.core.base import MasterBaseModel
 from apps.utility.models import Location, PostalCode
 from apps.accounts.models import User
 from apps.companies.models import Company
@@ -11,7 +10,7 @@ from apps.companies.models import Company
 # MASTER TABLES
 # ==========================================================
 
-class CustomerCategory(BaseModel):
+class CustomerCategory(MasterBaseModel):
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
@@ -21,7 +20,7 @@ class CustomerCategory(BaseModel):
         return self.name
 
 
-class CustomerSource(BaseModel):
+class CustomerSource(MasterBaseModel):
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
@@ -31,7 +30,7 @@ class CustomerSource(BaseModel):
         return self.name
 
 
-class CustomerRequirement(BaseModel):
+class CustomerRequirement(MasterBaseModel):
     name = models.CharField(max_length=150, unique=True)
 
     class Meta:
@@ -45,7 +44,7 @@ class CustomerRequirement(BaseModel):
 # CUSTOMER
 # ==========================================================
 
-class Customer(BaseModel):
+class Customer(MasterBaseModel):
 
     company = models.ForeignKey(
         Company,
@@ -126,7 +125,7 @@ class Customer(BaseModel):
 # CUSTOMER CONTACT
 # ==========================================================
 
-class CustomerContact(BaseModel):
+class CustomerContact(MasterBaseModel):
 
     customer = models.ForeignKey(
         Customer,
@@ -166,7 +165,7 @@ class CustomerContact(BaseModel):
 # CUSTOMER DOCUMENT
 # ==========================================================
 
-class CustomerDocument(BaseModel):
+class CustomerDocument(MasterBaseModel):
 
     customer = models.ForeignKey(
         Customer,

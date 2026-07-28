@@ -17,7 +17,6 @@ from apps.utility.models import (
 # ==========================================================
 
 class LocationAdminForm(forms.ModelForm):
-
     class Meta:
         model = Location
         fields = "__all__"
@@ -27,36 +26,23 @@ class LocationAdminForm(forms.ModelForm):
 
         self.fields["parent"].queryset = Location.objects.all()
 
-        location_type = None
-
         if self.instance and self.instance.pk:
-            location_type = self.instance.location_type
-        else:
-            location_type = self.initial.get("location_type")
 
-        parent_map = {
-            LocationType.STATE: [
-                LocationType.COUNTRY,
-            ],
-            LocationType.DISTRICT_CITY: [
-                LocationType.STATE,
-            ],
-            LocationType.LOCALITY_AREA: [
-                LocationType.DISTRICT_CITY,
-            ],
-            LocationType.SUBLOCALITY_AREA: [
-                LocationType.LOCALITY_AREA,
-            ],
-        }
+            parent_map = {
+                LocationType.STATE: [LocationType.COUNTRY],
+                LocationType.DISTRICT: [LocationType.STATE],
+                LocationType.CITY: [LocationType.DISTRICT],
+                LocationType.LOCALITY: [LocationType.CITY],
+                LocationType.SUBLOCALITY: [LocationType.LOCALITY],
+                LocationType.AREA: [LocationType.SUBLOCALITY],
+            }
 
-        allowed_parent_types = parent_map.get(location_type)
+            allowed_parent_types = parent_map.get(self.instance.location_type)
 
-        if allowed_parent_types:
-            self.fields["parent"].queryset = Location.objects.filter(
-                location_type__in=allowed_parent_types
-            )
-        else:
-            self.fields["parent"].queryset = Location.objects.none()
+            if allowed_parent_types:
+                self.fields["parent"].queryset = Location.objects.filter(
+                    location_type__in=allowed_parent_types
+                )
 
 
 # ==========================================================
@@ -65,7 +51,6 @@ class LocationAdminForm(forms.ModelForm):
 
 @admin.register(Location)
 class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
-
     form = LocationAdminForm
 
     mptt_indent_field = "name"
@@ -90,8 +75,8 @@ class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
 
     list_filter = (
         "location_type",
-        "is_top_city",
         "is_active",
+        "is_top_city",
     )
 
     list_editable = (
@@ -123,15 +108,14 @@ class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
         colors = {
             LocationType.COUNTRY: "#0d6efd",
             LocationType.STATE: "#198754",
-            LocationType.DISTRICT_CITY: "#fd7e14",
-            LocationType.LOCALITY_AREA: "#20c997",
-            LocationType.SUBLOCALITY_AREA: "#dc3545",
+            LocationType.DISTRICT: "#fd7e14",
+            LocationType.CITY: "#6f42c1",
+            LocationType.LOCALITY: "#20c997",
+            LocationType.SUBLOCALITY: "#0dcaf0",
+            LocationType.AREA: "#dc3545",
         }
 
-        color = colors.get(
-            obj.location_type,
-            "#6c757d"
-        )
+        color = colors.get(obj.location_type, "#6c757d")
 
         return format_html(
             """
@@ -139,7 +123,7 @@ class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
                 background:{};
                 color:white;
                 padding:4px 10px;
-                border-radius:16px;
+                border-radius:20px;
                 font-size:12px;
                 font-weight:600;
             ">
@@ -170,8 +154,8 @@ class PostalCodeAdmin(ImportExportModelAdmin):
     )
 
     list_filter = (
-        "location__location_type",
         "is_active",
+        "location__location_type",
     )
 
     list_editable = (
@@ -183,12 +167,12 @@ class PostalCodeAdmin(ImportExportModelAdmin):
         "updated_at",
     )
 
-    autocomplete_fields = (
-        "location",
-    )
-
     ordering = (
         "code",
+    )
+
+    autocomplete_fields = (
+        "location",
     )
 
     save_on_top = True

@@ -304,6 +304,3 @@ class CompanyDocumentAdmin(ImportExportModelAdmin):
     )
 
     save_on_top = True
-
-
-    

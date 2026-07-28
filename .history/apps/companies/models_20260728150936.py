@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.core.models import BaseModel
+from apps.core.base import MasterBaseModel
 from apps.utility.models import Location, PostalCode
 
 
@@ -8,7 +8,7 @@ from apps.utility.models import Location, PostalCode
 # MASTER TABLES
 # ==========================================================
 
-class CompanyIndustry(BaseModel):
+class CompanyIndustry(MasterBaseModel):
     name = models.CharField(max_length=150, unique=True)
 
     class Meta:
@@ -20,7 +20,7 @@ class CompanyIndustry(BaseModel):
         return self.name
 
 
-class CompanyType(BaseModel):
+class CompanyType(MasterBaseModel):
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
@@ -32,7 +32,7 @@ class CompanyType(BaseModel):
         return self.name
 
 
-class CompanySize(BaseModel):
+class CompanySize(MasterBaseModel):
     name = models.CharField(max_length=100, unique=True)
 
     class Meta:
@@ -48,7 +48,7 @@ class CompanySize(BaseModel):
 # COMPANY
 # ==========================================================
 
-class Company(BaseModel):
+class Company(MasterBaseModel):
 
     name = models.CharField(max_length=200)
 
@@ -164,7 +164,7 @@ class Company(BaseModel):
 # BRANCH
 # ==========================================================
 
-class Branch(BaseModel):
+class Branch(MasterBaseModel):
 
     company = models.ForeignKey(
         Company,
@@ -214,7 +214,7 @@ class Branch(BaseModel):
 # DEPARTMENT
 # ==========================================================
 
-class Department(BaseModel):
+class Department(MasterBaseModel):
 
     company = models.ForeignKey(
         Company,
@@ -238,7 +238,7 @@ class Department(BaseModel):
 # DESIGNATION
 # ==========================================================
 
-class Designation(BaseModel):
+class Designation(MasterBaseModel):
 
     department = models.ForeignKey(
         Department,
@@ -260,7 +260,7 @@ class Designation(BaseModel):
 # COMPANY CONTACT
 # ==========================================================
 
-class CompanyContact(BaseModel):
+class CompanyContact(MasterBaseModel):
 
     company = models.ForeignKey(
         Company,
@@ -300,7 +300,7 @@ class CompanyContact(BaseModel):
 # COMPANY DOCUMENT
 # ==========================================================
 
-class CompanyDocument(BaseModel):
+class CompanyDocument(MasterBaseModel):
 
     company = models.ForeignKey(
         Company,

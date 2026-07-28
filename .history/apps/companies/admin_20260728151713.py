@@ -1,0 +1,139 @@
+from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+
+from .models import (
+    CompanyIndustry,
+    CompanyType,
+    CompanySize,
+    Company,
+    Branch,
+    Department,
+    Designation,
+    CompanyContact,
+    CompanyDocument,
+)
+
+
+class MasterAdmin(ImportExportModelAdmin):
+    list_display = (
+        "name",
+        "is_active",
+    )
+
+    search_fields = (
+        "name",
+    )
+
+    list_filter = (
+        "is_active",
+    )
+
+    list_editable = (
+        "is_active",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+    ordering = (
+        "name",
+    )
+
+    save_on_top = True
+
+
+@admin.register(CompanyIndustry)
+class CompanyIndustryAdmin(MasterAdmin):
+    pass
+
+
+@admin.register(CompanyType)
+class CompanyTypeAdmin(MasterAdmin):
+    pass
+
+
+@admin.register(CompanySize)
+class CompanySizeAdmin(MasterAdmin):
+    pass
+
+class BranchInline(admin.TabularInline):
+    model = Branch
+    extra = 0
+
+
+class DepartmentInline(admin.TabularInline):
+    model = Department
+    extra = 0
+
+
+class CompanyContactInline(admin.TabularInline):
+    model = CompanyContact
+    extra = 0
+
+
+class CompanyDocumentInline(admin.TabularInline):
+    model = CompanyDocument
+    extra = 0
+
+
+
+@admin.register(Company)
+class CompanyAdmin(ImportExportModelAdmin):
+
+    list_display = (
+        "name",
+        "industry",
+        "company_type",
+        "company_size",
+        "phone",
+        "email",
+        "location",
+        "is_verified",
+        "is_active",
+    )
+
+    list_filter = (
+        "industry",
+        "company_type",
+        "company_size",
+        "is_verified",
+        "is_active",
+    )
+
+    search_fields = (
+        "name",
+        "legal_name",
+        "email",
+        "phone",
+        "gst_number",
+        "pan_number",
+    )
+
+    autocomplete_fields = (
+        "industry",
+        "company_type",
+        "company_size",
+        "location",
+        "postal_code",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+    list_editable = (
+        "is_verified",
+        "is_active",
+    )
+
+    inlines = [
+        BranchInline,
+        DepartmentInline,
+        CompanyContactInline,
+        CompanyDocumentInline,
+    ]
+
+    save_on_top = True

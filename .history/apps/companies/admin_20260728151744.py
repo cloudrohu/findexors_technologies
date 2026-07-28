@@ -274,36 +274,3 @@ class CompanyContactAdmin(ImportExportModelAdmin):
     )
 
     save_on_top = True
-
-
-
-@admin.register(CompanyDocument)
-class CompanyDocumentAdmin(ImportExportModelAdmin):
-
-    list_display = (
-        "title",
-        "company",
-    )
-
-    list_filter = (
-        "company",
-    )
-
-    search_fields = (
-        "title",
-        "company__name",
-    )
-
-    autocomplete_fields = (
-        "company",
-    )
-
-    readonly_fields = (
-        "created_at",
-        "updated_at",
-    )
-
-    save_on_top = True
-
-
-    
