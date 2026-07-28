@@ -323,39 +323,3 @@ class PostalCodeAdmin(ImportExportModelAdmin):
         if obj.location:
             return obj.location.get_location_type_display()
         return "-"
-
-
-# ==========================================================
-# Admin Actions
-# ==========================================================
-
-    actions = (
-        "make_active",
-        "make_inactive",
-        "make_top_city",
-        "remove_top_city",
-    )
-
-    @admin.action(description="✅ Mark selected locations as Active")
-    def make_active(self, request, queryset):
-        queryset.update(is_active=True)
-
-    @admin.action(description="❌ Mark selected locations as Inactive")
-    def make_inactive(self, request, queryset):
-        queryset.update(is_active=False)
-
-    @admin.action(description="⭐ Mark selected locations as Top City")
-    def make_top_city(self, request, queryset):
-        queryset.update(is_top_city=True)
-
-    @admin.action(description="Remove Top City")
-    def remove_top_city(self, request, queryset):
-        queryset.update(is_top_city=False)
-
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-
-
-# ==========================================================
-# Postal Code Admin
-# ==========================================================

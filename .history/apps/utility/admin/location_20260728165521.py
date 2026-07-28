@@ -359,3 +359,61 @@ class PostalCodeAdmin(ImportExportModelAdmin):
 # ==========================================================
 # Postal Code Admin
 # ==========================================================
+
+@admin.register(PostalCode)
+class PostalCodeAdmin(ImportExportModelAdmin):
+
+    list_display = (
+        "code",
+        "location",
+        "location_type",
+        "is_active",
+    )
+
+    list_display_links = (
+        "code",
+    )
+
+    search_fields = (
+        "code",
+        "location__name",
+    )
+
+    autocomplete_fields = (
+        "location",
+    )
+
+    list_filter = (
+        "location__location_type",
+        "is_active",
+    )
+
+    list_editable = (
+        "is_active",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+    )
+
+    ordering = (
+        "code",
+    )
+
+    save_on_top = True
+
+    list_per_page = 50
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .select_related("location")
+        )
+
+    @admin.display(description="Location Type")
+    def location_type(self, obj):
+        if obj.location:
+            return obj.location.get_location_type_display()
+        return "-"
