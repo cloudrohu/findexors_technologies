@@ -114,9 +114,9 @@ class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
         colors = {
             LocationType.COUNTRY: "#0d6efd",
             LocationType.STATE: "#198754",
-            LocationType.DISTRICT_CITY: "#fd7e14",
-            LocationType.LOCALITY_AREA: "#20c997",
-            LocationType.SUBLOCALITY_AREA: "#dc3545",
+            LocationType.DISTRICT: "#fd7e14",
+            LocationType.LOCALITY: "#20c997",
+            LocationType.SUBLOCALITY: "#dc3545",
         }
 
         color = colors.get(obj.location_type, "#6c757d")

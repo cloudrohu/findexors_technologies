@@ -35,9 +35,9 @@ class LocationAdminForm(forms.ModelForm):
 
         parent_map = {
             LocationType.STATE: [LocationType.COUNTRY],
-            LocationType.DISTRICT_CITY: [LocationType.STATE],
-            LocationType.LOCALITY_AREA: [LocationType.DISTRICT_CITY],
-            LocationType.SUBLOCALITY_AREA: [LocationType.LOCALITY_AREA],
+            LocationType.DISTRICT: [LocationType.STATE],
+            LocationType.LOCALITY: [LocationType.DISTRICT],
+            LocationType.SUBLOCALITY: [LocationType.LOCALITY],
         }
 
         allowed_parent_types = parent_map.get(location_type)
@@ -114,9 +114,9 @@ class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
         colors = {
             LocationType.COUNTRY: "#0d6efd",
             LocationType.STATE: "#198754",
-            LocationType.DISTRICT_CITY: "#fd7e14",
-            LocationType.LOCALITY_AREA: "#20c997",
-            LocationType.SUBLOCALITY_AREA: "#dc3545",
+            LocationType.DISTRICT: "#fd7e14",
+            LocationType.LOCALITY: "#20c997",
+            LocationType.SUBLOCALITY: "#dc3545",
         }
 
         color = colors.get(obj.location_type, "#6c757d")
