@@ -76,6 +76,7 @@ LOCAL_APPS = [
     "apps.meetings.apps.MeetingsConfig",
     "apps.tasks.apps.TasksConfig",
     "apps.reports.apps.ReportsConfig",
+    "apps.response.apps.ResponseConfig",
     "apps.dashboard.apps.DashboardConfig",
 ]
 

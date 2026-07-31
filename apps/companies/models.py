@@ -2,6 +2,15 @@ from django.db import models
 
 from apps.core.models import BaseModel
 
+from django.utils.text import slugify
+from ckeditor.fields import RichTextField
+
+from django.conf import settings
+from apps.utility.models import (
+    Location,
+    PostalCode,
+    LocationType,
+)
 
 # ==========================================================
 # COMPANY STATUS
@@ -145,16 +154,6 @@ class DocumentType(BaseModel):
         return self.name
 
 
-from django.db import models
-from django.utils.text import slugify
-from ckeditor.fields import RichTextField
-
-from django.conf import settings
-from apps.utility.models import (
-    Location,
-    PostalCode,
-    LocationType,
-)
 
 
 class Company(BaseModel):
