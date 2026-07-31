@@ -248,45 +248,45 @@ class ResponseAdmin(AutoUserAdminMixin, MagicSearchMixin, admin.ModelAdmin):
 
     fieldsets = (
 
+
+        (
+            "Business Details",
+            {
+                "fields": (
+
+                    "contact_no",
+                    "contact_persone",
+
+                    "business_name",
+                    "lead_source",
+                    "status",
+
+                    "business_category",
+                    "requirement_types",
+                    "city",
+                    "locality",
+                    "area",
+                    "postal_code",
+                    "address",
+                    "assigned_to",
+
+                )
+            },
+        ),
+
+
         (
             "Response Information",
             {
                 "fields": (
                     "response_no",
-                    "status",
-                    "lead_source",
-                    "assigned_to",
                     "is_converted",
                     "converted_at",
                 )
             },
         ),
 
-        (
-            "Business Details",
-            {
-                "fields": (
-                    "business_name",
-                    "business_category",
-                    "contact_persone",
-                    "contact_no",
-                    "requirement_types",
-                )
-            },
-        ),
 
-        (
-            "Location Details",
-            {
-                "fields": (
-                    "city",
-                    "locality",
-                    "area",
-                    "postal_code",
-                    "address",
-                )
-            },
-        ),
 
         (
             "WhatsApp Tracking",
