@@ -12,10 +12,10 @@ from .models import (
     WorkingDaysOption,
     JobTimingTemplate,
 )
-
+from import_export.admin import ImportExportModelAdmin
 
 @admin.register(JobTitle)
-class JobTitleAdmin(admin.ModelAdmin):
+class JobTitleAdmin(admin.ModelAdmin,ImportExportModelAdmin):
     list_display = ("name", "is_active")
     list_filter = ("is_active",)
     search_fields = ("name",)
