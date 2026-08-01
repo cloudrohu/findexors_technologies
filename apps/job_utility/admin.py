@@ -14,12 +14,16 @@ from .models import (
 )
 from import_export.admin import ImportExportModelAdmin
 
-@admin.register(JobTitle)
-class JobTitleAdmin(admin.ModelAdmin,ImportExportModelAdmin):
-    list_display = ("name", "is_active")
-    list_filter = ("is_active",)
+class BaseUtilityAdmin(ImportExportModelAdmin):
+    list_per_page = 50
     search_fields = ("name",)
     ordering = ("name",)
+
+
+@admin.register(JobTitle)
+class JobTitleAdmin(BaseUtilityAdmin):
+    list_display = ("id", "name", "is_active")
+    list_filter = ("is_active",)
 
 
 @admin.register(JobCategory)
