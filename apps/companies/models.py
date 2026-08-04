@@ -3,7 +3,7 @@ from django.db import models
 from apps.core.models import BaseModel
 
 from django.utils.text import slugify
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from django.conf import settings
 from apps.utility.models import (
@@ -388,9 +388,11 @@ class Company(BaseModel):
         blank=True,
     )
 
-    about = RichTextField(
-        blank=True,
+    about = CKEditor5Field(
+        "About",
+        config_name="default",
     )
+
 
     # =====================================================
     # SOCIAL

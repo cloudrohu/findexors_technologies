@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 from django.utils.html import format_html
-
+from apps.utility.resources import LocationResource
 from import_export.admin import ImportExportModelAdmin
 from mptt.admin import DraggableMPTTAdmin
 
@@ -23,6 +23,7 @@ from ..filters import (
 # ==========================================================
 
 class LocationAdminForm(forms.ModelForm):
+    
 
     class Meta:
         model = Location
@@ -94,7 +95,10 @@ class LocationAdminForm(forms.ModelForm):
 @admin.register(Location)
 class LocationAdmin(ImportExportModelAdmin, DraggableMPTTAdmin):
 
+    resource_class = LocationResource   # ✅ Yahin hona chahiye
+
     form = LocationAdminForm
+
 
     mptt_indent_field = "name"
 

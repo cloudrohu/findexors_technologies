@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from apps.core.models import BaseModel
 from apps.companies.models import Company
@@ -217,17 +217,17 @@ class Job(BaseModel):
 
     short_description = models.TextField(blank=True)
 
-    description = RichTextUploadingField(
+    description = CKEditor5Field(
         blank=True,
         null=True,
     )
 
-    responsibilities = RichTextUploadingField(
+    responsibilities = CKEditor5Field(
         blank=True,
         null=True,
     )
 
-    requirements = RichTextUploadingField(
+    requirements = CKEditor5Field(
         blank=True,
         null=True,
     )
@@ -445,7 +445,7 @@ class JobApplicant(BaseModel):
         null=True,
     )
 
-    cover_letter = RichTextUploadingField(
+    cover_letter = CKEditor5Field(
         blank=True,
         null=True,
     )
@@ -569,7 +569,7 @@ class InterviewSchedule(BaseModel):
         default=InterviewStatus.SCHEDULED,
     )
 
-    feedback = RichTextUploadingField(
+    feedback = CKEditor5Field(
         blank=True,
         null=True,
     )
@@ -680,7 +680,7 @@ class OfferLetter(BaseModel):
 
     valid_till = models.DateField()
 
-    terms = RichTextUploadingField(
+    terms = CKEditor5Field(
         blank=True,
         null=True,
     )

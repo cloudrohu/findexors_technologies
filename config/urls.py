@@ -55,9 +55,12 @@ urlpatterns = [
     # ==========================================
     # CKEditor
     # ==========================================
+    path("ckeditor5/", include("django_ckeditor_5.urls")),
+
+
     path(
-        "ckeditor/",
-        include("ckeditor_uploader.urls"),
+        "importer/",
+        include("apps.importer.urls"),
     ),
 ]
 

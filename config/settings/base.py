@@ -55,9 +55,10 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "import_export",
-    "ckeditor",
+    "django_ckeditor_5",
+    "multiselectfield",      # ✅ Add
+    "embed_video",          # ✅ Add
 ]
-
 LOCAL_APPS = [
     "apps.accounts.apps.AccountsConfig",
     "apps.core.apps.CoreConfig",
@@ -78,6 +79,11 @@ LOCAL_APPS = [
     "apps.reports.apps.ReportsConfig",
     "apps.response.apps.ResponseConfig",
     "apps.dashboard.apps.DashboardConfig",
+    "apps.business.apps.BusinessConfig",
+    "apps.business_utility.apps.BusinessUtilityConfig",
+   "apps.properties.apps.PropertiesConfig",   # ✅ Add this
+   "apps.properties_utility.apps.PropertiesUtilityConfig",
+   "apps.importer",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -216,14 +222,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 
-CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
-
-CKEDITOR_UPLOAD_PATH = 'images/'
-CKEDITOR_IMAGE_BACKEND = "pillow"
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': None,
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "heading",
+            "|",
+            "bold",
+            "italic",
+            "link",
+            "bulletedList",
+            "numberedList",
+            "|",
+            "blockQuote",
+            "insertTable",
+            "imageUpload",
+            "|",
+            "undo",
+            "redo",
+        ],
     },
 }
 
