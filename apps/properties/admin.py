@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from import_export.admin import ImportExportModelAdmin
 from mptt.admin import DraggableMPTTAdmin
-
+from .resources import DeveloperResource
 
 from .models import *
 
@@ -160,6 +160,15 @@ class BaseCRMAdmin(ImportExportModelAdmin):
     save_on_top = True
 
     list_per_page = 50
+
+    def save_model(self, request, obj, form, change):
+
+        if not change and not obj.created_by:
+            obj.created_by = request.user
+
+        obj.updated_by = request.user
+
+        super().save_model(request, obj, form, change)
 
     readonly_fields = (
         "created_at",
@@ -453,6 +462,7 @@ class DeveloperAdmin(
     ImportExportModelAdmin,
 ):
 
+    resource_class = DeveloperResource
     list_display = (
         "title",
         "city",
