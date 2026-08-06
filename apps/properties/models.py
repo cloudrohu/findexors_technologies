@@ -750,7 +750,7 @@ class Project(MPTTModel, BaseModel):
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Project"
-        verbose_name_plural = "1. Projects"
+        verbose_name_plural = "4. Projects"
     
         # models.py
     def image_tag(self):
@@ -1540,6 +1540,8 @@ class Followup(BaseModel):
 
         self.full_clean()
         super().save(*args, **kwargs)
+
+
 
 class Meeting(BaseModel):
 
