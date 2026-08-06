@@ -1007,7 +1007,6 @@ class Enquiry(BaseModel):
         verbose_name_plural = '3. Project Enquiries'
         ordering = ['-contacted_on']
 
-
 class ProjectContactPerson(BaseModel):
 
     project = models.ForeignKey(
@@ -1160,7 +1159,6 @@ class Comment(BaseModel):
         self.full_clean()
 
         super().save(*args, **kwargs)
-
 
 class VoiceRecording(BaseModel):
 
@@ -1416,8 +1414,6 @@ class Visit(BaseModel):
         self.full_clean()
         super().save(*args, **kwargs)
 
-
-
 class Followup(BaseModel):
 
     TYPE_CHOICES = (
@@ -1540,8 +1536,6 @@ class Followup(BaseModel):
 
         self.full_clean()
         super().save(*args, **kwargs)
-
-
 
 class Meeting(BaseModel):
 

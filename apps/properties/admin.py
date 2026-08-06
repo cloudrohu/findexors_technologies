@@ -128,6 +128,33 @@ class LogoPreviewMixin:
 # BASE ADMIN
 # =====================================================
 
+# =====================================================
+# BASE CRM INLINE
+# =====================================================
+
+class BaseCRMInline(admin.TabularInline):
+    extra = 1
+
+    def get_exclude(self, request, obj=None):
+        exclude = [
+            "developer",
+            "architect",
+            "engineer",
+            "project",
+            "type",
+        ]
+
+        # Parent FK ko exclude mat karo
+        if hasattr(self, "fk_name") and self.fk_name in exclude:
+            exclude.remove(self.fk_name)
+
+        return tuple(exclude)
+
+
+# =====================================================
+# BASE CRM ADMIN
+# =====================================================
+
 class BaseCRMAdmin(ImportExportModelAdmin):
 
     save_on_top = True
@@ -166,55 +193,163 @@ class BaseCRMAdmin(ImportExportModelAdmin):
     )
 
     def logo_preview(self, obj):
+        logo = getattr(obj, "logo", None)
 
-        if getattr(obj, "logo", None):
-
+        if logo and hasattr(logo, "url"):
             return format_html(
                 '<img src="{}" style="height:55px;border-radius:6px;">',
-                obj.logo.url,
+                logo.url,
             )
 
         return "-"
 
     logo_preview.short_description = "Logo"
 
-
 # =====================================================
 # INLINE
 # =====================================================
 
-class CommentInline(admin.TabularInline):
+
+class CommentDeveloperInline(BaseCRMInline):
     model = Comment
-    extra = 0
+    fk_name = "developer"
+    extra = 1
 
 
-class VoiceRecordingInline(admin.TabularInline):
+class CommentArchitectInline(BaseCRMInline):
+    model = Comment
+    fk_name = "architect"
+    extra = 1
+
+
+class CommentEngineerInline(BaseCRMInline):
+    model = Comment
+    fk_name = "engineer"
+    extra = 1
+
+
+class CommentProjectInline(BaseCRMInline):
+    model = Comment
+    fk_name = "project"
+    extra = 1
+
+
+
+class VoiceDeveloperInline(BaseCRMInline):
     model = VoiceRecording
-    extra = 0
+    fk_name = "developer"
+    extra = 1
 
 
-class VisitInline(admin.TabularInline):
+class VoiceArchitectInline(BaseCRMInline):
+    model = VoiceRecording
+    fk_name = "architect"
+    extra = 1
+
+
+class VoiceEngineerInline(BaseCRMInline):
+    model = VoiceRecording
+    fk_name = "engineer"
+    extra = 1
+
+
+class VoiceProjectInline(BaseCRMInline):
+    model = VoiceRecording
+    fk_name = "project"
+    extra = 1
+
+
+
+class VisitDeveloperInline(BaseCRMInline):
     model = Visit
-    extra = 0
+    fk_name = "developer"
+    extra = 1
 
 
-class FollowupInline(admin.StackedInline):
+class VisitArchitectInline(BaseCRMInline):
+    model = Visit
+    fk_name = "architect"
+    extra = 1
+
+
+class VisitEngineerInline(BaseCRMInline):
+    model = Visit
+    fk_name = "engineer"
+    extra = 1
+
+
+class VisitProjectInline(BaseCRMInline):
+    model = Visit
+    fk_name = "project"
+    extra = 1
+
+
+
+class FollowupDeveloperInline(BaseCRMInline):
     model = Followup
-    extra = 0
-    max_num = 1
+    fk_name = "developer"
+    extra = 1
 
 
-class MeetingInline(admin.StackedInline):
+class FollowupArchitectInline(BaseCRMInline):
+    model = Followup
+    fk_name = "architect"
+    extra = 1
+
+
+class FollowupEngineerInline(BaseCRMInline):
+    model = Followup
+    fk_name = "engineer"
+    extra = 1
+
+
+class FollowupProjectInline(BaseCRMInline):
+    model = Followup
+    fk_name = "project"
+    extra = 1
+
+
+
+class MeetingDeveloperInline(BaseCRMInline):
     model = Meeting
-    extra = 0
-    max_num = 1
+    fk_name = "developer"
+    extra = 1
+
+
+    exclude = (
+        "architect",
+        "engineer",
+        "project",
+        'type'
+    )
+
+
+
+class MeetingArchitectInline(BaseCRMInline):
+    model = Meeting
+    fk_name = "architect"
+    extra = 1
+
+
+class MeetingEngineerInline(BaseCRMInline):
+    model = Meeting
+    fk_name = "engineer"
+    extra = 1
+
+
+class MeetingProjectInline(BaseCRMInline):
+    model = Meeting
+    fk_name = "project"
+    extra = 1
+
+
 
 
 # =====================================================
 # PROJECT INLINES
 # =====================================================
 
-class BookingOfferInline(admin.TabularInline):
+class BookingOfferInline(BaseCRMInline):
     model = BookingOffer
     extra = 1
 
@@ -224,12 +359,12 @@ class WelcomeToInline(admin.StackedInline):
     extra = 1
 
 
-class WebSliderInline(admin.TabularInline):
+class WebSliderInline(BaseCRMInline):
     model = WebSlider
     extra = 1
 
 
-class OverviewInline(admin.TabularInline):
+class OverviewInline(BaseCRMInline):
     model = Overview
     extra = 1
 
@@ -239,66 +374,66 @@ class AboutUsInline(admin.StackedInline):
     extra = 1
 
 
-class USPInline(admin.TabularInline):
+class USPInline(BaseCRMInline):
     model = USP
     extra = 1
 
 
-class ConfigurationInline(admin.TabularInline):
+class ConfigurationInline(BaseCRMInline):
     model = Configuration
     extra = 1
 
 
-class ConnectivityInline(admin.TabularInline):
+class ConnectivityInline(BaseCRMInline):
     model = Connectivity
     extra = 1
 
 
-class AmenitiesInline(admin.TabularInline):
+class AmenitiesInline(BaseCRMInline):
     model = Amenities
     extra = 1
 
 
-class GalleryInline(admin.TabularInline):
+class GalleryInline(BaseCRMInline):
     model = Gallery
     extra = 1
 
 
 class HeaderInline(admin.StackedInline):
     model = Header
-    extra = 0
+    extra = 1
     max_num = 1
 
 
 class RERAInline(admin.StackedInline):
     model = RERA_Info
-    extra = 0
+    extra = 1
     max_num = 1
 
 
-class WhyInvestInline(admin.TabularInline):
+class WhyInvestInline(BaseCRMInline):
     model = WhyInvest
     extra = 1
 
 
-class BankOfferInline(admin.TabularInline):
+class BankOfferInline(BaseCRMInline):
     model = BankOffer
     extra = 1
 
 
-class FAQInline(admin.TabularInline):
+class FAQInline(BaseCRMInline):
     model = ProjectFAQ
     extra = 1
 
 
-class ContactPersonInline(admin.TabularInline):
+class ContactPersonInline(BaseCRMInline):
     model = ProjectContactPerson
     extra = 1
 
 
-class EnquiryInline(admin.TabularInline):
+class EnquiryInline(BaseCRMInline):
     model = Enquiry
-    extra = 0
+    extra = 1
     can_delete = False
     readonly_fields = (
         "name",
@@ -342,6 +477,7 @@ class DeveloperAdmin(
 
     search_fields = (
         "title",
+        "slug",
         "contact_person",
         "contact_no",
         "email",
@@ -361,10 +497,10 @@ class DeveloperAdmin(
     list_filter = (
         "calling_status",
         "featured_builder",
+        "is_verified",
         "is_active",
         "city",
     )
-
     readonly_fields = (
         "slug",
         "logo_preview",
@@ -372,7 +508,13 @@ class DeveloperAdmin(
         "updated_at",
     )
 
-    
+    inlines = [
+        CommentDeveloperInline,
+        VoiceDeveloperInline,
+        VisitDeveloperInline,
+        FollowupDeveloperInline,
+        MeetingDeveloperInline,
+    ]
 
     fieldsets = (
 
@@ -446,16 +588,26 @@ class ArchitectAdmin(
     LogoPreviewMixin,
     ImportExportModelAdmin,
 ):
+
+    inlines = [
+        CommentArchitectInline,
+        VoiceArchitectInline,
+        VisitArchitectInline,
+        FollowupArchitectInline,
+        MeetingArchitectInline,
+    ]
+    
     list_display = (
-        "title",
-        "city",
-        "contact_person",
-        "contact_no",
-        "calling_status",
-        "featured_architect",
-        "is_active",
-        "logo_preview",
-    )
+            "title",
+            "city",
+            "locality",
+            "contact_person",
+            "contact_no",
+            "calling_status",
+            "featured_architect",
+            "is_active",
+            "logo_preview",
+        )
 
     list_display_links = ("title",)
 
@@ -466,9 +618,13 @@ class ArchitectAdmin(
 
     search_fields = (
         "title",
+        "slug",
         "contact_person",
         "contact_no",
         "email",
+        "city__name",
+        "locality__name",
+        "postal_code__code",
     )
 
     autocomplete_fields = (
@@ -482,6 +638,7 @@ class ArchitectAdmin(
     list_filter = (
         "calling_status",
         "featured_architect",
+        "is_verified",
         "is_active",
         "city",
     )
@@ -565,9 +722,21 @@ class EngineerAdmin(
     LogoPreviewMixin,
     ImportExportModelAdmin,
 ):
+
+    inlines = [
+        CommentEngineerInline,
+        VoiceEngineerInline,
+        VisitEngineerInline,
+        FollowupEngineerInline,
+        MeetingEngineerInline,
+    ]
+    
+
+
     list_display = (
         "title",
         "city",
+        "locality",
         "contact_person",
         "contact_no",
         "calling_status",
@@ -575,7 +744,6 @@ class EngineerAdmin(
         "is_active",
         "logo_preview",
     )
-
     list_display_links = ("title",)
 
     list_editable = (
@@ -585,11 +753,14 @@ class EngineerAdmin(
 
     search_fields = (
         "title",
+        "slug",
         "contact_person",
         "contact_no",
         "email",
+        "city__name",
+        "locality__name",
+        "postal_code__code",
     )
-
     autocomplete_fields = (
         "city",
         "locality",
@@ -601,6 +772,7 @@ class EngineerAdmin(
     list_filter = (
         "calling_status",
         "featured_engineer",
+        "is_verified",
         "is_active",
         "city",
     )
@@ -674,6 +846,11 @@ class EngineerAdmin(
     save_on_top = True
     list_per_page = 30
 
+    list_select_related = (
+        "city",
+        "locality",
+        "postal_code",
+    )
 
 # =====================================================
 # PROJECT ADMIN
@@ -759,6 +936,16 @@ class ProjectAdmin(
     list_per_page = 30
 
     inlines = [
+
+                # CRM
+        CommentProjectInline,
+        VoiceProjectInline,
+        VisitProjectInline,
+        FollowupProjectInline,
+        MeetingProjectInline,
+
+
+
         BookingOfferInline,
         WelcomeToInline,
         WebSliderInline,
@@ -858,9 +1045,6 @@ class ProjectAdmin(
         return "-"
 
     image_preview.short_description = "Image"
-
-
-
 
 # =====================================================
 # VOICE RECORDING
