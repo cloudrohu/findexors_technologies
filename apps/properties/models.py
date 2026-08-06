@@ -20,6 +20,81 @@ from django.db.models import Min, Max
 from django.utils import timezone
 import re
 
+
+def refresh_calling_status(obj):
+
+    if isinstance(obj, Developer):
+        field = "developer"
+
+    elif isinstance(obj, Architects):
+        field = "architect"
+
+    elif isinstance(obj, Engineer):
+        field = "engineer"
+
+    elif isinstance(obj, Project):
+        field = "project"
+
+    else:
+        return
+
+    has_meeting = Meeting.objects.filter(
+        **{field: obj}
+    ).exists()
+
+    has_followup = Followup.objects.filter(
+        **{field: obj}
+    ).exists()
+
+    meeting_done = Meeting.objects.filter(
+        **{
+            field: obj,
+            "status": "Deal Done",
+        }
+    ).exists()
+
+    followup_done = Followup.objects.filter(
+        **{
+            field: obj,
+            "status": "Deal Done",
+        }
+    ).exists()
+
+    if meeting_done or followup_done:
+        status = "Deal Done"
+
+    elif has_meeting and has_followup:
+        status = "Meeting_FollowUp"
+
+    elif has_meeting:
+        status = "Meeting"
+
+    elif has_followup:
+        status = "FollowUp"
+
+    else:
+        status = "New"
+
+    if obj.calling_status != status:
+        obj.calling_status = status
+        obj.save(update_fields=["calling_status"])
+
+
+def refresh_parent_status(obj):
+
+        if obj.developer:
+            obj.developer.refresh_calling_status()
+
+        if obj.architect:
+            obj.architect.refresh_calling_status()
+
+        if obj.engineer:
+            obj.engineer.refresh_calling_status()
+
+        if obj.project:
+            obj.project.refresh_calling_status()
+
+
 def format_price(value):
     """
     Convert rupees into Indian readable format.
@@ -45,7 +120,6 @@ def format_price(value):
 
     return f"₹{value:,}"
 
-
 def format_price_range(price_min, price_max):
     """
     Example:
@@ -70,14 +144,12 @@ def format_price_range(price_min, price_max):
 
     return f"{format_price(price_min)} – {format_price(price_max)}"
 
-
 def clean_phone_last10(phone: str):
     if not phone:
         return None
 
     digits = re.sub(r"\D", "", str(phone))
     return digits[-10:] if len(digits) >= 10 else digits
-
 
 class Developer(BaseModel):
 
@@ -249,6 +321,9 @@ class Developer(BaseModel):
         return "No Image"
 
     logo_preview.short_description = "Logo"
+
+    def refresh_calling_status(self):
+        refresh_calling_status(self)
 
 class Architects(BaseModel):
 
@@ -423,6 +498,8 @@ class Architects(BaseModel):
 
     logo_preview.short_description = "Logo"
 
+    def refresh_calling_status(self):
+        refresh_calling_status(self)
 
 class Engineer(BaseModel):
 
@@ -596,6 +673,8 @@ class Engineer(BaseModel):
         return "No Image"
 
     logo_preview.short_description = "Logo"
+    def refresh_calling_status(self):
+        refresh_calling_status(self)
 
 
 class Project(MPTTModel, BaseModel):
@@ -762,6 +841,9 @@ class Project(MPTTModel, BaseModel):
 
     image_tag.short_description = "Image"
 
+    def refresh_calling_status(self):
+        refresh_calling_status(self)
+
 
     # 🔑 CRITICAL FIX: Handling object-to-string conversion for slug creation
     def save(self, *args, **kwargs):
@@ -852,6 +934,8 @@ class Project(MPTTModel, BaseModel):
 
         return f"₹ {fmt(price_min)} – {fmt(price_max)}"
 
+
+
 class BookingOffer(BaseModel):
     Project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="BookingOffer")
     title = models.CharField(max_length=255)
@@ -921,6 +1005,7 @@ class Connectivity(BaseModel):
 
     def __str__(self):
         return f"{self.title}"
+    
 class Amenities(BaseModel):
     Project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="amenities")
     amenities = models.ForeignKey(ProjectAmenities, on_delete=models.CASCADE, related_name="amenities")
@@ -1414,6 +1499,7 @@ class Visit(BaseModel):
         self.full_clean()
         super().save(*args, **kwargs)
 
+
 class Followup(BaseModel):
 
     TYPE_CHOICES = (
@@ -1535,7 +1621,56 @@ class Followup(BaseModel):
             self.type = "Engineer"
 
         self.full_clean()
+
         super().save(*args, **kwargs)
+
+        if self.status == "Deal Done":
+
+            if self.developer:
+                Developer.objects.filter(
+                    pk=self.developer_id
+                ).update(calling_status="Deal Done")
+
+            if self.architect:
+                Architects.objects.filter(
+                    pk=self.architect_id
+                ).update(calling_status="Deal Done")
+
+            if self.engineer:
+                Engineer.objects.filter(
+                    pk=self.engineer_id
+                ).update(calling_status="Deal Done")
+
+            if self.project:
+                Project.objects.filter(
+                    pk=self.project_id
+                ).update(calling_status="Deal Done")
+
+        else:
+            refresh_parent_status(self)
+
+    def delete(self, *args, **kwargs):
+
+        developer = self.developer
+        architect = self.architect
+        engineer = self.engineer
+        project = self.project
+
+        super().delete(*args, **kwargs)
+
+        if developer:
+            developer.refresh_calling_status()
+
+        if architect:
+            architect.refresh_calling_status()
+
+        if engineer:
+            engineer.refresh_calling_status()
+
+        if project:
+            project.refresh_calling_status()
+
+
 
 class Meeting(BaseModel):
 
@@ -1658,4 +1793,52 @@ class Meeting(BaseModel):
             self.type = "Engineer"
 
         self.full_clean()
+
         super().save(*args, **kwargs)
+
+        if self.status == "Deal Done":
+
+            if self.developer:
+                Developer.objects.filter(
+                    pk=self.developer_id
+                ).update(calling_status="Deal Done")
+
+            if self.architect:
+                Architects.objects.filter(
+                    pk=self.architect_id
+                ).update(calling_status="Deal Done")
+
+            if self.engineer:
+                Engineer.objects.filter(
+                    pk=self.engineer_id
+                ).update(calling_status="Deal Done")
+
+            if self.project:
+                Project.objects.filter(
+                    pk=self.project_id
+                ).update(calling_status="Deal Done")
+
+        else:
+            refresh_parent_status(self)
+
+    def delete(self, *args, **kwargs):
+
+        developer = self.developer
+        architect = self.architect
+        engineer = self.engineer
+        project = self.project
+
+        super().delete(*args, **kwargs)
+
+        if developer:
+            developer.refresh_calling_status()
+
+        if architect:
+            architect.refresh_calling_status()
+
+        if engineer:
+            engineer.refresh_calling_status()
+
+        if project:
+            project.refresh_calling_status()
+
