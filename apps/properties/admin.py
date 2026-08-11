@@ -2,7 +2,11 @@ from django.contrib import admin
 from django.utils.html import format_html
 from import_export.admin import ImportExportModelAdmin
 from mptt.admin import DraggableMPTTAdmin
-from .resources import DeveloperResource
+from .resources import (
+    DeveloperResource,
+    MeetingResource,
+    FollowupResource,
+)
 
 from .models import *
 
@@ -457,12 +461,13 @@ class EnquiryInline(BaseCRMInline):
 class DeveloperAdmin(
     BaseAdmin,
     LogoPreviewMixin,
-    
+    ImportExportModelAdmin,
 ):
     change_list_template = "admin/properties/developer/change_list.html"
     
 
     resource_class = DeveloperResource
+
     list_display = (
         "title",
         "city",
@@ -1595,9 +1600,13 @@ class VisitAdmin(admin.ModelAdmin):
 
 
 @admin.register(Followup)
-class FollowupAdmin(BaseAdmin,
+class FollowupAdmin(
+    BaseAdmin,
     ImagePreviewMixin,
-    ImportExportModelAdmin,):
+    ImportExportModelAdmin,
+):
+
+    resource_class = FollowupResource
 
     change_list_template = "admin/properties/followup/change_list.html"
 
@@ -1648,11 +1657,17 @@ class FollowupAdmin(BaseAdmin,
 # =====================================================
 
 @admin.register(Meeting)
-class MeetingAdmin(BaseAdmin,
+class MeetingAdmin(
+    BaseAdmin,
     ImagePreviewMixin,
-    ImportExportModelAdmin,):
+    ImportExportModelAdmin,
+):
+
+    resource_class = MeetingResource
 
     change_list_template = "admin/properties/meeting/change_list.html"
+
+    # baaki tumhara existing code...
 
     list_display = (
         "type",
