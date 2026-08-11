@@ -20,6 +20,32 @@ from django.db.models import Min, Max
 from django.utils import timezone
 import re
 
+def get_crm_id(obj):
+    """
+    Generate readable CRM ID based on model type.
+    Example:
+    Developer -> DEV3514
+    Architect -> ARC193
+    Engineer  -> ENG105
+    Project   -> PRO221
+    """
+
+    if isinstance(obj, Developer):
+        prefix = "DEV"
+
+    elif isinstance(obj, Architects):
+        prefix = "ARC"
+
+    elif isinstance(obj, Engineer):
+        prefix = "ENG"
+
+    elif isinstance(obj, Project):
+        prefix = "PRO"
+
+    else:
+        return str(obj.pk)
+
+    return f"{prefix}{obj.pk}"
 
 def refresh_calling_status(obj):
 
@@ -933,8 +959,6 @@ class Project(MPTTModel, BaseModel):
             return f"₹ {fmt(price_min)}"
 
         return f"₹ {fmt(price_min)} – {fmt(price_max)}"
-
-
 
 class BookingOffer(BaseModel):
     Project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="BookingOffer")

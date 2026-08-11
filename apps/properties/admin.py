@@ -40,8 +40,6 @@ from .models import (
 NO_IMAGE = "https://via.placeholder.com/70x70?text=No+Image"
 
 
-
-
 class BaseAdmin(admin.ModelAdmin):
 
     save_on_top = True
@@ -459,8 +457,10 @@ class EnquiryInline(BaseCRMInline):
 class DeveloperAdmin(
     BaseAdmin,
     LogoPreviewMixin,
-    ImportExportModelAdmin,
+    
 ):
+    change_list_template = "admin/properties/developer/change_list.html"
+    
 
     resource_class = DeveloperResource
     list_display = (
@@ -589,6 +589,148 @@ class DeveloperAdmin(
     list_per_page = 30
 
 
+    # =====================================================
+    # CHANGE VIEW
+    # =====================================================
+
+    def change_view(
+        self,
+        request,
+        object_id,
+        form_url="",
+        extra_context=None,
+    ):
+        """
+        Remember where Developer was opened from.
+
+        Possible sources:
+            Meeting
+            Followup
+        """
+
+        if request.method == "GET":
+
+            return_to = request.GET.get("return_to")
+
+            meeting_id = request.GET.get("meeting_id")
+
+            followup_id = request.GET.get("followup_id")
+
+
+            # =================================================
+            # OPENED FROM MEETING
+            # =================================================
+
+            if return_to == "meeting" and meeting_id:
+
+                request.session[
+                    f"developer_return_{object_id}"
+                ] = {
+                    "return_to": "meeting",
+                    "meeting_id": meeting_id,
+                }
+
+
+            # =================================================
+            # OPENED FROM FOLLOWUP
+            # =================================================
+
+            elif return_to == "followup" and followup_id:
+
+                request.session[
+                    f"developer_return_{object_id}"
+                ] = {
+                    "return_to": "followup",
+                    "followup_id": followup_id,
+                }
+
+
+        return super().change_view(
+            request,
+            object_id,
+            form_url,
+            extra_context,
+        )
+
+
+    # =====================================================
+    # AFTER SAVE
+    # =====================================================
+
+    def response_change(
+        self,
+        request,
+        obj,
+    ):
+        """
+        After saving Developer:
+
+        Meeting  -> same Meeting card
+        Followup -> same Followup card
+        Direct   -> normal Developer list
+        """
+
+        from django.http import HttpResponseRedirect
+
+
+        # =================================================
+        # GET SAVED RETURN DATA
+        # =================================================
+
+        return_data = request.session.pop(
+            f"developer_return_{obj.pk}",
+            None,
+        )
+
+
+        # =================================================
+        # RETURN TO MEETING
+        # =================================================
+
+        if return_data:
+
+            if (
+                return_data.get("return_to") == "meeting"
+                and return_data.get("meeting_id")
+            ):
+
+                meeting_id = return_data["meeting_id"]
+
+
+                return HttpResponseRedirect(
+                    f"/admin/properties/meeting/"
+                    f"#meeting-{meeting_id}"
+                )
+
+
+        # =================================================
+        # RETURN TO FOLLOWUP
+        # =================================================
+
+        if return_data:
+
+            if (
+                return_data.get("return_to") == "followup"
+                and return_data.get("followup_id")
+            ):
+
+                followup_id = return_data["followup_id"]
+
+
+                return HttpResponseRedirect(
+                    f"/admin/properties/followup/"
+                    f"#followup-{followup_id}"
+                )
+
+
+        # =================================================
+        # NORMAL DJANGO ADMIN SAVE
+        # =================================================
+
+        return super().response_change(
+            request,
+            obj,
+        )
 # =====================================================
 # ARCHITECT ADMIN
 # =====================================================
@@ -719,13 +861,154 @@ class ArchitectAdmin(
         }),
     )
 
+
     save_on_top = True
     list_per_page = 30
 
 
-# =====================================================
-# ENGINEER ADMIN
-# =====================================================
+    # =====================================================
+    # CHANGE VIEW
+    # =====================================================
+
+    def change_view(
+        self,
+        request,
+        object_id,
+        form_url="",
+        extra_context=None,
+    ):
+        """
+        Remember where Architect was opened from.
+
+        Possible sources:
+            Meeting
+            Followup
+        """
+
+        if request.method == "GET":
+
+            return_to = request.GET.get("return_to")
+
+            meeting_id = request.GET.get("meeting_id")
+
+            followup_id = request.GET.get("followup_id")
+
+
+            # =================================================
+            # OPENED FROM MEETING
+            # =================================================
+
+            if return_to == "meeting" and meeting_id:
+
+                request.session[
+                    f"architect_return_{object_id}"
+                ] = {
+                    "return_to": "meeting",
+                    "meeting_id": meeting_id,
+                }
+
+
+            # =================================================
+            # OPENED FROM FOLLOWUP
+            # =================================================
+
+            elif return_to == "followup" and followup_id:
+
+                request.session[
+                    f"architect_return_{object_id}"
+                ] = {
+                    "return_to": "followup",
+                    "followup_id": followup_id,
+                }
+
+
+        return super().change_view(
+            request,
+            object_id,
+            form_url,
+            extra_context,
+        )
+
+
+    # =====================================================
+    # AFTER SAVE
+    # =====================================================
+
+    def response_change(
+        self,
+        request,
+        obj,
+    ):
+        """
+        After saving Architect:
+
+        Meeting  -> same Meeting card
+        Followup -> same Followup card
+        Direct   -> normal Architect list
+        """
+
+        from django.http import HttpResponseRedirect
+
+
+        # =================================================
+        # GET SAVED RETURN DATA
+        # =================================================
+
+        return_data = request.session.pop(
+            f"architect_return_{obj.pk}",
+            None,
+        )
+
+
+        # =================================================
+        # RETURN TO MEETING
+        # =================================================
+
+        if return_data:
+
+            if (
+                return_data.get("return_to") == "meeting"
+                and return_data.get("meeting_id")
+            ):
+
+                meeting_id = return_data["meeting_id"]
+
+
+                return HttpResponseRedirect(
+                    f"/admin/properties/meeting/"
+                    f"#meeting-{meeting_id}"
+                )
+
+
+        # =================================================
+        # RETURN TO FOLLOWUP
+        # =================================================
+
+        if return_data:
+
+            if (
+                return_data.get("return_to") == "followup"
+                and return_data.get("followup_id")
+            ):
+
+                followup_id = return_data["followup_id"]
+
+
+                return HttpResponseRedirect(
+                    f"/admin/properties/followup/"
+                    f"#followup-{followup_id}"
+                )
+
+
+        # =================================================
+        # NORMAL DJANGO ADMIN SAVE
+        # =================================================
+
+        return super().response_change(
+            request,
+            obj,
+        )
+
 @admin.register(Engineer)
 class EngineerAdmin(
     BaseAdmin,
@@ -733,15 +1016,63 @@ class EngineerAdmin(
     ImportExportModelAdmin,
 ):
 
-    inlines = [
-        CommentEngineerInline,
-        VoiceEngineerInline,
-        VisitEngineerInline,
-        FollowupEngineerInline,
-        MeetingEngineerInline,
-    ]
-    
+    # =================================================
+    # SEARCH
+    # =================================================
 
+    search_fields = (
+        "title",
+        "slug",
+        "contact_person",
+        "contact_no",
+        "email",
+        "city__name",
+        "locality__name",
+        "postal_code__code",
+    )
+
+
+    # =================================================
+    # AUTOCOMPLETE
+    # =================================================
+
+    autocomplete_fields = (
+        "city",
+        "locality",
+        "area",
+        "postal_code",
+        "assigned_to",
+    )
+
+
+    # =================================================
+    # FILTER
+    # =================================================
+
+    list_filter = (
+        "calling_status",
+        "featured_engineer",
+        "is_verified",
+        "is_active",
+        "city",
+    )
+
+
+    # =================================================
+    # READONLY
+    # =================================================
+
+    readonly_fields = (
+        "slug",
+        "logo_preview",
+        "created_at",
+        "updated_at",
+    )
+
+
+    # =================================================
+    # LIST DISPLAY
+    # =================================================
 
     list_display = (
         "title",
@@ -754,117 +1085,155 @@ class EngineerAdmin(
         "is_active",
         "logo_preview",
     )
-    list_display_links = ("title",)
+
+
+    list_display_links = (
+        "title",
+    )
+
 
     list_editable = (
         "featured_engineer",
         "is_active",
     )
 
-    search_fields = (
-        "title",
-        "slug",
-        "contact_person",
-        "contact_no",
-        "email",
-        "city__name",
-        "locality__name",
-        "postal_code__code",
-    )
-    autocomplete_fields = (
-        "city",
-        "locality",
-        "area",
-        "postal_code",
-        "assigned_to",
-    )
 
-    list_filter = (
-        "calling_status",
-        "featured_engineer",
-        "is_verified",
-        "is_active",
-        "city",
-    )
+    # =================================================
+    # INLINE
+    # =================================================
 
-    readonly_fields = (
-        "slug",
-        "logo_preview",
-        "created_at",
-        "updated_at",
-    )
+    inlines = [
+        CommentEngineerInline,
+        VoiceEngineerInline,
+        VisitEngineerInline,
+        FollowupEngineerInline,
+        MeetingEngineerInline,
+    ]
 
-    fieldsets = (
 
-        ("Basic Information", {
-            "fields": (
-                "title",
-                "slug",
-                "logo",
-                "logo_preview",
-            )
-        }),
+    # =================================================
+    # CHANGE VIEW
+    # =================================================
 
-        ("Location", {
-            "fields": (
-                "city",
-                "locality",
-                "area",
-                "postal_code",
-                "address",
-                "google_map",
-            )
-        }),
+    def change_view(
+        self,
+        request,
+        object_id,
+        form_url="",
+        extra_context=None,
+    ):
 
-        ("Contact", {
-            "fields": (
-                "contact_person",
-                "contact_no",
-                "email",
-                "web_site",
-            )
-        }),
+        if request.method == "GET":
 
-        ("Description", {
-            "fields": (
-                "keywords",
-                "about_engineer",
-                "note",
-            )
-        }),
+            return_to = request.GET.get("return_to")
 
-        ("Status", {
-            "fields": (
-                "calling_status",
-                "assigned_to",
-                "featured_engineer",
-                "is_featured",
-                "is_verified",
-                "is_active",
-            )
-        }),
+            meeting_id = request.GET.get("meeting_id")
 
-        ("System", {
-            "classes": ("collapse",),
-            "fields": (
-                "created_at",
-                "updated_at",
-            )
-        }),
-    )
+            followup_id = request.GET.get("followup_id")
 
-    save_on_top = True
-    list_per_page = 30
 
-    list_select_related = (
-        "city",
-        "locality",
-        "postal_code",
-    )
+            # -----------------------------
+            # FROM MEETING
+            # -----------------------------
 
-# =====================================================
-# PROJECT ADMIN
-# =====================================================
+            if return_to == "meeting" and meeting_id:
+
+                request.session[
+                    f"engineer_return_{object_id}"
+                ] = {
+                    "return_to": "meeting",
+                    "meeting_id": meeting_id,
+                }
+
+
+            # -----------------------------
+            # FROM FOLLOWUP
+            # -----------------------------
+
+            elif return_to == "followup" and followup_id:
+
+                request.session[
+                    f"engineer_return_{object_id}"
+                ] = {
+                    "return_to": "followup",
+                    "followup_id": followup_id,
+                }
+
+
+        return super().change_view(
+            request,
+            object_id,
+            form_url,
+            extra_context,
+        )
+
+
+    # =================================================
+    # AFTER SAVE
+    # =================================================
+
+    def response_change(
+        self,
+        request,
+        obj,
+    ):
+
+        from django.http import HttpResponseRedirect
+
+
+        return_data = request.session.pop(
+            f"engineer_return_{obj.pk}",
+            None,
+        )
+
+
+        # =================================================
+        # RETURN TO MEETING
+        # =================================================
+
+        if return_data:
+
+            if (
+                return_data.get("return_to") == "meeting"
+                and return_data.get("meeting_id")
+            ):
+
+                meeting_id = return_data["meeting_id"]
+
+                return HttpResponseRedirect(
+                    f"/admin/properties/meeting/"
+                    f"#meeting-{meeting_id}"
+                )
+
+
+        # =================================================
+        # RETURN TO FOLLOWUP
+        # =================================================
+
+        if return_data:
+
+            if (
+                return_data.get("return_to") == "followup"
+                and return_data.get("followup_id")
+            ):
+
+                followup_id = return_data["followup_id"]
+
+                return HttpResponseRedirect(
+                    f"/admin/properties/followup/"
+                    f"#followup-{followup_id}"
+                )
+
+
+        # =================================================
+        # NORMAL DJANGO SAVE
+        # =================================================
+
+        return super().response_change(
+            request,
+            obj,
+        )
+
 
 @admin.register(Project)
 class ProjectAdmin(
@@ -1055,6 +1424,72 @@ class ProjectAdmin(
         return "-"
 
     image_preview.short_description = "Image"
+    # =====================================================
+# RETURN TO MEETING AFTER EDITING PROJECT
+# =====================================================
+
+    def change_view(
+        self,
+        request,
+        object_id,
+        form_url="",
+        extra_context=None,
+    ):
+        """
+        Remember if Project was opened from a Meeting.
+        """
+
+        if request.method == "GET":
+
+            return_to = request.GET.get("return_to")
+            meeting_id = request.GET.get("meeting_id")
+
+            if return_to == "meeting" and meeting_id:
+
+                request.session[
+                    f"project_return_{object_id}"
+                ] = {
+                    "return_to": "meeting",
+                    "meeting_id": meeting_id,
+                }
+
+        return super().change_view(
+            request,
+            object_id,
+            form_url,
+            extra_context,
+        )
+
+
+    def response_change(self, request, obj):
+        """
+        After saving Project, return to the same Meeting card.
+        """
+
+        return_data = request.session.pop(
+            f"project_return_{obj.pk}",
+            None,
+        )
+
+        if return_data:
+
+            if (
+                return_data.get("return_to") == "meeting"
+                and return_data.get("meeting_id")
+            ):
+
+                from django.http import HttpResponseRedirect
+
+                meeting_id = return_data["meeting_id"]
+
+                return HttpResponseRedirect(
+                    f"/admin/properties/meeting/#meeting-{meeting_id}"
+                )
+
+        return super().response_change(
+            request,
+            obj,
+        )
 
 # =====================================================
 # VOICE RECORDING
@@ -1159,12 +1594,12 @@ class VisitAdmin(admin.ModelAdmin):
     list_per_page = 30
 
 
-# =====================================================
-# FOLLOWUP
-# =====================================================
-
 @admin.register(Followup)
-class FollowupAdmin(admin.ModelAdmin):
+class FollowupAdmin(BaseAdmin,
+    ImagePreviewMixin,
+    ImportExportModelAdmin,):
+
+    change_list_template = "admin/properties/followup/change_list.html"
 
     list_display = (
         "type",
@@ -1208,14 +1643,16 @@ class FollowupAdmin(admin.ModelAdmin):
     )
 
     list_per_page = 30
-
-
 # =====================================================
-# MEETING
+# MEETING ImportExportModelAdmin
 # =====================================================
 
 @admin.register(Meeting)
-class MeetingAdmin(admin.ModelAdmin):
+class MeetingAdmin(BaseAdmin,
+    ImagePreviewMixin,
+    ImportExportModelAdmin,):
+
+    change_list_template = "admin/properties/meeting/change_list.html"
 
     list_display = (
         "type",
@@ -1247,20 +1684,20 @@ class MeetingAdmin(admin.ModelAdmin):
     list_filter = (
         "type",
         "status",
+        "meeting_date",
+        "assigned_to",
     )
 
     readonly_fields = (
-        "created_at",
-        "updated_at",
-    )
+            "created_at",
+            "updated_at",
+        )
 
     ordering = (
         "-meeting_date",
     )
 
     list_per_page = 30
-
-
 # =====================================================
 # BASE ADMIN
 # =====================================================
