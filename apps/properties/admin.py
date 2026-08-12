@@ -455,14 +455,13 @@ class EnquiryInline(BaseCRMInline):
     )
 
 # =====================================================
-# DEVELOPER ADMIN
+# DEVELOPER ADMIN ImportExportModelAdmin
 # =====================================================
 @admin.register(Developer)
 class DeveloperAdmin(
     BaseAdmin,
     LogoPreviewMixin,
-    ImportExportModelAdmin,
-):
+    ):
     change_list_template = "admin/properties/developer/change_list.html"
     
 
@@ -737,14 +736,13 @@ class DeveloperAdmin(
             obj,
         )
 # =====================================================
-# ARCHITECT ADMIN
+# ARCHITECT ADMIN ImportExportModelAdmin,
 # =====================================================
 @admin.register(Architects)
 class ArchitectAdmin(
     BaseAdmin,
     LogoPreviewMixin,
-    ImportExportModelAdmin,
-):
+    ):
 
     inlines = [
         CommentArchitectInline,
@@ -1014,12 +1012,13 @@ class ArchitectAdmin(
             obj,
         )
 
+#ImportExportModelAdmin
+
 @admin.register(Engineer)
 class EngineerAdmin(
     BaseAdmin,
     LogoPreviewMixin,
-    ImportExportModelAdmin,
-):
+    ):
 
     # =================================================
     # SEARCH
@@ -1598,13 +1597,12 @@ class VisitAdmin(admin.ModelAdmin):
 
     list_per_page = 30
 
-
+# ImportExportModelAdmin
 @admin.register(Followup)
 class FollowupAdmin(
     BaseAdmin,
     ImagePreviewMixin,
-    ImportExportModelAdmin,
-):
+    ):
 
     resource_class = FollowupResource
 
@@ -1660,8 +1658,7 @@ class FollowupAdmin(
 class MeetingAdmin(
     BaseAdmin,
     ImagePreviewMixin,
-    ImportExportModelAdmin,
-):
+    ):
 
     resource_class = MeetingResource
 
