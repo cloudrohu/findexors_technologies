@@ -1550,6 +1550,8 @@ class VoiceRecordingAdmin(admin.ModelAdmin):
 
 @admin.register(Visit)
 class VisitAdmin(admin.ModelAdmin):
+    change_list_template = "admin/properties/visit/change_list.html"
+
 
     list_display = (
         "type",
@@ -1713,3 +1715,132 @@ class MeetingAdmin(
 # =====================================================
 # BASE ADMIN
 # =====================================================
+
+
+
+# =====================================================
+# COMMENT ADMIN
+# =====================================================
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    change_list_template = "admin/properties/comment/change_list.html"
+
+    list_display = (
+        "type",
+        "parent_name",
+        "comment_preview",
+        "created_by",
+        "created_at",
+    )
+
+    list_display_links = (
+        "comment_preview",
+    )
+
+    autocomplete_fields = (
+        "developer",
+        "architect",
+        "engineer",
+        "project",
+        "created_by",
+        "updated_by",
+    )
+
+    search_fields = (
+        "comment",
+        "developer__title",
+        "architect__title",
+        "engineer__title",
+        "project__project_name",
+    )
+
+    list_filter = (
+        "type",
+        "created_at",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "created_by",
+        "updated_by",
+    )
+
+    ordering = (
+        "-created_at",
+    )
+
+    list_per_page = 30
+
+    fieldsets = (
+        ("Comment Information", {
+            "fields": (
+                "type",
+                "comment",
+            )
+        }),
+
+        ("Parent", {
+            "fields": (
+                "developer",
+                "architect",
+                "engineer",
+                "project",
+            )
+        }),
+
+        ("System", {
+            "classes": ("collapse",),
+            "fields": (
+                "created_by",
+                "created_at",
+                "updated_by",
+                "updated_at",
+            )
+        }),
+    )
+
+    def parent_name(self, obj):
+        if obj.project:
+            return obj.project.project_name
+
+        if obj.developer:
+            return obj.developer.title
+
+        if obj.architect:
+            return obj.architect.title
+
+        if obj.engineer:
+            return obj.engineer.title
+
+        return "-"
+
+    parent_name.short_description = "Parent"
+
+    def comment_preview(self, obj):
+        if not obj.comment:
+            return "-"
+
+        text = obj.comment.strip()
+
+        if len(text) > 80:
+            return f"{text[:80]}..."
+
+        return text
+
+    comment_preview.short_description = "Comment"
+
+    def save_model(self, request, obj, form, change):
+
+        if not change and not obj.created_by:
+            obj.created_by = request.user
+
+        obj.updated_by = request.user
+
+        super().save_model(
+            request,
+            obj,
+            form,
+            change,
+        )
