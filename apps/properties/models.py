@@ -177,6 +177,9 @@ def clean_phone_last10(phone: str):
     digits = re.sub(r"\D", "", str(phone))
     return digits[-10:] if len(digits) >= 10 else digits
 
+
+
+
 class Developer(BaseModel):
 
     CALLING_STATUS_CHOICES = [
@@ -312,6 +315,12 @@ class Developer(BaseModel):
         null=True,
     )
 
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
+
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Developer"
@@ -322,22 +331,55 @@ class Developer(BaseModel):
 
     def save(self, *args, **kwargs):
 
+        # -------------------------
+        # CLEAN PHONE NUMBER
+        # -------------------------
         if self.contact_no:
             self.contact_no = clean_phone_last10(self.contact_no)
 
-        is_new = self.pk is None
+        # -------------------------
+        # GENERATE DEVELOPER ID
+        # DEV000001
+        # DEV000002
+        # DEV000003
+        # -------------------------
+        if not self.id:
 
+            last_developer = (
+                Developer.objects
+                .filter(id__startswith="DEV")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_developer and last_developer.id:
+                last_number = int(
+                    last_developer.id.replace("DEV", "")
+                )
+                next_number = last_number + 1
+            else:
+                next_number = 1
+
+            self.id = f"DEV{next_number:06d}"
+
+        # -------------------------
+        # SLUG
+        # -------------------------
+        if not self.slug:
+            self.slug = slugify(self.title)
+
+        # -------------------------
+        # SAVE
+        # -------------------------
         super().save(*args, **kwargs)
 
-        if is_new and not self.slug:
-            self.slug = f"{slugify(self.title)}-{self.pk}"
-            super().save(update_fields=["slug"])
 
     def get_absolute_url(self):
         return reverse(
             "developer_detail",
             kwargs={"slug": self.slug},
         )
+
 
     def logo_preview(self):
         if self.logo:
@@ -346,10 +388,15 @@ class Developer(BaseModel):
             )
         return "No Image"
 
+
     logo_preview.short_description = "Logo"
+
 
     def refresh_calling_status(self):
         refresh_calling_status(self)
+
+
+
 
 class Architects(BaseModel):
 
@@ -526,6 +573,8 @@ class Architects(BaseModel):
 
     def refresh_calling_status(self):
         refresh_calling_status(self)
+
+
 
 class Engineer(BaseModel):
 
@@ -843,8 +892,13 @@ class Project(MPTTModel, BaseModel):
         blank=True,
         null=True,
     )
-    
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
     slug = models.SlugField(unique=True, null=True, blank=True,max_length=555,)
+
 
     # --- Overridden Methods ---
     def __str__(self):
@@ -870,11 +924,35 @@ class Project(MPTTModel, BaseModel):
     def refresh_calling_status(self):
         refresh_calling_status(self)
 
+
+
     def save(self, *args, **kwargs):
 
-        # -------------------------
+        # ==========================================
+        # GENERATE PROJECT ID FIRST
+        # ==========================================
+        if not self.id:
+
+            last_project = (
+                Project.objects
+                .filter(id__startswith="PRO")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_project and last_project.id:
+                last_number = int(
+                    last_project.id.replace("PRO", "")
+                )
+                next_number = last_number + 1
+            else:
+                next_number = 1
+
+            self.id = f"PRO{next_number:06d}"
+
+        # ==========================================
         # BHK SLUG
-        # -------------------------
+        # ==========================================
         bhk_slug = ""
 
         if self.bhk_type:
@@ -888,20 +966,18 @@ class Project(MPTTModel, BaseModel):
                     if value.strip()
                 ]
 
-            # Extract only numbers
             bhk_numbers = []
 
             for bhk in bhk_values:
                 number = str(bhk).replace(" BHK", "").strip()
                 bhk_numbers.append(number)
 
-            # 3 + 4 BHK → 3-4-bhk
             if bhk_numbers:
                 bhk_slug = f"{'-'.join(bhk_numbers)}-bhk"
 
-        # -------------------------
+        # ==========================================
         # PROPERTY TYPE
-        # -------------------------
+        # ==========================================
         property_type_slug = ""
 
         if self.property_type:
@@ -909,9 +985,9 @@ class Project(MPTTModel, BaseModel):
                 self.property_type.name
             )
 
-        # -------------------------
+        # ==========================================
         # LOCALITY
-        # -------------------------
+        # ==========================================
         locality_slug = ""
 
         if self.locality:
@@ -919,9 +995,9 @@ class Project(MPTTModel, BaseModel):
                 self.locality.name
             )
 
-        # -------------------------
+        # ==========================================
         # CITY
-        # -------------------------
+        # ==========================================
         city_slug = ""
 
         if self.city:
@@ -929,13 +1005,14 @@ class Project(MPTTModel, BaseModel):
                 self.city.name
             )
 
-        # -------------------------
-        # FINAL SLUG
-        # -------------------------
+        # ==========================================
+        # SEO SLUG
+        # ==========================================
         slug_parts = [
             self.project_name,
             bhk_slug,
             property_type_slug,
+            "in",
             locality_slug,
             city_slug,
         ]
@@ -948,7 +1025,12 @@ class Project(MPTTModel, BaseModel):
             )
         )
 
+        # ==========================================
+        # SAVE
+        # ==========================================
         super().save(*args, **kwargs)
+
+
     
     class MPTTMeta:
         order_insertion_by = ['project_name']
@@ -1023,7 +1105,6 @@ class Project(MPTTModel, BaseModel):
             return f"₹ {fmt(price_min)}"
 
         return f"₹ {fmt(price_min)} – {fmt(price_max)}"
-
 
 
 class BookingOffer(BaseModel):

@@ -461,13 +461,14 @@ class EnquiryInline(BaseCRMInline):
 class DeveloperAdmin(
     BaseAdmin,
     LogoPreviewMixin,
+    ImportExportModelAdmin
     ):
     change_list_template = "admin/properties/developer/change_list.html"
     
 
     resource_class = DeveloperResource
 
-    list_display = (
+    list_display = ("id",
         "title",
         "city",
         "locality",
@@ -480,9 +481,7 @@ class DeveloperAdmin(
         
     )
 
-    list_display_links = (
-        "title",
-    )
+
 
     list_editable = (
         "featured_builder",
@@ -590,7 +589,7 @@ class DeveloperAdmin(
     )
 
     save_on_top = True
-    list_per_page = 30
+    list_per_page = 300
 
 
     # =====================================================
@@ -1249,7 +1248,7 @@ class ProjectAdmin(
     image_field = "image"
     mptt_indent_field = "project_name"
 
-    list_display = (
+    list_display = ('id',
         "tree_actions",
         "indented_title",
         "developer",
@@ -1261,9 +1260,7 @@ class ProjectAdmin(
         "image_preview",
     )
 
-    list_display_links = (
-        "indented_title",
-    )
+
 
     list_editable = (
         "featured_property",
@@ -1591,7 +1588,7 @@ class VisitAdmin(admin.ModelAdmin):
 @admin.register(Followup)
 class FollowupAdmin(
     BaseAdmin,
-    ImagePreviewMixin,
+    ImagePreviewMixin,ImportExportModelAdmin
     ):
 
     resource_class = FollowupResource
@@ -1647,7 +1644,7 @@ class FollowupAdmin(
 @admin.register(Meeting)
 class MeetingAdmin(
     BaseAdmin,
-    ImagePreviewMixin,
+    ImagePreviewMixin,ImportExportModelAdmin
     ):
 
     resource_class = MeetingResource
