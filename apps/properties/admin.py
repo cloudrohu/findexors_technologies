@@ -1313,7 +1313,7 @@ class ProjectAdmin(
 
     save_on_top = True
 
-    list_per_page = 30
+    list_per_page = 20
 
     inlines = [
         HeaderInline,
