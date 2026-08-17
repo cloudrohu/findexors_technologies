@@ -461,7 +461,6 @@ class EnquiryInline(BaseCRMInline):
 class DeveloperAdmin(
     BaseAdmin,
     LogoPreviewMixin,
-    ImportExportModelAdmin
     ):
     change_list_template = "admin/properties/developer/change_list.html"
     
