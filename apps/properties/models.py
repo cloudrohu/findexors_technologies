@@ -870,21 +870,85 @@ class Project(MPTTModel, BaseModel):
     def refresh_calling_status(self):
         refresh_calling_status(self)
 
-
-    # 🔑 CRITICAL FIX: Handling object-to-string conversion for slug creation
     def save(self, *args, **kwargs):
 
-        is_new = self.pk is None
+        # -------------------------
+        # BHK SLUG
+        # -------------------------
+        bhk_slug = ""
+
+        if self.bhk_type:
+
+            bhk_values = self.bhk_type
+
+            if isinstance(bhk_values, str):
+                bhk_values = [
+                    value.strip()
+                    for value in bhk_values.split(",")
+                    if value.strip()
+                ]
+
+            # Extract only numbers
+            bhk_numbers = []
+
+            for bhk in bhk_values:
+                number = str(bhk).replace(" BHK", "").strip()
+                bhk_numbers.append(number)
+
+            # 3 + 4 BHK → 3-4-bhk
+            if bhk_numbers:
+                bhk_slug = f"{'-'.join(bhk_numbers)}-bhk"
+
+        # -------------------------
+        # PROPERTY TYPE
+        # -------------------------
+        property_type_slug = ""
+
+        if self.property_type:
+            property_type_slug = slugify(
+                self.property_type.name
+            )
+
+        # -------------------------
+        # LOCALITY
+        # -------------------------
+        locality_slug = ""
+
+        if self.locality:
+            locality_slug = slugify(
+                self.locality.name
+            )
+
+        # -------------------------
+        # CITY
+        # -------------------------
+        city_slug = ""
+
+        if self.city:
+            city_slug = slugify(
+                self.city.name
+            )
+
+        # -------------------------
+        # FINAL SLUG
+        # -------------------------
+        slug_parts = [
+            self.project_name,
+            bhk_slug,
+            property_type_slug,
+            locality_slug,
+            city_slug,
+        ]
+
+        self.slug = slugify(
+            "-".join(
+                str(part).strip()
+                for part in slug_parts
+                if part
+            )
+        )
 
         super().save(*args, **kwargs)
-
-        if is_new and not self.slug:
-            self.slug = (
-                f"{slugify(self.project_name)}-{self.pk}"
-            )
-            super().save(update_fields=["slug"])
-    # --- End save method ---
-
     
     class MPTTMeta:
         order_insertion_by = ['project_name']
@@ -959,6 +1023,8 @@ class Project(MPTTModel, BaseModel):
             return f"₹ {fmt(price_min)}"
 
         return f"₹ {fmt(price_min)} – {fmt(price_max)}"
+
+
 
 class BookingOffer(BaseModel):
     Project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="BookingOffer")
