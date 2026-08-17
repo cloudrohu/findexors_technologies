@@ -589,7 +589,7 @@ class DeveloperAdmin(
     )
 
     save_on_top = True
-    list_per_page = 300
+    list_per_page = 15
 
 
     # =====================================================
@@ -1588,7 +1588,7 @@ class VisitAdmin(admin.ModelAdmin):
 @admin.register(Followup)
 class FollowupAdmin(
     BaseAdmin,
-    ImagePreviewMixin,ImportExportModelAdmin
+    ImagePreviewMixin,
     ):
 
     resource_class = FollowupResource
@@ -1644,7 +1644,7 @@ class FollowupAdmin(
 @admin.register(Meeting)
 class MeetingAdmin(
     BaseAdmin,
-    ImagePreviewMixin,ImportExportModelAdmin
+    ImagePreviewMixin,
     ):
 
     resource_class = MeetingResource
