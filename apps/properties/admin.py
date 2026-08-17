@@ -1319,33 +1319,34 @@ class ProjectAdmin(
     list_per_page = 30
 
     inlines = [
+        HeaderInline,
+        WelcomeToInline,
+        WebSliderInline,
+        OverviewInline,
+        AboutUsInline,
+        GalleryInline,
 
+
+        ConfigurationInline,
+        ConnectivityInline,
+        AmenitiesInline,
+        WhyInvestInline,
+        BankOfferInline,
+        FAQInline,
+        USPInline,
+
+        BookingOfferInline,
+        RERAInline,
+
+        ContactPersonInline,
+        EnquiryInline,
                 # CRM
+
         CommentProjectInline,
         VoiceProjectInline,
         VisitProjectInline,
         FollowupProjectInline,
         MeetingProjectInline,
-
-
-
-        BookingOfferInline,
-        WelcomeToInline,
-        WebSliderInline,
-        OverviewInline,
-        AboutUsInline,
-        USPInline,
-        ConfigurationInline,
-        ConnectivityInline,
-        AmenitiesInline,
-        GalleryInline,
-        HeaderInline,
-        RERAInline,
-        WhyInvestInline,
-        BankOfferInline,
-        FAQInline,
-        ContactPersonInline,
-        EnquiryInline,
     ]
 
     fieldsets = (
@@ -1354,27 +1355,36 @@ class ProjectAdmin(
             "fields": (
                 "parent",
                 "project_name",
-                "slug",
+                "property_type",
+
+                "city",
+                "locality",
+                "developer",
+
+                "architect",
+                "engineer",
+                "construction_status",
+
+                "bhk_type",
+                "possession_year",
+                "possession_month",
+                "occupancy_certificate",
+                "commencement_certificate",
+                "calling_status",
                 "image",
+                "youtube_embed_id",
+                "featured_property",
+                "is_active",
+                "slug",
                 "image_preview",
             )
         }),
 
-        ("Project Information", {
-            "fields": (
-                "developer",
-                "architect",
-                "engineer",
-                "property_type",
-                "construction_status",
-                "calling_status",
-            )
-        }),
+
 
         ("Location", {
             "fields": (
-                "city",
-                "locality",
+                
                 "area",
                 "postal_code",
                 "address",
@@ -1384,7 +1394,6 @@ class ProjectAdmin(
 
         ("Configuration", {
             "fields": (
-                "bhk_type",
                 "floor",
                 "land_parcel",
                 "luxurious",
@@ -1393,27 +1402,6 @@ class ProjectAdmin(
             )
         }),
 
-        ("Possession", {
-            "fields": (
-                "possession_year",
-                "possession_month",
-                "occupancy_certificate",
-                "commencement_certificate",
-            )
-        }),
-
-        ("Media", {
-            "fields": (
-                "youtube_embed_id",
-            )
-        }),
-
-        ("Status", {
-            "fields": (
-                "featured_property",
-                "is_active",
-            )
-        }),
 
         
     )
