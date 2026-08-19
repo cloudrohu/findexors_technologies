@@ -746,6 +746,9 @@
                     <b>Status :</b>
 
                     {{ obj.followup.status }}
+                    <span class="badge orange" style="margin-left:0px;">
+                        {{ obj.followup.id }}
+                    </span>
 
                 </div>
 
@@ -838,6 +841,10 @@
                     <b>Status :</b>
 
                     {{ obj.meeting.status }}
+
+                    <span class="badge blue" style="margin-left:8px;">
+                        {{ obj.meeting.id }}
+                    </span>
 
                 </div>
 

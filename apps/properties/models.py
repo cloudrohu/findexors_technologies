@@ -396,8 +396,6 @@ class Developer(BaseModel):
         refresh_calling_status(self)
 
 
-
-
 class Architects(BaseModel):
 
     CALLING_STATUS_CHOICES = [
@@ -1750,13 +1748,19 @@ class Followup(BaseModel):
         null=True,
     )
 
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
+
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Followup"
         verbose_name_plural = "Followups"
 
     def __str__(self):
-        return f"Followup #{self.pk}"
+        return f"Followup #{self.id}"
 
     def clean(self):
 
@@ -1779,6 +1783,32 @@ class Followup(BaseModel):
 
     def save(self, *args, **kwargs):
 
+        # -------------------------
+        # GENERATE FOLLOWUP ID
+        # FU000001
+        # -------------------------
+        if not self.id:
+
+            last_followup = (
+                Followup.objects
+                .filter(id__startswith="FU")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_followup and last_followup.id:
+                last_number = int(
+                    last_followup.id.replace("FU", "")
+                )
+                next_number = last_number + 1
+            else:
+                next_number = 1
+
+            self.id = f"FU{next_number:06d}"
+
+        # -------------------------
+        # SET TYPE
+        # -------------------------
         if self.project:
             self.type = "Project"
 
@@ -1795,6 +1825,9 @@ class Followup(BaseModel):
 
         super().save(*args, **kwargs)
 
+        # -------------------------
+        # DEAL DONE
+        # -------------------------
         if self.status == "Deal Done":
 
             if self.developer:
@@ -1842,7 +1875,6 @@ class Followup(BaseModel):
             project.refresh_calling_status()
 
 
-
 class Meeting(BaseModel):
 
     TYPE_CHOICES = (
@@ -1857,6 +1889,16 @@ class Meeting(BaseModel):
         ("Re Meeting", "Re Meeting"),
         ("Cancelled", "Cancelled"),
         ("Deal Done", "Deal Done"),
+    )
+
+    # -------------------------
+    # CUSTOM MEETING ID
+    # MEET000001
+    # -------------------------
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
     )
 
     type = models.CharField(
@@ -1928,7 +1970,7 @@ class Meeting(BaseModel):
         verbose_name_plural = "Meetings"
 
     def __str__(self):
-        return f"Meeting #{self.pk}"
+        return f"Meeting #{self.id}"
 
     def clean(self):
 
@@ -1951,6 +1993,32 @@ class Meeting(BaseModel):
 
     def save(self, *args, **kwargs):
 
+        # -------------------------
+        # GENERATE MEETING ID
+        # MEET000001
+        # -------------------------
+        if not self.id:
+
+            last_meeting = (
+                Meeting.objects
+                .filter(id__startswith="MT")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_meeting and last_meeting.id:
+                last_number = int(
+                    last_meeting.id.replace("MT", "")
+                )
+                next_number = last_number + 1
+            else:
+                next_number = 1
+
+            self.id = f"MT{next_number:06d}"
+
+        # -------------------------
+        # SET TYPE
+        # -------------------------
         if self.project:
             self.type = "Project"
 
@@ -1967,6 +2035,9 @@ class Meeting(BaseModel):
 
         super().save(*args, **kwargs)
 
+        # -------------------------
+        # DEAL DONE
+        # -------------------------
         if self.status == "Deal Done":
 
             if self.developer:
@@ -2012,4 +2083,3 @@ class Meeting(BaseModel):
 
         if project:
             project.refresh_calling_status()
-
