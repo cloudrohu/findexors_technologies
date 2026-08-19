@@ -628,7 +628,7 @@
                         <!-- MEETING ID -->
 
                         <span class="badge badge-id">
-                            M{{ obj.pk }}
+                            {{ obj.pk }}
                         </span>
 
 
@@ -636,11 +636,39 @@
 
                         {% if obj.type %}
 
+                    {% if obj.developer %}
+
+                        <span class="badge badge-type">
+                            Developer: {{ obj.developer.id }}
+                        </span>
+
+                    {% elif obj.architect %}
+
+                        <span class="badge badge-type">
+                            Architect: {{ obj.architect.id }}
+                        </span>
+
+                    {% elif obj.engineer %}
+
+                        <span class="badge badge-type">
+                            Engineer: {{ obj.engineer.id }}
+                        </span>
+
+                    {% elif obj.project %}
+
+                        <span class="badge badge-type">
+                            Project: {{ obj.project.id }}
+                        </span>
+
+                    {% else %}
+
                         <span class="badge badge-type">
                             {{ obj.type }}
                         </span>
 
-                        {% endif %}
+                    {% endif %}
+
+                {% endif %}
 
 
                         <!-- STATUS -->
