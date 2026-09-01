@@ -84,6 +84,7 @@ LOCAL_APPS = [
    "apps.properties.apps.PropertiesConfig",   # ✅ Add this
    "apps.properties_utility.apps.PropertiesUtilityConfig",
    "apps.importer",
+   "apps.gmbdata",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
