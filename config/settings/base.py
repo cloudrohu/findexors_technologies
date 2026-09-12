@@ -79,7 +79,7 @@ LOCAL_APPS = [
     "apps.reports.apps.ReportsConfig",
     "apps.response.apps.ResponseConfig",
     "apps.dashboard.apps.DashboardConfig",
-    "apps.business.apps.BusinessConfig",
+   # "apps.business.apps.BusinessConfig",
     "apps.business_utility.apps.BusinessUtilityConfig",
    "apps.properties.apps.PropertiesConfig",   # ✅ Add this
    "apps.properties_utility.apps.PropertiesUtilityConfig",

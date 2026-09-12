@@ -22,11 +22,9 @@ class BusinessAdmin(ImportExportModelAdmin):
     resource_class = BusinessResource
 
     save_on_top = True
-
     save_as = True
 
     list_per_page = 30
-
     list_max_show_all = 50
 
     date_hierarchy = "created_at"
@@ -34,12 +32,15 @@ class BusinessAdmin(ImportExportModelAdmin):
     empty_value_display = "-"
 
     prepopulated_fields = {
-        "slug": (
-            "name",
-        ),
+        "slug": ("name",),
     }
 
+    # ==========================================================
+    # LIST DISPLAY
+    # ==========================================================
+
     list_display = (
+        "id",
         "logo_preview",
         "name",
         "category",
@@ -58,6 +59,10 @@ class BusinessAdmin(ImportExportModelAdmin):
         "name",
     )
 
+    # ==========================================================
+    # SEARCH
+    # ==========================================================
+
     search_fields = (
         "name",
         "code",
@@ -68,6 +73,10 @@ class BusinessAdmin(ImportExportModelAdmin):
         "website",
         "owner_name",
     )
+
+    # ==========================================================
+    # FILTERS
+    # ==========================================================
 
     list_filter = (
         "category",
@@ -80,9 +89,17 @@ class BusinessAdmin(ImportExportModelAdmin):
         "is_active",
     )
 
+    # ==========================================================
+    # ORDERING
+    # ==========================================================
+
     ordering = (
         "name",
     )
+
+    # ==========================================================
+    # SELECT RELATED
+    # ==========================================================
 
     list_select_related = (
         "category",
@@ -91,8 +108,9 @@ class BusinessAdmin(ImportExportModelAdmin):
         "location",
     )
 
-
-
+    # ==========================================================
+    # READONLY FIELDS
+    # ==========================================================
 
     readonly_fields = (
         "logo_preview",
@@ -100,6 +118,10 @@ class BusinessAdmin(ImportExportModelAdmin):
         "created_at",
         "updated_at",
     )
+
+    # ==========================================================
+    # INLINES
+    # ==========================================================
 
     inlines = (
         BusinessGalleryInline,
@@ -109,6 +131,10 @@ class BusinessAdmin(ImportExportModelAdmin):
         BusinessSocialLinkInline,
         BusinessAttributeValueInline,
     )
+
+    # ==========================================================
+    # LOGO PREVIEW
+    # ==========================================================
 
     @admin.display(description="Logo")
     def logo_preview(self, obj):
@@ -124,6 +150,10 @@ class BusinessAdmin(ImportExportModelAdmin):
 
         return "-"
 
+    # ==========================================================
+    # COVER PREVIEW
+    # ==========================================================
+
     @admin.display(description="Cover")
     def cover_preview(self, obj):
 
@@ -137,21 +167,35 @@ class BusinessAdmin(ImportExportModelAdmin):
 
         return "-"
 
+    # ==========================================================
+    # RATING BADGE
+    # ==========================================================
+
     @admin.display(description="Rating")
     def rating_badge(self, obj):
 
+        rating = f"{float(obj.rating or 0):.2f}"
+
         return format_html(
-            "<strong>{:.2f} ⭐</strong>",
-            obj.rating,
+            "<strong>{} ⭐</strong>",
+            rating,
         )
+
+    # ==========================================================
+    # VIEWS BADGE
+    # ==========================================================
 
     @admin.display(description="Views")
     def views_badge(self, obj):
 
         return format_html(
             "{} 👁",
-            obj.view_count,
+            obj.view_count or 0,
         )
+
+    # ==========================================================
+    # VERIFIED BADGE
+    # ==========================================================
 
     @admin.display(description="Verified")
     def verified_badge(self, obj):
@@ -161,17 +205,23 @@ class BusinessAdmin(ImportExportModelAdmin):
                 '<span style="background:#198754;'
                 'color:white;padding:4px 10px;'
                 'border-radius:20px;">'
-                '✓ Verified'
-                '</span>'
+                '{}'
+                '</span>',
+                "✓ Verified",
             )
 
         return format_html(
             '<span style="background:#dc3545;'
             'color:white;padding:4px 10px;'
             'border-radius:20px;">'
-            '✗ No'
-            '</span>'
+            '{}'
+            '</span>',
+            "✗ No",
         )
+
+    # ==========================================================
+    # FEATURED BADGE
+    # ==========================================================
 
     @admin.display(description="Featured")
     def featured_badge(self, obj):
@@ -181,11 +231,16 @@ class BusinessAdmin(ImportExportModelAdmin):
                 '<span style="background:#fd7e14;'
                 'color:white;padding:4px 10px;'
                 'border-radius:20px;">'
-                '⭐ Featured'
-                '</span>'
+                '{}'
+                '</span>',
+                "⭐ Featured",
             )
 
         return "-"
+
+    # ==========================================================
+    # PREMIUM BADGE
+    # ==========================================================
 
     @admin.display(description="Premium")
     def premium_badge(self, obj):
@@ -195,14 +250,22 @@ class BusinessAdmin(ImportExportModelAdmin):
                 '<span style="background:#6f42c1;'
                 'color:white;padding:4px 10px;'
                 'border-radius:20px;">'
-                '💎 Premium'
-                '</span>'
+                '{}'
+                '</span>',
+                "💎 Premium",
             )
 
         return "-"
 
+    # ==========================================================
+    # FIELDSETS
+    # ==========================================================
 
-        fieldsets = (
+    fieldsets = (
+
+        # ------------------------------------------------------
+        # BASIC INFORMATION
+        # ------------------------------------------------------
 
         (
             "Basic Information",
@@ -220,6 +283,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             },
         ),
 
+        # ------------------------------------------------------
+        # CONTACT INFORMATION
+        # ------------------------------------------------------
+
         (
             "Contact Information",
             {
@@ -233,19 +300,25 @@ class BusinessAdmin(ImportExportModelAdmin):
             },
         ),
 
+        # ------------------------------------------------------
+        # LOCATION
+        # ------------------------------------------------------
+
         (
             "Location",
             {
                 "fields": (
                     "location",
                     "address",
-                    (
-                        "latitude",
-                        "longitude",
-                    ),
+                    "latitude",
+                    "longitude",
                 )
             },
         ),
+
+        # ------------------------------------------------------
+        # MEDIA
+        # ------------------------------------------------------
 
         (
             "Media",
@@ -259,6 +332,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             },
         ),
 
+        # ------------------------------------------------------
+        # BUSINESS DETAILS
+        # ------------------------------------------------------
+
         (
             "Business Details",
             {
@@ -270,6 +347,10 @@ class BusinessAdmin(ImportExportModelAdmin):
                 )
             },
         ),
+
+        # ------------------------------------------------------
+        # FEATURES
+        # ------------------------------------------------------
 
         (
             "Features",
@@ -284,6 +365,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             },
         ),
 
+        # ------------------------------------------------------
+        # STATUS
+        # ------------------------------------------------------
+
         (
             "Status",
             {
@@ -296,6 +381,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             },
         ),
 
+        # ------------------------------------------------------
+        # STATISTICS
+        # ------------------------------------------------------
+
         (
             "Statistics",
             {
@@ -306,6 +395,10 @@ class BusinessAdmin(ImportExportModelAdmin):
                 )
             },
         ),
+
+        # ------------------------------------------------------
+        # SYSTEM INFORMATION
+        # ------------------------------------------------------
 
         (
             "System Information",
@@ -319,8 +412,11 @@ class BusinessAdmin(ImportExportModelAdmin):
                 )
             },
         ),
-
     )
+
+    # ==========================================================
+    # QUERYSET
+    # ==========================================================
 
     def get_queryset(self, request):
 
@@ -346,9 +442,8 @@ class BusinessAdmin(ImportExportModelAdmin):
             )
         )
 
-
-        # ==========================================================
-    # Admin Actions
+    # ==========================================================
+    # ADMIN ACTIONS
     # ==========================================================
 
     actions = (
@@ -364,6 +459,10 @@ class BusinessAdmin(ImportExportModelAdmin):
         "reset_reviews",
     )
 
+    # ==========================================================
+    # VERIFY BUSINESS
+    # ==========================================================
+
     @admin.action(description="✅ Verify Selected Businesses")
     def verify_business(self, request, queryset):
 
@@ -375,6 +474,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             request,
             f"{count} business(es) verified successfully.",
         )
+
+    # ==========================================================
+    # UNVERIFY BUSINESS
+    # ==========================================================
 
     @admin.action(description="❌ Remove Verification")
     def unverify_business(self, request, queryset):
@@ -388,6 +491,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             f"{count} business(es) unverified successfully.",
         )
 
+    # ==========================================================
+    # MAKE FEATURED
+    # ==========================================================
+
     @admin.action(description="⭐ Mark as Featured")
     def make_featured(self, request, queryset):
 
@@ -399,6 +506,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             request,
             f"{count} business(es) marked as featured.",
         )
+
+    # ==========================================================
+    # REMOVE FEATURED
+    # ==========================================================
 
     @admin.action(description="Remove Featured")
     def remove_featured(self, request, queryset):
@@ -412,6 +523,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             f"{count} business(es) removed from featured.",
         )
 
+    # ==========================================================
+    # MAKE PREMIUM
+    # ==========================================================
+
     @admin.action(description="💎 Mark as Premium")
     def make_premium(self, request, queryset):
 
@@ -423,6 +538,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             request,
             f"{count} business(es) marked as premium.",
         )
+
+    # ==========================================================
+    # REMOVE PREMIUM
+    # ==========================================================
 
     @admin.action(description="Remove Premium")
     def remove_premium(self, request, queryset):
@@ -436,6 +555,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             f"{count} business(es) removed from premium.",
         )
 
+    # ==========================================================
+    # ACTIVATE BUSINESS
+    # ==========================================================
+
     @admin.action(description="✅ Activate Businesses")
     def activate_business(self, request, queryset):
 
@@ -447,6 +570,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             request,
             f"{count} business(es) activated.",
         )
+
+    # ==========================================================
+    # DEACTIVATE BUSINESS
+    # ==========================================================
 
     @admin.action(description="❌ Deactivate Businesses")
     def deactivate_business(self, request, queryset):
@@ -460,6 +587,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             f"{count} business(es) deactivated.",
         )
 
+    # ==========================================================
+    # RESET VIEWS
+    # ==========================================================
+
     @admin.action(description="👁 Reset View Counter")
     def reset_views(self, request, queryset):
 
@@ -471,6 +602,10 @@ class BusinessAdmin(ImportExportModelAdmin):
             request,
             f"View counter reset for {count} business(es).",
         )
+
+    # ==========================================================
+    # RESET REVIEWS
+    # ==========================================================
 
     @admin.action(description="⭐ Reset Rating & Reviews")
     def reset_reviews(self, request, queryset):
@@ -486,7 +621,7 @@ class BusinessAdmin(ImportExportModelAdmin):
         )
 
     # ==========================================================
-    # Save Model
+    # SAVE MODEL
     # ==========================================================
 
     def save_model(self, request, obj, form, change):
@@ -504,10 +639,15 @@ class BusinessAdmin(ImportExportModelAdmin):
         )
 
     # ==========================================================
-    # Save Messages
+    # SAVE MESSAGES
     # ==========================================================
 
-    def response_add(self, request, obj, post_url_continue=None):
+    def response_add(
+        self,
+        request,
+        obj,
+        post_url_continue=None,
+    ):
 
         self.message_user(
             request,
@@ -531,6 +671,3 @@ class BusinessAdmin(ImportExportModelAdmin):
             request,
             obj,
         )
-
-
-    

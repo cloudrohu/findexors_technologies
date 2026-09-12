@@ -1295,6 +1295,8 @@ class ProjectAdmin(
         "is_active",
         "developer",
         "city",
+        "locality",
+
         "property_type",
     )
 

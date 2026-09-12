@@ -68,6 +68,11 @@ class Business(BaseModel):
         blank=True,
     )
 
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
     # ==========================================
     # Contact
     # ==========================================
@@ -239,3 +244,33 @@ class Business(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+
+    # ==========================================
+    # GENERATE BUSINESS ID
+    # ==========================================
+
+        if not self.id:
+
+            last_business = (
+                Business.objects
+                .filter(id__startswith="B30001")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_business and last_business.id:
+
+                last_number = int(
+                    last_business.id.replace("B30001", "")
+                )
+
+                next_number = last_number + 1
+
+            else:
+                next_number = 1
+
+            self.id = f"B30001{next_number:03d}"
+
+        super().save(*args, **kwargs)

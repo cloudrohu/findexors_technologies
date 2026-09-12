@@ -69,6 +69,84 @@ def close_jobs(modeladmin, request, queryset):
 
 
 # ==========================================================
+# JOB APPLICANT INLINE
+# ==========================================================
+
+class JobApplicantInline(admin.TabularInline):
+
+    model = JobApplicant
+
+    extra = 0
+
+    show_change_link = True
+
+    fields = (
+        "full_name",
+        "phone",
+        "email",
+        "current_company",
+        "current_designation",
+        "experience_display",
+        "expected_salary_display",
+        "status_badge",
+        "source",
+        "applied_at",
+    )
+
+    readonly_fields = (
+        "experience_display",
+        "expected_salary_display",
+        "status_badge",
+        "applied_at",
+    )
+
+    ordering = (
+        "-applied_at",
+    )
+
+    @admin.display(description="Experience")
+    def experience_display(self, obj):
+
+        if obj.experience is None:
+            return "-"
+
+        years = obj.experience // 12
+        months = obj.experience % 12
+
+        return f"{years}Y {months}M"
+
+    @admin.display(description="Expected Salary")
+    def expected_salary_display(self, obj):
+
+        if obj.expected_salary is None:
+            return "-"
+
+        return f"${obj.expected_salary:,.2f}"
+
+    @admin.display(description="Status")
+    def status_badge(self, obj):
+
+        colors = {
+            "APPLIED": "#2563EB",
+            "SHORTLISTED": "#16A34A",
+            "INTERVIEW": "#9333EA",
+            "SELECTED": "#0F766E",
+            "REJECTED": "#DC2626",
+            "HOLD": "#D97706",
+            "JOINED": "#15803D",
+        }
+
+        color = colors.get(obj.status, "#6B7280")
+
+        return format_html(
+            '<span style="background:{};color:white;padding:4px 10px;'
+            'border-radius:20px;font-size:12px;">{}</span>',
+            color,
+            obj.get_status_display(),
+        )
+
+
+# ==========================================================
 # Job Admin
 # ==========================================================
 
@@ -140,6 +218,14 @@ class JobAdmin(ImportExportModelAdmin):
         "category",
         "industry",
         "location",
+    )
+
+    # ======================================================
+    # APPLICANTS
+    # ======================================================
+
+    inlines = (
+        JobApplicantInline,
     )
 
     actions = (
@@ -313,11 +399,13 @@ class JobAdmin(ImportExportModelAdmin):
 
         if obj.featured:
             return format_html(
-                '<span style="color:#16A34A;font-weight:700;">✓ Featured</span>'
+                '<span style="color:#16A34A;font-weight:700;">{}</span>',
+                "✓ Featured",
             )
 
         return format_html(
-            '<span style="color:#9CA3AF;">—</span>'
+            '<span style="color:#9CA3AF;">{}</span>',
+            "—",
         )
 
     @admin.display(description="Published", ordering="published")
@@ -325,11 +413,13 @@ class JobAdmin(ImportExportModelAdmin):
 
         if obj.published:
             return format_html(
-                '<span style="color:#16A34A;font-weight:700;">Published</span>'
+                '<span style="color:#16A34A;font-weight:700;">{}</span>',
+                "Published",
             )
 
         return format_html(
-            '<span style="color:#DC2626;font-weight:700;">Hidden</span>'
+            '<span style="color:#DC2626;font-weight:700;">{}</span>',
+            "Hidden",
         )
 
     # ==========================================================
@@ -350,13 +440,76 @@ class JobAdmin(ImportExportModelAdmin):
 
 
 # ==========================================================
+# INTERVIEW SCHEDULE INLINE
+# ==========================================================
+
+class InterviewScheduleInline(admin.TabularInline):
+
+    model = InterviewSchedule
+
+    extra = 0
+
+    max_num = 1
+
+    can_delete = True
+
+    show_change_link = True
+
+    fields = (
+        "interview_type",
+        "scheduled_datetime",
+        "duration",
+        "interviewer",
+        "office_address",
+        "meeting_link",
+        "status_badge",
+        "whatsapp_sent",
+        "reminder_sent",
+    )
+
+    readonly_fields = (
+        "status_badge",
+    )
+
+    ordering = (
+        "-scheduled_datetime",
+    )
+
+    @admin.display(description="Status")
+    def status_badge(self, obj):
+
+        colors = {
+            "SCHEDULED": "#2563EB",
+            "CONFIRMED": "#16A34A",
+            "COMPLETED": "#059669",
+            "CANCELLED": "#DC2626",
+            "RESCHEDULED": "#D97706",
+            "NO_SHOW": "#7C3AED",
+        }
+
+        color = colors.get(obj.status, "#6B7280")
+
+        return format_html(
+            '<span style="background:{};color:white;'
+            'padding:4px 10px;border-radius:20px;">{}</span>',
+            color,
+            obj.get_status_display(),
+        )
+
+
+# ==========================================================
 # JOB APPLICANT ADMIN
 # ==========================================================
+
 
 @admin.register(JobApplicant)
 class JobApplicantAdmin(ImportExportModelAdmin):
 
     resource_class = JobApplicantResource
+
+    # ======================================================
+    # LIST
+    # ======================================================
 
     list_display = (
         "full_name",
@@ -371,21 +524,34 @@ class JobApplicantAdmin(ImportExportModelAdmin):
         "applied_at",
     )
 
+    # ======================================================
+    # FILTERS
+    # ======================================================
+
     list_filter = (
-        "status",
-        "source",
-        "job",
-        "applied_at",
+        ("status", admin.ChoicesFieldListFilter),
+        ("source", admin.ChoicesFieldListFilter),
+        ("job", admin.RelatedOnlyFieldListFilter),
+        ("applied_at", admin.DateFieldListFilter),
     )
+
+    # ======================================================
+    # SEARCH
+    # ======================================================
 
     search_fields = (
         "full_name",
         "phone",
         "email",
         "current_company",
+        "current_designation",
+        "job__title__name",
+        "job__company__name",
     )
 
-    ordering = ("-applied_at",)
+    ordering = (
+        "-applied_at",
+    )
 
     autocomplete_fields = (
         "job",
@@ -408,6 +574,18 @@ class JobApplicantAdmin(ImportExportModelAdmin):
     date_hierarchy = "applied_at"
 
     show_full_result_count = False
+
+    # ======================================================
+    # INTERVIEW SCHEDULES
+    # ======================================================
+
+    inlines = (
+        InterviewScheduleInline,
+    )
+
+    # ======================================================
+    # FIELDSETS
+    # ======================================================
 
     fieldsets = (
 
@@ -471,14 +649,21 @@ class JobApplicantAdmin(ImportExportModelAdmin):
                 )
             },
         ),
-
     )
+
+    # ======================================================
+    # ACTIONS
+    # ======================================================
 
     actions = (
         "mark_shortlisted",
         "mark_selected",
         "mark_rejected",
     )
+
+    # ======================================================
+    # QUERYSET
+    # ======================================================
 
     def get_queryset(self, request):
 
@@ -488,17 +673,29 @@ class JobApplicantAdmin(ImportExportModelAdmin):
             .select_related(
                 "job",
                 "location",
+                "postal_code",
             )
         )
 
+    # ======================================================
+    # PHONE
+    # ======================================================
+
     @admin.display(description="Phone")
     def phone_link(self, obj):
+
+        if not obj.phone:
+            return "-"
 
         return format_html(
             '<a href="tel:{}">{}</a>',
             obj.phone,
             obj.phone,
         )
+
+    # ======================================================
+    # EMAIL
+    # ======================================================
 
     @admin.display(description="Email")
     def email_link(self, obj):
@@ -512,6 +709,10 @@ class JobApplicantAdmin(ImportExportModelAdmin):
             obj.email,
         )
 
+    # ======================================================
+    # RESUME
+    # ======================================================
+
     @admin.display(description="Resume")
     def resume_link(self, obj):
 
@@ -523,18 +724,36 @@ class JobApplicantAdmin(ImportExportModelAdmin):
             obj.resume.url,
         )
 
+    # ======================================================
+    # EXPERIENCE
+    # ======================================================
+
     @admin.display(description="Experience")
     def experience_display(self, obj):
+
+        if obj.experience is None:
+            return "-"
 
         years = obj.experience // 12
         months = obj.experience % 12
 
         return f"{years}Y {months}M"
 
+    # ======================================================
+    # EXPECTED SALARY
+    # ======================================================
+
     @admin.display(description="Expected Salary")
     def expected_salary_display(self, obj):
 
+        if obj.expected_salary is None:
+            return "-"
+
         return f"${obj.expected_salary:,.2f}"
+
+    # ======================================================
+    # STATUS
+    # ======================================================
 
     @admin.display(description="Status")
     def status_badge(self, obj):
@@ -549,29 +768,72 @@ class JobApplicantAdmin(ImportExportModelAdmin):
             "JOINED": "#15803D",
         }
 
-        color = colors.get(obj.status, "#6B7280")
+        color = colors.get(
+            obj.status,
+            "#6B7280",
+        )
 
         return format_html(
-            '<span style="background:{};color:white;padding:4px 10px;'
-            'border-radius:20px;font-size:12px;">{}</span>',
+            '<span style="background:{};'
+            'color:white;'
+            'padding:4px 10px;'
+            'border-radius:20px;'
+            'font-size:12px;">'
+            '{}</span>',
             color,
             obj.get_status_display(),
         )
 
+    # ======================================================
+    # MARK SELECTED
+    # ======================================================
+
     @admin.action(description="Mark Selected")
     def mark_selected(self, request, queryset):
-        updated = queryset.update(status="SELECTED")
-        self.message_user(request, f"{updated} applicants updated.")
+
+        updated = queryset.update(
+            status="SELECTED"
+        )
+
+        self.message_user(
+            request,
+            f"{updated} applicants updated.",
+        )
+
+    # ======================================================
+    # MARK SHORTLISTED
+    # ======================================================
 
     @admin.action(description="Mark Shortlisted")
     def mark_shortlisted(self, request, queryset):
-        updated = queryset.update(status="SHORTLISTED")
-        self.message_user(request, f"{updated} applicants updated.")
+
+        updated = queryset.update(
+            status="SHORTLISTED"
+        )
+
+        self.message_user(
+            request,
+            f"{updated} applicants updated.",
+        )
+
+    # ======================================================
+    # MARK REJECTED
+    # ======================================================
 
     @admin.action(description="Mark Rejected")
     def mark_rejected(self, request, queryset):
-        updated = queryset.update(status="REJECTED")
-        self.message_user(request, f"{updated} applicants updated.")
+
+        updated = queryset.update(
+            status="REJECTED"
+        )
+
+        self.message_user(
+            request,
+            f"{updated} applicants updated.",
+        )
+
+
+
 
 # ==========================================================
 # INTERVIEW SCHEDULE ADMIN
@@ -694,11 +956,13 @@ class InterviewScheduleAdmin(ImportExportModelAdmin):
 
         if obj.whatsapp_sent:
             return format_html(
-                '<span style="color:#16A34A;font-weight:bold;">Sent</span>'
+                '<span style="color:#16A34A;font-weight:bold;">{}</span>',
+                "Sent",
             )
 
         return format_html(
-            '<span style="color:#DC2626;">Pending</span>'
+            '<span style="color:#DC2626;">{}</span>',
+            "Pending",
         )
 
     @admin.display(description="Interview")
@@ -966,11 +1230,13 @@ class EmployeeJoiningAdmin(ImportExportModelAdmin):
 
         if obj.documents_verified:
             return format_html(
-                '<span style="color:#16A34A;font-weight:700;">Verified</span>'
+                '<span style="color:#16A34A;font-weight:700;">{}</span>',
+                "Verified",
             )
 
         return format_html(
-            '<span style="color:#DC2626;">Pending</span>'
+            '<span style="color:#DC2626;">{}</span>',
+            "Pending",
         )
 
     @admin.display(description="Welcome")
@@ -978,11 +1244,13 @@ class EmployeeJoiningAdmin(ImportExportModelAdmin):
 
         if obj.welcome_mail_sent:
             return format_html(
-                '<span style="color:#16A34A;">Sent</span>'
+                '<span style="color:#16A34A;">{}</span>',
+                "Sent",
             )
 
         return format_html(
-            '<span style="color:#D97706;">Pending</span>'
+            '<span style="color:#D97706;">{}</span>',
+            "Pending",
         )
 
 

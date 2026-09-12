@@ -154,8 +154,6 @@ class DocumentType(BaseModel):
         return self.name
 
 
-
-
 class Company(BaseModel):
 
     # =====================================================
@@ -298,22 +296,22 @@ class Company(BaseModel):
         Location,
         on_delete=models.PROTECT,
         related_name="companies_locality",
+        limit_choices_to={
+            "location_type": LocationType.LOCALITY_AREA,
+        },
         null=True,
         blank=True,
-        limit_choices_to={
-            "location_type": LocationType.LOCALITY_AREA
-        },
     )
 
     area = models.ForeignKey(
         Location,
         on_delete=models.PROTECT,
         related_name="companies_area",
+        limit_choices_to={
+            "location_type": LocationType.SUBLOCALITY_AREA,
+        },
         null=True,
         blank=True,
-        limit_choices_to={
-            "location_type": LocationType.SUBLOCALITY_AREA
-        },
     )
 
     postal_code = models.ForeignKey(
@@ -393,20 +391,29 @@ class Company(BaseModel):
         config_name="default",
     )
 
-
     # =====================================================
     # SOCIAL
     # =====================================================
 
-    facebook = models.URLField(blank=True)
+    facebook = models.URLField(
+        blank=True,
+    )
 
-    instagram = models.URLField(blank=True)
+    instagram = models.URLField(
+        blank=True,
+    )
 
-    linkedin = models.URLField(blank=True)
+    linkedin = models.URLField(
+        blank=True,
+    )
 
-    twitter = models.URLField(blank=True)
+    twitter = models.URLField(
+        blank=True,
+    )
 
-    youtube = models.URLField(blank=True)
+    youtube = models.URLField(
+        blank=True,
+    )
 
     # =====================================================
     # SEO
@@ -426,6 +433,16 @@ class Company(BaseModel):
     )
 
     # =====================================================
+    # ID
+    # =====================================================
+
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
+
+    # =====================================================
     # FLAGS
     # =====================================================
 
@@ -437,27 +454,85 @@ class Company(BaseModel):
         default=False,
     )
 
+    # =====================================================
+    # META
+    # =====================================================
+
     class Meta:
         ordering = ["name"]
         verbose_name = "Company"
         verbose_name_plural = "Companies"
 
+    # =====================================================
+    # STRING
+    # =====================================================
+
     def __str__(self):
         return self.name
 
+    # =====================================================
+    # SAVE
+    # =====================================================
+
     def save(self, *args, **kwargs):
+
+        # =================================================
+        # CLEAN PRIMARY PHONE
+        # =================================================
 
         if self.primary_phone:
             self.primary_phone = (
-                self.primary_phone.replace(" ", "").strip()
+                self.primary_phone
+                .replace(" ", "")
+                .strip()
             )
+
+        # =================================================
+        # GENERATE SLUG
+        # =================================================
 
         if not self.slug:
             self.slug = slugify(self.name)
 
+        # =================================================
+        # GENERATE COMPANY ID
+        #
+        # C300010001
+        # C300010002
+        # C300010003
+        # =================================================
+
+        if not self.id:
+
+            last_company = (
+                Company.objects
+                .filter(id__startswith="C30001")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_company and last_company.id:
+
+                last_number = int(
+                    last_company.id.replace(
+                        "C30001",
+                        "",
+                        1,
+                    )
+                )
+
+                next_number = last_number + 1
+
+            else:
+                next_number = 1
+
+            self.id = f"C30001{next_number:04d}"
+
+        # =================================================
+        # SAVE
+        # =================================================
+
         super().save(*args, **kwargs)
-
-
 # ==========================================================
 # COMPANY BRANCH
 # ==========================================================
