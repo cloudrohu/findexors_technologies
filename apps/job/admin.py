@@ -156,6 +156,7 @@ class JobAdmin(ImportExportModelAdmin):
     resource_class = JobResource
 
     list_display = (
+        "id",
         "title",
         "company",
         "location",
@@ -512,6 +513,7 @@ class JobApplicantAdmin(ImportExportModelAdmin):
     # ======================================================
 
     list_display = (
+        'id',
         "full_name",
         "phone_link",
         "email_link",
@@ -845,6 +847,7 @@ class InterviewScheduleAdmin(ImportExportModelAdmin):
     resource_class = InterviewScheduleResource
 
     list_display = (
+        "id",
         "applicant",
         "job",
         "interview_type_badge",

@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 
+from django.utils import timezone
+
 from apps.core.models import BaseModel
 from apps.companies.models import Company
 from apps.utility.models import Location, PostalCode, LocationType
@@ -252,14 +254,29 @@ class Job(BaseModel):
         blank=True,
     )
 
-    meta_description = models.TextField(blank=True)
+    meta_description = models.TextField(
+        blank=True,
+    )
 
-    meta_keywords = models.TextField(blank=True)
+    meta_keywords = models.TextField(
+        blank=True,
+    )
+
+    # =====================================================
+    # ID
+    # =====================================================
+
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
 
     class Meta:
         ordering = ["-created_at"]
         verbose_name = "Job"
         verbose_name_plural = "Jobs"
+
         indexes = [
             models.Index(fields=["company"]),
             models.Index(fields=["title"]),
@@ -291,35 +308,74 @@ class Job(BaseModel):
             )
 
         if self.postal_code and self.location:
+
             if self.postal_code.location_id != self.location_id:
                 raise ValidationError(
                     {
-                        "postal_code": "Selected postal code does not belong to selected location."
+                        "postal_code": (
+                            "Selected postal code does not belong "
+                            "to selected location."
+                        )
                     }
                 )
 
     def save(self, *args, **kwargs):
 
+        # =================================================
+        # GENERATE SLUG
+        # =================================================
+
         if not self.slug:
             self.slug = slugify(
-                f"{self.company.name}-{self.title.name}-{self.location.name}"
+                f"{self.company.name}-"
+                f"{self.title.name}-"
+                f"{self.location.name}"
             )
 
+        # =================================================
+        # GENERATE JOB ID
+        # =================================================
+
+        if not self.id:
+
+            last_job = (
+                Job.objects
+                .filter(id__startswith="J10001")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_job and last_job.id:
+
+                last_number = int(
+                    last_job.id.replace(
+                        "J10001",
+                        "",
+                        1,
+                    )
+                )
+
+                next_number = last_number + 1
+
+            else:
+                next_number = 1
+
+            self.id = f"J10001{next_number:04d}"
+
+        # =================================================
+        # VALIDATE
+        # =================================================
+
         self.full_clean()
+
+        # =================================================
+        # SAVE
+        # =================================================
 
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} - {self.company}"
-
-
-
-
-# ==========================================================
-# JOB APPLICANT
-# ==========================================================
-
-from django.utils import timezone
 
 
 class ApplicationStatus(models.TextChoices):
@@ -466,6 +522,11 @@ class JobApplicant(BaseModel):
         default=ApplicationStatus.APPLIED,
     )
 
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
     applied_at = models.DateTimeField(
         default=timezone.now,
     )
@@ -489,17 +550,75 @@ class JobApplicant(BaseModel):
             )
         ]
 
+    # =====================================================
+    # VALIDATION
+    # =====================================================
+
     def clean(self):
 
         if self.postal_code and self.location:
+
             if self.postal_code.location_id != self.location_id:
+
                 raise ValidationError(
                     "Postal code does not belong to selected location."
                 )
 
+    # =====================================================
+    # SAVE
+    # =====================================================
+
     def save(self, *args, **kwargs):
+
+        # =================================================
+        # GENERATE APPLICANT ID
+        #
+        # AP200010001
+        # AP200010002
+        # AP200010003
+        # =================================================
+
+        if not self.id:
+
+            last_applicant = (
+                JobApplicant.objects
+                .filter(id__startswith="AP20001")
+                .order_by("-id")
+                .first()
+            )
+
+            if last_applicant and last_applicant.id:
+
+                last_number = int(
+                    last_applicant.id.replace(
+                        "AP20001",
+                        "",
+                        1,
+                    )
+                )
+
+                next_number = last_number + 1
+
+            else:
+                next_number = 1
+
+            self.id = f"AP20001{next_number:04d}"
+
+        # =================================================
+        # VALIDATE
+        # =================================================
+
         self.full_clean()
+
+        # =================================================
+        # SAVE
+        # =================================================
+
         super().save(*args, **kwargs)
+
+    # =====================================================
+    # STRING
+    # =====================================================
 
     def __str__(self):
         return f"{self.full_name} ({self.phone})"
@@ -580,29 +699,102 @@ class InterviewSchedule(BaseModel):
 
     reminder_sent = models.BooleanField(default=False)
 
+    id = models.CharField(
+        primary_key=True,
+        max_length=20,
+        editable=False,
+    )
+
+    # =====================================================
+    # META
+    # =====================================================
+
     class Meta:
-        ordering = ["scheduled_datetime"]
+
+        ordering = [
+            "scheduled_datetime",
+        ]
 
         indexes = [
-            models.Index(fields=["scheduled_datetime"]),
-            models.Index(fields=["status"]),
+            models.Index(
+                fields=["scheduled_datetime"]
+            ),
+            models.Index(
+                fields=["status"]
+            ),
         ]
+
+    # =====================================================
+    # SAVE
+    # =====================================================
 
     def save(self, *args, **kwargs):
 
-        if not self.job_id:
+        # =================================================
+        # AUTO SET JOB FROM APPLICANT
+        # =================================================
+
+        if not self.job_id and self.applicant_id:
             self.job = self.applicant.job
+
+        # =================================================
+        # GENERATE INTERVIEW ID
+        #
+        # IS300010001
+        # IS300010002
+        # IS300010003
+        # =================================================
+
+        if not self.id:
+
+            last_interview = (
+                InterviewSchedule.objects
+                .filter(
+                    id__startswith="IS30001"
+                )
+                .order_by("-id")
+                .first()
+            )
+
+            if last_interview and last_interview.id:
+
+                last_number = int(
+                    last_interview.id.replace(
+                        "IS30001",
+                        "",
+                        1,
+                    )
+                )
+
+                next_number = last_number + 1
+
+            else:
+                next_number = 1
+
+            self.id = f"IS30001{next_number:04d}"
+
+        # =================================================
+        # VALIDATE
+        # =================================================
 
         self.full_clean()
 
+        # =================================================
+        # SAVE
+        # =================================================
+
         super().save(*args, **kwargs)
 
+    # =====================================================
+    # STRING
+    # =====================================================
+
     def __str__(self):
+
         return (
             f"{self.applicant.full_name} - "
             f"{self.get_interview_type_display()}"
         )
-
 
 # ==========================================================
 # OFFER LETTER
