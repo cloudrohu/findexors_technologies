@@ -1255,6 +1255,8 @@ class ProjectAdmin(
         "locality",
         "construction_status",
         "featured_property",
+        "created_at",
+        "created_by",
         "is_active",
         "image_preview",
     )
@@ -1306,7 +1308,7 @@ class ProjectAdmin(
     
 
     ordering = (
-        "tree_id",
+        "-id",
         "lft",
     )
 

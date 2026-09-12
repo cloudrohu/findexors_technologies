@@ -666,7 +666,7 @@ class Realty(BaseModel):
 
             last_id = (
                 Realty.objects
-                .filter(id__startswith="RE")
+                .filter(id__startswith="re")
                 .order_by("-id")
                 .values_list("id", flat=True)
                 .first()

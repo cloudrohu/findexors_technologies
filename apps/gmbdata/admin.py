@@ -21,10 +21,6 @@ from .resources_clean import (
     
 )
 
-# =========================================================
-# MEETING INLINE
-# =========================================================
-
 class MeetingInline(admin.StackedInline):
     model = Meeting
     extra = 0
@@ -43,10 +39,6 @@ class MeetingInline(admin.StackedInline):
     )
 
 
-# =========================================================
-# FOLLOWUP INLINE
-# =========================================================
-
 class FollowupInline(admin.StackedInline):
     model = Followup
     extra = 0
@@ -64,11 +56,6 @@ class FollowupInline(admin.StackedInline):
         "followup_no",
     )
 
-
-# =========================================================
-# COMMENT INLINE
-# =========================================================
-
 class CommentInline(admin.TabularInline):
     model = Comment
     extra = 0
@@ -77,19 +64,9 @@ class CommentInline(admin.TabularInline):
         "comment",
     )
 
-
-# =========================================================
-# VOICE RECORDING INLINE
-# =========================================================
-
 class VoiceRecordingInline(admin.TabularInline):
     model = VoiceRecording
     extra = 0
-
-
-# =========================================================
-# VISIT INLINE
-# =========================================================
 
 class VisitInline(admin.TabularInline):
     model = Visit
@@ -101,11 +78,6 @@ class VisitInline(admin.TabularInline):
         "assigned_to",
         "comment",
     )
-
-
-# =========================================================
-# REALTY ADMIN
-# =========================================================
 
 @admin.register(Realty)
 class RealtyAdmin(ImportExportModelAdmin):
@@ -255,15 +227,6 @@ class RealtyAdmin(ImportExportModelAdmin):
             obj.updated_by = request.user
 
         super().save_model(request, obj, form, change)
-# =========================================================
-# REFRENSE ADMIN
-# =========================================================
-
-
-
-# =========================================================
-# INTERIOR ADMIN
-# =========================================================
 
 @admin.register(Interior)
 class InteriorAdmin(ImportExportModelAdmin):
@@ -547,9 +510,6 @@ class RefrenseAdmin(ImportExportModelAdmin):
             form,
             change,
         )
-# =========================================================
-# MEETING ADMIN
-# =========================================================
 
 @admin.register(Meeting)
 class MeetingAdmin(ImportExportModelAdmin):
@@ -584,10 +544,6 @@ class MeetingAdmin(ImportExportModelAdmin):
     )
 
 
-# =========================================================
-# FOLLOWUP ADMIN
-# =========================================================
-
 @admin.register(Followup)
 class FollowupAdmin(ImportExportModelAdmin):
 
@@ -620,11 +576,6 @@ class FollowupAdmin(ImportExportModelAdmin):
         "updated_at",
     )
 
-
-# =========================================================
-# COMMENT ADMIN
-# =========================================================
-
 @admin.register(Comment)
 class CommentAdmin(ImportExportModelAdmin):
 
@@ -652,10 +603,6 @@ class CommentAdmin(ImportExportModelAdmin):
     )
 
 
-# =========================================================
-# VOICE RECORDING ADMIN
-# =========================================================
-
 @admin.register(VoiceRecording)
 class VoiceRecordingAdmin(ImportExportModelAdmin):
 
@@ -682,14 +629,8 @@ class VoiceRecordingAdmin(ImportExportModelAdmin):
     )
 
 
-# =========================================================
-# VISIT ADMIN
-# =========================================================
-
 @admin.register(Visit)
 class VisitAdmin(ImportExportModelAdmin):
-
-
     list_display = (
         "id",
         "realty",
