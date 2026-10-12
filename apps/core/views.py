@@ -14,6 +14,7 @@ def home(request):
         BusinessCategory.objects
         .filter(
             is_active=True,
+            is_featured=True,
             parent__isnull=True,
         )
         .order_by(
@@ -41,6 +42,7 @@ def home(request):
             "-is_premium",
             "-is_verified",
             "-rating",
+            "-review_count",
             "-created_at",
         )[:8]
     )
@@ -64,15 +66,10 @@ def home(request):
 
 
     context = {
-
         "categories": categories,
-
         "featured_businesses": featured_businesses,
-
         "business_count": business_count,
-
         "category_count": category_count,
-
     }
 
 
