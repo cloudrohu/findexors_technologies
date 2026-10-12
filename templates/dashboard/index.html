@@ -1,72 +1,323 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}
+Dashboard | Findexor
+{% endblock %}
+
 
 {% block content %}
 
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
 
-    <div class="bg-white rounded-2xl shadow p-6">
-        <p class="text-gray-500">Total Leads</p>
-        <h2 class="text-4xl font-bold mt-2">248</h2>
-    </div>
+<style>
 
-    <div class="bg-white rounded-2xl shadow p-6">
-        <p class="text-gray-500">Customers</p>
-        <h2 class="text-4xl font-bold mt-2">92</h2>
-    </div>
 
-    <div class="bg-white rounded-2xl shadow p-6">
-        <p class="text-gray-500">Meetings</p>
-        <h2 class="text-4xl font-bold mt-2">16</h2>
-    </div>
+    /* =====================================================
+   DASHBOARD STATISTICS
+===================================================== */
 
-    <div class="bg-white rounded-2xl shadow p-6">
-        <p class="text-gray-500">Revenue</p>
-        <h2 class="text-4xl font-bold mt-2">₹12.5L</h2>
-    </div>
+.dashboard-stat-card {
+    position: relative;
 
-</div>
+    background: #ffffff;
 
-<div class="grid lg:grid-cols-3 gap-6 mt-8">
+    border: 1px solid #e2e8f0;
 
-    <!-- Chart -->
-    <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6">
+    border-radius: 16px;
 
-        <h3 class="text-xl font-bold mb-4">
-            Sales Analytics
-        </h3>
+    padding: 22px;
 
-        <div class="h-80 flex items-center justify-center text-gray-400">
+    min-height: 150px;
 
-            Chart Coming Soon
+    box-shadow:
+        0 1px 2px rgba(15, 23, 42, 0.03);
 
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #dbeafe;
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+
+/* LABEL */
+
+.stat-label {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    font-weight: 500;
+}
+
+
+/* VALUE */
+
+.stat-value {
+    margin-top: 8px;
+
+    color: #0f172a;
+
+    font-size: 28px;
+
+    line-height: 1.1;
+
+    font-weight: 700;
+
+    letter-spacing: -0.02em;
+}
+
+
+/* ICON */
+
+.stat-icon {
+    width: 46px;
+
+    height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 12px;
+
+    font-size: 17px;
+
+    transition: transform 0.2s ease;
+}
+
+.dashboard-stat-card:hover .stat-icon {
+    transform: scale(1.08);
+}
+
+
+/* BLUE */
+
+.stat-icon-blue {
+    background: #eff6ff;
+
+    color: #2563eb;
+}
+
+
+/* PURPLE */
+
+.stat-icon-purple {
+    background: #f5f3ff;
+
+    color: #7c3aed;
+}
+
+
+/* ORANGE */
+
+.stat-icon-orange {
+    background: #fff7ed;
+
+    color: #ea580c;
+}
+
+
+/* GREEN */
+
+.stat-icon-green {
+    background: #ecfdf5;
+
+    color: #059669;
+}
+
+
+/* FOOTER */
+
+.stat-footer {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 20px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+
+/* GROWTH */
+
+.stat-growth {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    color: #059669;
+
+    font-weight: 600;
+}
+</style>
+
+<!-- =====================================================
+     STATISTICS CARDS
+====================================================== -->
+
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+
+    <!-- TOTAL LEADS -->
+    <div class="dashboard-stat-card group">
+
+        <div class="flex items-start justify-between">
+
+            <div>
+                <p class="stat-label">
+                    Total Leads
+                </p>
+
+                <h2 class="stat-value">
+                    248
+                </h2>
+            </div>
+
+            <div class="stat-icon stat-icon-blue">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+
+        </div>
+
+        <div class="stat-footer">
+            <span class="stat-growth">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                12.5%
+            </span>
+
+            <span>
+                vs last month
+            </span>
         </div>
 
     </div>
 
-    <!-- Activity -->
 
-    <div class="bg-white rounded-2xl shadow p-6">
+    <!-- CUSTOMERS -->
+    <div class="dashboard-stat-card group">
 
-        <h3 class="text-xl font-bold mb-4">
-            Recent Activity
-        </h3>
+        <div class="flex items-start justify-between">
 
-        <ul class="space-y-4">
+            <div>
+                <p class="stat-label">
+                    Customers
+                </p>
 
-            <li>✅ New Lead Added</li>
+                <h2 class="stat-value">
+                    92
+                </h2>
+            </div>
 
-            <li>📅 Meeting Scheduled</li>
+            <div class="stat-icon stat-icon-purple">
+                <i class="fa-solid fa-users"></i>
+            </div>
 
-            <li>📞 Follow-up Completed</li>
+        </div>
 
-            <li>💰 New Booking</li>
+        <div class="stat-footer">
+            <span class="stat-growth">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                8.2%
+            </span>
 
-        </ul>
+            <span>
+                vs last month
+            </span>
+        </div>
+
+    </div>
+
+
+    <!-- MEETINGS -->
+    <div class="dashboard-stat-card group">
+
+        <div class="flex items-start justify-between">
+
+            <div>
+                <p class="stat-label">
+                    Meetings
+                </p>
+
+                <h2 class="stat-value">
+                    16
+                </h2>
+            </div>
+
+            <div class="stat-icon stat-icon-orange">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+
+        </div>
+
+        <div class="stat-footer">
+            <span class="stat-growth">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                5.4%
+            </span>
+
+            <span>
+                this month
+            </span>
+        </div>
+
+    </div>
+
+
+    <!-- REVENUE -->
+    <div class="dashboard-stat-card group">
+
+        <div class="flex items-start justify-between">
+
+            <div>
+                <p class="stat-label">
+                    Revenue
+                </p>
+
+                <h2 class="stat-value">
+                    ₹12.5L
+                </h2>
+            </div>
+
+            <div class="stat-icon stat-icon-green">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
+            </div>
+
+        </div>
+
+        <div class="stat-footer">
+            <span class="stat-growth">
+                <i class="fa-solid fa-arrow-trend-up"></i>
+                18.6%
+            </span>
+
+            <span>
+                vs last month
+            </span>
+        </div>
 
     </div>
 
 </div>
+
+
+
 
 {% endblock %}

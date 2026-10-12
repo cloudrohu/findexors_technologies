@@ -1,52 +1,266 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         {% block title %}Findexors CRM{% endblock %}
     </title>
 
-    <!-- Tailwind CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- =========================================
+         Main CSS
+    ========================================== -->
 
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
 
-    {% block extra_css %}{% endblock %}
+
+    <!-- =========================================
+         Font Awesome
+    ========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+    <!-- =========================================
+         Alpine.js
+    ========================================== -->
+
+    <script
+        defer
+        src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+
+
+    {% block extra_css %}
+    {% endblock %}
+
 </head>
+
 
 <body class="bg-slate-100 text-slate-800">
 
-<div x-data="{ sidebarOpen:true }" class="flex min-h-screen">
+    <!-- =========================================
+         DASHBOARD LAYOUT
+    ========================================== -->
 
-    {% include "includes/sidebar.html" %}
+    <div class="dashboard-layout">
 
-    <div class="flex-1 flex flex-col">
 
-        {% include "includes/navbar.html" %}
+        <!-- =====================================
+             SIDEBAR
+        ====================================== -->
 
-        <main class="flex-1 p-6">
+        {% include "includes/sidebar.html" %}
 
-            {% block content %}
-            {% endblock %}
 
-        </main>
+        <!-- =====================================
+             MAIN AREA
+        ====================================== -->
 
-        {% include "includes/footer.html" %}
+        <div class="dashboard-main">
+
+
+            <!-- =================================
+                 TOP NAVBAR
+            ================================== -->
+
+            {% include "includes/navbar.html" %}
+
+
+            <!-- =================================
+                 PAGE CONTENT
+            ================================== -->
+
+            <main class="dashboard-content">
+
+                {% block content %}
+                {% endblock %}
+
+            </main>
+
+
+            <!-- =================================
+                 FOOTER
+            ================================== -->
+
+            {% include "includes/footer.html" %}
+
+
+        </div>
 
     </div>
 
-</div>
 
-{% block extra_js %}{% endblock %}
+    {% block extra_js %}
+    {% endblock %}
+
+
+    <!-- =========================================
+         DASHBOARD LAYOUT CSS
+    ========================================== -->
+
+    <style>
+
+        /* =====================================
+           GLOBAL
+        ====================================== */
+
+        html,
+        body {
+
+            margin: 0;
+
+            padding: 0;
+
+            width: 100%;
+
+            min-height: 100%;
+
+        }
+
+
+        body {
+
+            overflow-x: hidden;
+
+        }
+
+
+        /* =====================================
+           DASHBOARD LAYOUT
+        ====================================== */
+
+        .dashboard-layout {
+
+            min-height: 100vh;
+
+            width: 100%;
+
+        }
+
+
+        /* =====================================
+           MAIN AREA
+
+           Sidebar = 210px
+        ====================================== */
+
+        .dashboard-main {
+
+            min-height: 100vh;
+
+            margin-left: 210px;
+
+            width: calc(100% - 210px);
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-width: 0;
+
+        }
+
+
+        /* =====================================
+           CONTENT
+        ====================================== */
+
+        .dashboard-content {
+
+            flex: 1;
+
+            width: 100%;
+
+            min-width: 0;
+
+            padding: 24px;
+
+            box-sizing: border-box;
+
+        }
+
+
+        /* =====================================
+           IMPORTANT
+
+           Prevent Dashboard grids/cards
+           from overflowing
+        ====================================== */
+
+        .dashboard-content > * {
+
+            max-width: 100%;
+
+            min-width: 0;
+
+        }
+
+
+        /* =====================================
+           TABLET
+        ====================================== */
+
+        @media (max-width: 1024px) {
+
+            .dashboard-main {
+
+                margin-left: 210px;
+
+                width: calc(100% - 210px);
+
+            }
+
+            .dashboard-content {
+
+                padding: 20px;
+
+            }
+
+        }
+
+
+        /* =====================================
+           MOBILE
+        ====================================== */
+
+        @media (max-width: 767px) {
+
+            .dashboard-main {
+
+                margin-left: 0;
+
+                width: 100%;
+
+            }
+
+
+            .dashboard-content {
+
+                padding: 16px;
+
+            }
+
+        }
+
+    </style>
 
 </body>
+
 </html>

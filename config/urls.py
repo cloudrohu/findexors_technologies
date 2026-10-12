@@ -5,6 +5,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
 
+
+    
+
     # ==========================================
         # Dashboard
         # ==========================================
@@ -43,6 +46,12 @@ urlpatterns = [
     path(
         "",
         include("apps.dashboard.urls"),
+    ),
+
+
+    path(
+        "dashboard/meeting/",
+        include("apps.meetings.urls"),
     ),
 
     # ==========================================

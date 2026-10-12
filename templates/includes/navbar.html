@@ -1,95 +1,898 @@
-<header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-30">
+<header class="fx-topbar">
 
-    <!-- Left -->
-    <div class="flex items-center gap-4">
+    <!-- =========================================
+         LEFT SECTION
+    ========================================== -->
 
-        <button class="lg:hidden text-xl">
+    <div class="fx-topbar-left">
+
+        <!-- Mobile Sidebar Button -->
+
+        <button
+            type="button"
+            class="fx-mobile-menu"
+            id="fxMobileMenuBtn"
+            aria-label="Open navigation"
+        >
             <i class="fa-solid fa-bars"></i>
         </button>
 
-        <div>
-            <h1 class="text-xl font-bold text-slate-800">
-                Dashboard
+
+        <!-- Page Heading -->
+
+        <div class="fx-page-heading">
+
+            <h1>
+                {% block page_title %}Dashboard{% endblock %}
             </h1>
 
-            <p class="text-sm text-gray-500">
+            <p>
                 Welcome back, Administrator 👋
             </p>
-        </div>
-
-    </div>
-
-    <!-- Center Search -->
-    <div class="hidden md:block w-full max-w-md mx-10">
-
-        <div class="relative">
-
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-
-            <input
-                type="text"
-                placeholder="Search..."
-                class="w-full pl-11 pr-4 h-11 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
 
         </div>
 
     </div>
 
-    <!-- Right -->
-    <div class="flex items-center gap-5">
 
-        <!-- Notification -->
+    <!-- =========================================
+         CENTER SEARCH
+    ========================================== -->
 
-        <button class="relative">
+    <div class="fx-topbar-search">
 
-            <i class="fa-regular fa-bell text-xl text-gray-600"></i>
+        <i class="fa-solid fa-magnifying-glass"></i>
 
-            <span
-                class="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+        <input
+            type="search"
+            placeholder="Search anything..."
+            aria-label="Search"
+        >
 
+        <kbd>
+            /
+        </kbd>
+
+    </div>
+
+
+    <!-- =========================================
+         RIGHT SECTION
+    ========================================== -->
+
+    <div class="fx-topbar-right">
+
+
+        <!-- Search Mobile -->
+
+        <button
+            type="button"
+            class="fx-mobile-search"
+            aria-label="Search"
+        >
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+
+        <!-- =====================================
+             Notifications
+        ====================================== -->
+
+        <button
+            type="button"
+            class="fx-topbar-icon"
+            aria-label="Notifications"
+        >
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span class="fx-notification-badge">
                 3
-
             </span>
 
         </button>
 
-        <!-- Settings -->
 
-        <button>
+        <!-- =====================================
+             Settings
+        ====================================== -->
 
-            <i class="fa-solid fa-gear text-xl text-gray-600"></i>
-
+        <button
+            type="button"
+            class="fx-topbar-icon"
+            aria-label="Settings"
+        >
+            <i class="fa-solid fa-gear"></i>
         </button>
 
-        <!-- User -->
 
-        <div class="flex items-center gap-3">
+        <!-- =====================================
+             User
+        ====================================== -->
 
-            <div
-                class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+        <button
+            type="button"
+            class="fx-user-profile"
+            aria-label="Administrator menu"
+        >
 
+            <span class="fx-user-avatar">
                 A
+            </span>
 
-            </div>
+            <span class="fx-user-details">
 
-            <div class="hidden md:block">
-
-                <h4 class="font-semibold">
-
+                <strong>
                     Administrator
+                </strong>
 
-                </h4>
-
-                <p class="text-sm text-gray-500">
-
+                <small>
                     Super Admin
+                </small>
 
-                </p>
+            </span>
 
-            </div>
+            <i class="fa-solid fa-chevron-down fx-user-chevron"></i>
 
-        </div>
+        </button>
 
     </div>
 
 </header>
+
+
+<!-- =========================================
+     MOBILE SIDEBAR OVERLAY
+========================================== -->
+
+<div
+    id="fxSidebarOverlay"
+    class="fx-sidebar-overlay"
+>
+</div>
+
+
+<style>
+
+/* =====================================================
+   TOPBAR
+===================================================== */
+
+.fx-topbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 900;
+
+    height: 64px;
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 0 22px;
+
+    background: rgba(255,255,255,.96);
+
+    border-bottom: 1px solid #e2e8f0;
+
+    backdrop-filter: blur(12px);
+
+}
+
+
+/* =====================================================
+   LEFT
+===================================================== */
+
+.fx-topbar-left {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    min-width: 190px;
+
+}
+
+
+.fx-page-heading h1 {
+
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 16px;
+
+    line-height: 20px;
+
+    font-weight: 700;
+
+}
+
+
+.fx-page-heading p {
+
+    margin: 2px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+
+    line-height: 15px;
+
+}
+
+
+/* =====================================================
+   MOBILE MENU
+===================================================== */
+
+.fx-mobile-menu {
+
+    display: none;
+
+    width: 36px;
+
+    height: 36px;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: #f1f5f9;
+
+    color: #334155;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+}
+
+
+.fx-mobile-menu:hover {
+
+    background: #e2e8f0;
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.fx-topbar-search {
+
+    position: relative;
+
+    flex: 1;
+
+    width: 100%;
+
+    max-width: 430px;
+
+}
+
+
+.fx-topbar-search i {
+
+    position: absolute;
+
+    left: 14px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #94a3b8;
+
+    font-size: 13px;
+
+    pointer-events: none;
+
+}
+
+
+.fx-topbar-search input {
+
+    width: 100%;
+
+    height: 38px;
+
+    padding: 0 42px 0 38px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #f8fafc;
+
+    color: #334155;
+
+    font-size: 12px;
+
+    transition: .2s ease;
+
+}
+
+
+.fx-topbar-search input::placeholder {
+
+    color: #94a3b8;
+
+}
+
+
+.fx-topbar-search input:focus {
+
+    background: #ffffff;
+
+    border-color: #93c5fd;
+
+    box-shadow: 0 0 0 3px rgba(59,130,246,.08);
+
+}
+
+
+.fx-topbar-search kbd {
+
+    position: absolute;
+
+    right: 10px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    min-width: 21px;
+
+    height: 21px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+
+}
+
+
+/* =====================================================
+   RIGHT
+===================================================== */
+
+.fx-topbar-right {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+}
+
+
+.fx-topbar-icon {
+
+    position: relative;
+
+    width: 36px;
+
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    font-size: 15px;
+
+    transition: .2s ease;
+
+}
+
+
+.fx-topbar-icon:hover {
+
+    background: #f1f5f9;
+
+    color: #2563eb;
+
+}
+
+
+/* =====================================================
+   NOTIFICATION
+===================================================== */
+
+.fx-notification-badge {
+
+    position: absolute;
+
+    top: 3px;
+
+    right: 2px;
+
+    min-width: 16px;
+
+    height: 16px;
+
+    padding: 0 4px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 999px;
+
+    background: #ef4444;
+
+    color: #ffffff;
+
+    border: 2px solid #ffffff;
+
+    font-size: 8px;
+
+    font-weight: 700;
+
+}
+
+
+/* =====================================================
+   USER PROFILE
+===================================================== */
+
+.fx-user-profile {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    margin-left: 5px;
+
+    padding: 4px 7px 4px 4px;
+
+    border: 0;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    text-align: left;
+
+}
+
+
+.fx-user-profile:hover {
+
+    background: #f8fafc;
+
+}
+
+
+.fx-user-avatar {
+
+    width: 34px;
+
+    height: 34px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+    );
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.fx-user-details {
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 95px;
+
+}
+
+
+.fx-user-details strong {
+
+    color: #0f172a;
+
+    font-size: 11px;
+
+    font-weight: 650;
+
+    line-height: 15px;
+
+}
+
+
+.fx-user-details small {
+
+    margin-top: 1px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+    line-height: 13px;
+
+}
+
+
+.fx-user-chevron {
+
+    margin-left: 3px;
+
+    color: #94a3b8;
+
+    font-size: 9px;
+
+}
+
+
+/* =====================================================
+   MOBILE SEARCH
+===================================================== */
+
+.fx-mobile-search {
+
+    display: none;
+
+    width: 36px;
+
+    height: 36px;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border: 0;
+
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+}
+
+
+/* =====================================================
+   SIDEBAR OVERLAY
+===================================================== */
+
+.fx-sidebar-overlay {
+
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 950;
+
+    background: rgba(15,23,42,.45);
+
+    backdrop-filter: blur(2px);
+
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .fx-topbar {
+
+        padding: 0 16px;
+
+    }
+
+    .fx-topbar-search {
+
+        max-width: 300px;
+
+    }
+
+    .fx-user-details {
+
+        display: none;
+
+    }
+
+    .fx-user-chevron {
+
+        display: none;
+
+    }
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 767px) {
+
+    .fx-topbar {
+
+        height: 60px;
+
+        padding: 0 12px;
+
+        gap: 8px;
+
+    }
+
+
+    .fx-topbar-left {
+
+        min-width: auto;
+
+        gap: 9px;
+
+    }
+
+
+    .fx-mobile-menu {
+
+        display: flex;
+
+    }
+
+
+    .fx-page-heading h1 {
+
+        font-size: 14px;
+
+    }
+
+
+    .fx-page-heading p {
+
+        display: none;
+
+    }
+
+
+    .fx-topbar-search {
+
+        display: none;
+
+    }
+
+
+    .fx-mobile-search {
+
+        display: flex;
+
+    }
+
+
+    .fx-topbar-right {
+
+        margin-left: auto;
+
+        gap: 2px;
+
+    }
+
+
+    .fx-user-profile {
+
+        margin-left: 1px;
+
+        padding: 2px;
+
+    }
+
+
+    .fx-user-avatar {
+
+        width: 34px;
+
+        height: 34px;
+
+    }
+
+}
+
+
+/* =====================================================
+   SMALL MOBILE
+===================================================== */
+
+@media (max-width: 420px) {
+
+    .fx-topbar-icon {
+
+        width: 32px;
+
+        height: 32px;
+
+    }
+
+
+    .fx-mobile-search {
+
+        width: 32px;
+
+        height: 32px;
+
+    }
+
+
+    .fx-user-avatar {
+
+        width: 32px;
+
+        height: 32px;
+
+    }
+
+}
+
+</style>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const menuButton =
+        document.getElementById("fxMobileMenuBtn");
+
+    const sidebar =
+        document.querySelector(".fx-sidebar");
+
+    const overlay =
+        document.getElementById("fxSidebarOverlay");
+
+
+    if (!menuButton || !sidebar) {
+        return;
+    }
+
+
+    function openSidebar() {
+
+        sidebar.classList.add("fx-sidebar-open");
+
+        if (overlay) {
+            overlay.style.display = "block";
+        }
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+
+    function closeSidebar() {
+
+        sidebar.classList.remove("fx-sidebar-open");
+
+        if (overlay) {
+            overlay.style.display = "none";
+        }
+
+        document.body.style.overflow = "";
+
+    }
+
+
+    menuButton.addEventListener(
+        "click",
+        function () {
+
+            if (
+                sidebar.classList.contains(
+                    "fx-sidebar-open"
+                )
+            ) {
+
+                closeSidebar();
+
+            } else {
+
+                openSidebar();
+
+            }
+
+        }
+    );
+
+
+    if (overlay) {
+
+        overlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Escape") {
+
+                closeSidebar();
+
+            }
+
+        }
+    );
+
+});
+
+</script>

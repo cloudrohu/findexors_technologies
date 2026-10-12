@@ -8,7 +8,7 @@ urlpatterns = [
     path(
         "dashboard",
         dashboard,
-        name="dashboard"
+        name="index"
     ),
 
 ]
