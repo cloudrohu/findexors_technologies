@@ -1,0 +1,484 @@
+{% extends "home/homebase.html" %}
+
+{% block title %}
+Findexor - Discover. Connect. Grow.
+{% endblock %}
+
+{% block meta_description %}
+Discover trusted businesses, companies, services and opportunities with Findexor. Find the right business and grow your business online.
+{% endblock %}
+
+{% block meta_keywords %}
+Findexor, businesses, companies, services, local businesses, business directory, discover businesses
+{% endblock %}
+
+
+{% block content %}
+
+<!-- =====================================================
+     HERO SECTION
+====================================================== -->
+
+<section class="relative overflow-hidden bg-slate-950">
+
+    <!-- Background -->
+    <div class="absolute inset-0">
+        <div class="absolute -left-20 -top-20 h-72 w-72 rounded-full bg-blue-600/20 blur-3xl"></div>
+        <div class="absolute right-0 top-20 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl"></div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+
+        <div class="mx-auto max-w-4xl text-center">
+
+            <!-- Badge -->
+            <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+                <span class="flex h-2 w-2 rounded-full bg-blue-500"></span>
+                Discover businesses near you
+            </div>
+
+
+            <!-- Heading -->
+            <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
+
+                Discover.
+                <span class="text-blue-500">Connect.</span>
+                Grow.
+
+            </h1>
+
+
+            <!-- Description -->
+            <p class="mx-auto mt-6 max-w-2xl text-base leading-7 text-slate-400 sm:text-lg">
+
+                Find trusted businesses, companies, services and
+                opportunities in your area — all in one place.
+
+            </p>
+
+
+            <!-- Search -->
+            <div class="mx-auto mt-10 max-w-3xl">
+
+                <form action="#" method="get">
+
+                    <div class="flex flex-col gap-3 rounded-2xl bg-white p-3 shadow-2xl sm:flex-row">
+
+                        <!-- Search -->
+                        <div class="flex flex-1 items-center gap-3 px-3">
+
+                            <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+
+                            <input
+                                type="text"
+                                name="q"
+                                placeholder="Search businesses, services..."
+                                class="w-full border-0 bg-transparent py-3 text-sm text-slate-800 outline-none focus:ring-0 sm:text-base"
+                            >
+
+                        </div>
+
+
+                        <!-- Location -->
+                        <div class="hidden h-10 w-px bg-slate-200 sm:block"></div>
+
+                        <div class="flex items-center gap-3 px-3 sm:w-56">
+
+                            <i class="fa-solid fa-location-dot text-slate-400"></i>
+
+                            <input
+                                type="text"
+                                name="location"
+                                placeholder="Location"
+                                class="w-full border-0 bg-transparent py-3 text-sm text-slate-800 outline-none focus:ring-0"
+                            >
+
+                        </div>
+
+
+                        <!-- Button -->
+                        <button
+                            type="submit"
+                            class="rounded-xl bg-blue-600 px-7 py-3 font-semibold text-white transition hover:bg-blue-700">
+
+                            <i class="fa-solid fa-magnifying-glass mr-2"></i>
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- Popular Searches -->
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
+
+                <span class="text-slate-500">
+                    Popular:
+                </span>
+
+                <a href="#" class="text-slate-300 transition hover:text-blue-400">
+                    Restaurants
+                </a>
+
+                <span class="text-slate-600">•</span>
+
+                <a href="#" class="text-slate-300 transition hover:text-blue-400">
+                    Healthcare
+                </a>
+
+                <span class="text-slate-600">•</span>
+
+                <a href="#" class="text-slate-300 transition hover:text-blue-400">
+                    Real Estate
+                </a>
+
+                <span class="text-slate-600">•</span>
+
+                <a href="#" class="text-slate-300 transition hover:text-blue-400">
+                    Education
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     QUICK STATS
+====================================================== -->
+
+<section class="border-b border-slate-200 bg-white">
+
+    <div class="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-slate-200 md:grid-cols-4">
+
+        <div class="px-5 py-7 text-center">
+            <div class="text-2xl font-bold text-slate-900">10K+</div>
+            <div class="mt-1 text-sm text-slate-500">Businesses</div>
+        </div>
+
+        <div class="px-5 py-7 text-center">
+            <div class="text-2xl font-bold text-slate-900">500+</div>
+            <div class="mt-1 text-sm text-slate-500">Categories</div>
+        </div>
+
+        <div class="px-5 py-7 text-center">
+            <div class="text-2xl font-bold text-slate-900">100+</div>
+            <div class="mt-1 text-sm text-slate-500">Cities</div>
+        </div>
+
+        <div class="px-5 py-7 text-center">
+            <div class="text-2xl font-bold text-slate-900">50K+</div>
+            <div class="mt-1 text-sm text-slate-500">Connections</div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     CATEGORIES
+====================================================== -->
+
+<section class="bg-slate-50 py-16 lg:py-20">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <!-- Heading -->
+
+        <div class="flex flex-col justify-between gap-5 sm:flex-row sm:items-end">
+
+            <div>
+
+                <span class="text-sm font-semibold uppercase tracking-wider text-blue-600">
+                    Explore
+                </span>
+
+                <h2 class="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                    Explore Popular Categories
+                </h2>
+
+                <p class="mt-3 max-w-2xl text-slate-500">
+                    Discover trusted businesses and services across popular categories.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Category Grid -->
+
+        <div class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+
+            {% for category in categories %}
+
+                <a
+                    href="#"
+                    class="group rounded-2xl border border-slate-200 bg-white p-6 text-center transition hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg"
+                >
+
+                    <!-- Icon -->
+
+                    <div
+                        class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition group-hover:bg-blue-600 group-hover:text-white"
+                        {% if category.color %}
+                            style="--category-color: {{ category.color }};"
+                        {% endif %}
+                    >
+
+                        {% if category.icon_class %}
+
+                            <i class="{{ category.icon_class }} text-xl"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-layer-group text-xl"></i>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- Name -->
+
+                    <h3 class="mt-4 font-semibold text-slate-900">
+
+                        {{ category.name }}
+
+                    </h3>
+
+
+                    <!-- Description -->
+
+                    {% if category.description %}
+
+                        <p class="mt-1 line-clamp-2 text-xs text-slate-500">
+
+                            {{ category.description }}
+
+                        </p>
+
+                    {% else %}
+
+                        <p class="mt-1 text-xs text-slate-500">
+
+                            Explore businesses
+
+                        </p>
+
+                    {% endif %}
+
+                </a>
+
+            {% empty %}
+
+                <!-- Empty State -->
+
+                <div class="col-span-full rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center">
+
+                    <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+
+                        <i class="fa-solid fa-layer-group text-xl"></i>
+
+                    </div>
+
+                    <h3 class="mt-4 font-semibold text-slate-900">
+                        No categories available
+                    </h3>
+
+                    <p class="mt-2 text-sm text-slate-500">
+                        Categories will appear here once they are added.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+<!-- =====================================================
+     WHY FINDEXOR
+====================================================== -->
+
+<section class="bg-white py-16 lg:py-20">
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+
+            <!-- Left -->
+            <div>
+
+                <span class="text-sm font-semibold uppercase tracking-wider text-blue-600">
+                    Why Findexor
+                </span>
+
+                <h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+                    Everything you need to discover and connect
+                </h2>
+
+                <p class="mt-5 leading-7 text-slate-500">
+                    Findexor makes it easier to discover trusted businesses,
+                    explore services and connect with companies that matter to you.
+                </p>
+
+
+                <div class="mt-8 space-y-5">
+
+                    <div class="flex gap-4">
+
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-slate-900">
+                                Easy Discovery
+                            </h3>
+
+                            <p class="mt-1 text-sm leading-6 text-slate-500">
+                                Find businesses, services and companies quickly.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4">
+
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-slate-900">
+                                Trusted Listings
+                            </h3>
+
+                            <p class="mt-1 text-sm leading-6 text-slate-500">
+                                Discover useful information about businesses before connecting.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="flex gap-4">
+
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+
+                        <div>
+                            <h3 class="font-semibold text-slate-900">
+                                Grow Your Business
+                            </h3>
+
+                            <p class="mt-1 text-sm leading-6 text-slate-500">
+                                Give your business more visibility and reach new customers.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Right -->
+            <div class="relative">
+
+                <div class="rounded-3xl bg-slate-950 p-8 shadow-2xl sm:p-10">
+
+                    <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white">
+                        <i class="fa-solid fa-location-dot text-xl"></i>
+                    </div>
+
+                    <h3 class="mt-7 text-2xl font-bold text-white">
+                        Find what's around you
+                    </h3>
+
+                    <p class="mt-4 leading-7 text-slate-400">
+                        Search local businesses, services and companies
+                        based on your needs and location.
+                    </p>
+
+                    <a
+                        href="#"
+                        class="mt-8 inline-flex items-center rounded-xl bg-white px-5 py-3 font-semibold text-slate-900 transition hover:bg-slate-100">
+
+                        Start Exploring
+
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BUSINESS CTA
+====================================================== -->
+
+<section class="bg-blue-600">
+
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+
+        <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-center">
+
+            <div>
+
+                <span class="text-sm font-semibold uppercase tracking-wider text-blue-100">
+                    For Businesses
+                </span>
+
+                <h2 class="mt-2 text-3xl font-bold text-white sm:text-4xl">
+                    Grow your business with Findexor
+                </h2>
+
+                <p class="mt-3 max-w-2xl text-blue-100">
+                    List your business, reach more customers and build
+                    your online presence.
+                </p>
+
+            </div>
+
+
+            <a
+                href="#"
+                class="inline-flex shrink-0 items-center rounded-xl bg-white px-6 py-3 font-semibold text-blue-600 shadow-lg transition hover:bg-slate-100">
+
+                Add Your Business
+
+                <i class="fa-solid fa-arrow-right ml-2"></i>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

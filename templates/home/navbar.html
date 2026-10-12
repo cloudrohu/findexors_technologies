@@ -1,0 +1,680 @@
+{% load static %}
+
+<header
+    x-data="{
+        mobileMenu: false,
+        exploreMenu: false,
+        categoryMenu: false,
+        accountMenu: false
+    }"
+    @keydown.escape.window="
+        mobileMenu = false;
+        exploreMenu = false;
+        categoryMenu = false;
+        accountMenu = false;
+    "
+    class="sticky top-0 z-[1000] w-full border-b border-slate-200 bg-white"
+>
+
+    <!-- =========================================================
+         TOP NAVBAR
+    ========================================================== -->
+
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="flex min-h-[76px] items-center justify-between gap-4">
+
+
+            <!-- =====================================================
+                 LOGO
+            ====================================================== -->
+
+            <a
+                href="{% url 'core:home' %}"
+                class="group flex shrink-0 items-center gap-3"
+            >
+
+                <div
+                    class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white shadow-sm transition group-hover:bg-blue-700"
+                >
+                    <i class="fa-solid fa-location-dot text-lg"></i>
+                </div>
+
+                <div class="hidden leading-none sm:block">
+
+                    <span class="block text-[21px] font-bold tracking-tight text-slate-900">
+                        Findexor
+                    </span>
+
+                    <span class="mt-1 block text-[9px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                        Discover • Connect • Grow
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <!-- =====================================================
+                 DESKTOP NAVIGATION
+            ====================================================== -->
+
+            <nav class="hidden items-center lg:flex">
+
+                <!-- Home -->
+
+                <a
+                    href="{% url 'core:home' %}"
+                    class="group relative px-4 py-7 text-sm font-semibold text-slate-700 transition hover:text-blue-600"
+                >
+
+                    Home
+
+                    <span
+                        class="absolute bottom-0 left-4 right-4 h-0.5 scale-x-0 bg-blue-600 transition group-hover:scale-x-100"
+                    ></span>
+
+                </a>
+
+
+                <!-- =================================================
+                     Explore Dropdown
+                ================================================== -->
+
+                <div class="relative">
+
+                    <button
+                        type="button"
+                        @click="
+                            exploreMenu = !exploreMenu;
+                            categoryMenu = false;
+                            accountMenu = false;
+                        "
+                        class="flex items-center gap-2 px-4 py-7 text-sm font-semibold text-slate-700 transition hover:text-blue-600"
+                    >
+
+                        Explore
+
+                        <i
+                            class="fa-solid fa-chevron-down text-[10px] transition-transform"
+                            :class="exploreMenu ? 'rotate-180' : ''"
+                        ></i>
+
+                    </button>
+
+
+                    <div
+                        x-show="exploreMenu"
+                        x-transition.origin.top.left
+                        @click.outside="exploreMenu = false"
+                        class="absolute left-0 top-[68px] w-64 overflow-hidden rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
+                    >
+
+                        <a
+                            href="#"
+                            class="flex items-start gap-3 rounded-lg p-3 transition hover:bg-slate-50"
+                        >
+
+                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
+                                <i class="fa-solid fa-building"></i>
+                            </span>
+
+                            <span>
+                                <span class="block text-sm font-semibold text-slate-800">
+                                    Businesses
+                                </span>
+
+                                <span class="mt-0.5 block text-xs text-slate-500">
+                                    Find local businesses
+                                </span>
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="flex items-start gap-3 rounded-lg p-3 transition hover:bg-slate-50"
+                        >
+
+                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                                <i class="fa-solid fa-briefcase"></i>
+                            </span>
+
+                            <span>
+                                <span class="block text-sm font-semibold text-slate-800">
+                                    Services
+                                </span>
+
+                                <span class="mt-0.5 block text-xs text-slate-500">
+                                    Explore professional services
+                                </span>
+                            </span>
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="flex items-start gap-3 rounded-lg p-3 transition hover:bg-slate-50"
+                        >
+
+                            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
+                                <i class="fa-solid fa-city"></i>
+                            </span>
+
+                            <span>
+                                <span class="block text-sm font-semibold text-slate-800">
+                                    Companies
+                                </span>
+
+                                <span class="mt-0.5 block text-xs text-slate-500">
+                                    Discover companies
+                                </span>
+                            </span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     Categories Dropdown
+                ================================================== -->
+
+                <div class="relative">
+
+                    <button
+                        type="button"
+                        @click="
+                            categoryMenu = !categoryMenu;
+                            exploreMenu = false;
+                            accountMenu = false;
+                        "
+                        class="flex items-center gap-2 px-4 py-7 text-sm font-semibold text-slate-700 transition hover:text-blue-600"
+                    >
+
+                        Categories
+
+                        <i
+                            class="fa-solid fa-chevron-down text-[10px] transition-transform"
+                            :class="categoryMenu ? 'rotate-180' : ''"
+                        ></i>
+
+                    </button>
+
+
+                    <div
+                        x-show="categoryMenu"
+                        x-transition.origin.top.left
+                        @click.outside="categoryMenu = false"
+                        class="absolute left-0 top-[68px] w-72 overflow-hidden rounded-xl border border-slate-200 bg-white p-3 shadow-xl"
+                    >
+
+                        <div class="mb-2 px-2 py-1">
+
+                            <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                                Popular Categories
+                            </p>
+
+                        </div>
+
+
+                        <div class="grid grid-cols-2 gap-1">
+
+                            <a
+                                href="#"
+                                class="rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                            >
+                                Restaurants
+                            </a>
+
+                            <a
+                                href="#"
+                                class="rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                            >
+                                Healthcare
+                            </a>
+
+                            <a
+                                href="#"
+                                class="rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                            >
+                                Real Estate
+                            </a>
+
+                            <a
+                                href="#"
+                                class="rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                            >
+                                Education
+                            </a>
+
+                            <a
+                                href="#"
+                                class="rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                            >
+                                Shopping
+                            </a>
+
+                            <a
+                                href="#"
+                                class="rounded-lg px-3 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                            >
+                                Automotive
+                            </a>
+
+                        </div>
+
+
+                        <div class="mt-2 border-t border-slate-100 pt-2">
+
+                            <a
+                                href="#"
+                                class="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold text-blue-600 hover:bg-blue-50"
+                            >
+
+                                View All Categories
+
+                                <i class="fa-solid fa-arrow-right text-xs"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Businesses -->
+
+                <a
+                    href="#"
+                    class="group relative px-4 py-7 text-sm font-semibold text-slate-700 transition hover:text-blue-600"
+                >
+
+                    Businesses
+
+                    <span
+                        class="absolute bottom-0 left-4 right-4 h-0.5 scale-x-0 bg-blue-600 transition group-hover:scale-x-100"
+                    ></span>
+
+                </a>
+
+
+                <!-- Companies -->
+
+                <a
+                    href="#"
+                    class="group relative px-4 py-7 text-sm font-semibold text-slate-700 transition hover:text-blue-600"
+                >
+
+                    Companies
+
+                    <span
+                        class="absolute bottom-0 left-4 right-4 h-0.5 scale-x-0 bg-blue-600 transition group-hover:scale-x-100"
+                    ></span>
+
+                </a>
+
+
+                <!-- Blog -->
+
+                <a
+                    href="#"
+                    class="group relative px-4 py-7 text-sm font-semibold text-slate-700 transition hover:text-blue-600"
+                >
+
+                    Blog
+
+                    <span
+                        class="absolute bottom-0 left-4 right-4 h-0.5 scale-x-0 bg-blue-600 transition group-hover:scale-x-100"
+                    ></span>
+
+                </a>
+
+            </nav>
+
+
+            <!-- =====================================================
+                 DESKTOP RIGHT SIDE
+            ====================================================== -->
+
+            <div class="hidden items-center gap-2 lg:flex">
+
+
+                <!-- Search -->
+
+                <button
+                    type="button"
+                    class="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 transition hover:bg-slate-100 hover:text-blue-600"
+                    aria-label="Search"
+                >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+
+                <!-- Login -->
+
+                <a
+                    href="#"
+                    class="rounded-lg px-3 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 hover:text-blue-600"
+                >
+                    Login
+                </a>
+
+
+                <!-- Add Business -->
+
+                <a
+                    href="#"
+                    class="ml-1 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                >
+
+                    <i class="fa-solid fa-plus text-xs"></i>
+
+                    Add Business
+
+                </a>
+
+            </div>
+
+
+            <!-- =====================================================
+                 MOBILE BUTTONS
+            ====================================================== -->
+
+            <div class="flex items-center gap-2 lg:hidden">
+
+                <button
+                    type="button"
+                    class="flex h-10 w-10 items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100"
+                    aria-label="Search"
+                >
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+
+
+                <button
+                    type="button"
+                    @click="mobileMenu = !mobileMenu"
+                    class="flex h-10 w-10 items-center justify-center rounded-lg text-slate-700 hover:bg-slate-100"
+                    aria-label="Open menu"
+                >
+
+                    <i
+                        class="fa-solid text-lg"
+                        :class="mobileMenu ? 'fa-xmark' : 'fa-bars'"
+                    ></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =============================================================
+         MOBILE MENU
+    ============================================================== -->
+
+    <div
+        x-show="mobileMenu"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-2"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100 translate-y-0"
+        x-transition:leave-end="opacity-0 -translate-y-2"
+        class="border-t border-slate-200 bg-white lg:hidden"
+    >
+
+        <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6">
+
+
+            <!-- Mobile Search -->
+
+            <div class="relative mb-4">
+
+                <i
+                    class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400"
+                ></i>
+
+                <input
+                    type="search"
+                    placeholder="Search businesses, services..."
+                    class="h-12 w-full rounded-xl border border-slate-200 bg-slate-50 pl-11 pr-4 text-sm outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                >
+
+            </div>
+
+
+            <!-- Mobile Navigation -->
+
+            <nav class="space-y-1">
+
+
+                <!-- Home -->
+
+                <a
+                    href="{% url 'core:home' %}"
+                    class="flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                >
+
+                    <i class="fa-solid fa-house w-5 text-center text-slate-400"></i>
+
+                    Home
+
+                </a>
+
+
+                <!-- Explore -->
+
+                <button
+                    type="button"
+                    @click="exploreMenu = !exploreMenu"
+                    class="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+
+                    <span class="flex items-center gap-3">
+
+                        <i class="fa-solid fa-compass w-5 text-center text-slate-400"></i>
+
+                        Explore
+
+                    </span>
+
+                    <i
+                        class="fa-solid fa-chevron-down text-xs transition-transform"
+                        :class="exploreMenu ? 'rotate-180' : ''"
+                    ></i>
+
+                </button>
+
+
+                <div
+                    x-show="exploreMenu"
+                    x-transition
+                    class="ml-8 space-y-1 border-l border-slate-200 pl-3"
+                >
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+                    >
+                        Businesses
+                    </a>
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+                    >
+                        Services
+                    </a>
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+                    >
+                        Companies
+                    </a>
+
+                </div>
+
+
+                <!-- Categories -->
+
+                <button
+                    type="button"
+                    @click="categoryMenu = !categoryMenu"
+                    class="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+
+                    <span class="flex items-center gap-3">
+
+                        <i class="fa-solid fa-layer-group w-5 text-center text-slate-400"></i>
+
+                        Categories
+
+                    </span>
+
+                    <i
+                        class="fa-solid fa-chevron-down text-xs transition-transform"
+                        :class="categoryMenu ? 'rotate-180' : ''"
+                    ></i>
+
+                </button>
+
+
+                <div
+                    x-show="categoryMenu"
+                    x-transition
+                    class="ml-8 space-y-1 border-l border-slate-200 pl-3"
+                >
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+                    >
+                        Restaurants
+                    </a>
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+                    >
+                        Healthcare
+                    </a>
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+                    >
+                        Real Estate
+                    </a>
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600"
+                    >
+                        Education
+                    </a>
+
+                    <a
+                        href="#"
+                        class="block rounded-lg px-3 py-2.5 text-sm font-semibold text-blue-600 hover:bg-blue-50"
+                    >
+                        View All Categories
+                    </a>
+
+                </div>
+
+
+                <!-- Businesses -->
+
+                <a
+                    href="#"
+                    class="flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                >
+
+                    <i class="fa-solid fa-building w-5 text-center text-slate-400"></i>
+
+                    Businesses
+
+                </a>
+
+
+                <!-- Companies -->
+
+                <a
+                    href="#"
+                    class="flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                >
+
+                    <i class="fa-solid fa-city w-5 text-center text-slate-400"></i>
+
+                    Companies
+
+                </a>
+
+
+                <!-- Blog -->
+
+                <a
+                    href="#"
+                    class="flex items-center gap-3 rounded-xl px-4 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-blue-600"
+                >
+
+                    <i class="fa-solid fa-newspaper w-5 text-center text-slate-400"></i>
+
+                    Blog
+
+                </a>
+
+            </nav>
+
+
+            <!-- Divider -->
+
+            <div class="my-5 border-t border-slate-200"></div>
+
+
+            <!-- Account -->
+
+            <div class="grid grid-cols-2 gap-3">
+
+                <a
+                    href="#"
+                    class="flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+
+                    <i class="fa-regular fa-user"></i>
+
+                    Login
+
+                </a>
+
+
+                <a
+                    href="#"
+                    class="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+                >
+
+                    <i class="fa-solid fa-plus text-xs"></i>
+
+                    Add Business
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>

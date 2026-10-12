@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =========================================
+         Basic Meta
+    ========================================== -->
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="{% block meta_description %}Findexor - Discover businesses, services, products and opportunities near you.{% endblock %}">
+
+    <meta name="keywords"
+          content="{% block meta_keywords %}Findexor, businesses, services, companies, local businesses{% endblock %}">
+
+    <meta name="author"
+          content="Findexor Technologies">
+
+    <!-- =========================================
+         Page Title
+    ========================================== -->
+
+    <title>
+        {% block title %}
+            Findexor - Discover. Connect. Grow.
+        {% endblock %}
+    </title>
+
+
+    <!-- =========================================
+         Favicon
+    ========================================== -->
+
+    <link rel="icon"
+          type="image/png"
+          href="{% static 'images/favicon.png' %}">
+
+
+    <!-- =========================================
+         Tailwind CSS
+    ========================================== -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+    <!-- =========================================
+         Font Awesome
+    ========================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+
+    <!-- =========================================
+         Main Website CSS
+    ========================================== -->
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+
+    <!-- =========================================
+         Page Specific CSS
+    ========================================== -->
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body class="bg-white text-slate-900 antialiased">
+
+
+    <!-- =========================================
+         Website Header
+    ========================================== -->
+
+    {% include "home/navbar.html" %}
+
+
+    <!-- =========================================
+         Main Content
+    ========================================== -->
+
+    <main id="main-content">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- =========================================
+         Website Footer
+    ========================================== -->
+
+    {% include "home/footer.html" %}
+
+
+    <!-- =========================================
+         Alpine.js
+         Required for Navbar Dropdowns & Mobile Menu
+    ========================================== -->
+
+    <script defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js">
+    </script>
+
+
+    <!-- =========================================
+         Global / Page Specific JavaScript
+    ========================================== -->
+
+    {% block extra_js %}
+    {% endblock %}
+
+
+</body>
+
+</html>
