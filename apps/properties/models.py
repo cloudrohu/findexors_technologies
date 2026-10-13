@@ -187,8 +187,12 @@ class Developer(BaseModel):
         ("Meeting", "Meeting"),
         ("FollowUp", "Follow Up"),
         ("Meeting_FollowUp", "Meeting-Follow Up"),
+
         ("Not Received", "Not Received"),
         ("Not Interested", "Not Interested"),
+        ("Visit", "Visit"),
+        ("Visit_ReMeeting", "Visit ReMeeting"),
+
         ("Deal Done", "Deal Done"),
     ]
 

@@ -1,0 +1,1695 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Developer | Findexor CRM{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.developer-page {
+    background: #f5f7fb;
+    min-height: calc(100vh - 70px);
+    padding: 24px;
+}
+
+.developer-container {
+    max-width: 1450px;
+    margin: auto;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    gap: 20px;
+}
+
+.page-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.page-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 7px 18px rgba(37, 99, 235, .20);
+}
+
+.page-title {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 700;
+    color: #172033;
+}
+
+.page-subtitle {
+    margin: 3px 0 0;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 14px;
+    border: 1px solid #dfe5ec;
+    background: #fff;
+    color: #475569;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.back-btn:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   MAIN GRID
+========================================================= */
+
+.form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 310px;
+    gap: 20px;
+    align-items: start;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.form-card {
+    background: #fff;
+    border: 1px solid #e7ebf1;
+    border-radius: 13px;
+    margin-bottom: 18px;
+    box-shadow: 0 3px 15px rgba(15, 23, 42, .035);
+    overflow: hidden;
+}
+
+.card-header {
+    padding: 14px 18px;
+    border-bottom: 1px solid #edf0f4;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.card-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #172033;
+}
+
+.card-subtitle {
+    margin: 2px 0 0;
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+.card-body {
+    padding: 19px;
+}
+
+
+/* =========================================================
+   INLINE FORM GRID
+========================================================= */
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.form-row:last-child {
+    margin-bottom: 0;
+}
+
+.form-row.three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.form-row.four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.field {
+    min-width: 0;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 650;
+    color: #475569;
+}
+
+.required {
+    color: #ef4444;
+}
+
+
+/* =========================================================
+   INPUTS / SELECT / TEXTAREA
+========================================================= */
+
+.developer-page input[type="text"],
+.developer-page input[type="email"],
+.developer-page input[type="url"],
+.developer-page input[type="tel"],
+.developer-page input[type="number"],
+.developer-page input[type="file"],
+.developer-page select,
+.developer-page textarea {
+
+    width: 100%;
+    box-sizing: border-box;
+
+    min-height: 40px;
+
+    padding: 9px 11px;
+
+    border: 1px solid #dbe2ea;
+    border-radius: 8px;
+
+    background-color: #fff;
+    color: #1e293b;
+
+    font-size: 12px;
+
+    outline: none;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
+}
+
+
+/* Dropdown */
+
+.developer-page select {
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    background-image:
+        linear-gradient(45deg, transparent 50%, #64748b 50%),
+        linear-gradient(135deg, #64748b 50%, transparent 50%);
+
+    background-position:
+        calc(100% - 15px) 17px,
+        calc(100% - 10px) 17px;
+
+    background-size:
+        5px 5px,
+        5px 5px;
+
+    background-repeat: no-repeat;
+
+    padding-right: 34px;
+}
+
+
+.developer-page textarea {
+    min-height: 115px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+
+.developer-page input:focus,
+.developer-page select:focus,
+.developer-page textarea:focus {
+
+    border-color: #60a5fa;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, .08);
+
+    background: #fff;
+}
+
+
+.developer-page input::placeholder,
+.developer-page textarea::placeholder {
+    color: #a8b2c1;
+}
+
+
+/* =========================================================
+   HELP TEXT
+========================================================= */
+
+.help-text {
+    margin-top: 5px;
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   ERRORS
+========================================================= */
+
+.error-field input,
+.error-field select,
+.error-field textarea {
+    border-color: #f87171 !important;
+    background: #fffafa;
+}
+
+.error-message {
+    margin-top: 5px;
+    color: #dc2626;
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   CHECKBOX INLINE
+========================================================= */
+
+.checkbox-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.checkbox-item {
+    flex: 1;
+    min-width: 180px;
+
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 11px 13px;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    transition: .18s ease;
+}
+
+.checkbox-item:hover {
+    border-color: #bfdbfe;
+    background: #f8fbff;
+}
+
+.checkbox-item input {
+    width: 16px;
+    height: 16px;
+    accent-color: #2563eb;
+}
+
+.checkbox-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+}
+
+
+/* =========================================================
+   LOGO UPLOAD
+========================================================= */
+
+.logo-box {
+    border: 1px dashed #cbd5e1;
+    border-radius: 11px;
+    padding: 18px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.logo-preview {
+    width: 105px;
+    height: 105px;
+
+    margin: 0 auto 13px;
+
+    object-fit: contain;
+
+    background: #fff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    padding: 7px;
+}
+
+.logo-placeholder {
+    width: 105px;
+    height: 105px;
+
+    margin: 0 auto 13px;
+
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 28px;
+}
+
+
+/* =========================================================
+   RIGHT SIDEBAR
+========================================================= */
+
+.right-column {
+    position: sticky;
+    top: 18px;
+}
+
+.summary-card {
+    text-align: center;
+    padding: 22px 18px;
+}
+
+.developer-avatar {
+    width: 78px;
+    height: 78px;
+
+    margin: 0 auto 12px;
+
+    border-radius: 17px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 28px;
+
+    overflow: hidden;
+}
+
+.developer-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #fff;
+}
+
+.developer-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #172033;
+}
+
+.developer-id {
+    margin-top: 4px;
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+.summary-divider {
+    height: 1px;
+    background: #edf0f4;
+    margin: 18px 0;
+}
+
+
+/* =========================================================
+   INFO ROW
+========================================================= */
+
+.info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    text-align: left;
+
+    margin-bottom: 13px;
+}
+
+.info-icon {
+    width: 29px;
+    height: 29px;
+
+    border-radius: 7px;
+
+    background: #f8fafc;
+    color: #64748b;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.info-label {
+    font-size: 9px;
+    color: #94a3b8;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 11px;
+    font-weight: 600;
+    color: #334155;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-box {
+    padding: 13px;
+
+    background: #f8fafc;
+    border: 1px solid #edf0f5;
+
+    border-radius: 9px;
+
+    margin-bottom: 13px;
+}
+
+.status-label {
+    font-size: 9px;
+    color: #94a3b8;
+    font-weight: 700;
+
+    margin-bottom: 5px;
+}
+
+.status-value {
+    font-size: 12px;
+    color: #2563eb;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ACTION BAR
+========================================================= */
+
+.action-bar {
+    position: sticky;
+    bottom: 14px;
+
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 11px 13px;
+
+    background: rgba(255,255,255,.96);
+
+    backdrop-filter: blur(12px);
+
+    border: 1px solid #dfe5ec;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 28px rgba(15,23,42,.10);
+}
+
+.action-note {
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    border-radius: 8px;
+
+    padding: 9px 15px;
+
+    font-size: 11px;
+    font-weight: 650;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: .18s ease;
+}
+
+.btn-cancel {
+    color: #475569;
+    background: #fff;
+    border: 1px solid #dbe2ea;
+}
+
+.btn-cancel:hover {
+    background: #f8fafc;
+}
+
+.btn-save {
+    border: 0;
+    color: #fff;
+
+    background: #2563eb;
+
+    box-shadow: 0 5px 12px rgba(37,99,235,.20);
+}
+
+.btn-save:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 1150px) {
+
+    .form-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .right-column {
+        position: static;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .developer-page {
+        padding: 15px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .form-row,
+    .form-row.three,
+    .form-row.four {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .checkbox-row {
+        flex-direction: column;
+    }
+
+    .checkbox-item {
+        min-width: auto;
+    }
+
+    .action-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .action-buttons .btn {
+        width: 100%;
+    }
+
+}
+
+</style>
+
+
+<div class="developer-page">
+
+<div class="developer-container">
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<div class="page-header">
+
+    <div class="page-title-wrap">
+
+        <div class="page-icon">
+            <i class="fa-solid fa-building"></i>
+        </div>
+
+        <div>
+
+            <h1 class="page-title">
+                Edit Developer
+            </h1>
+
+            <p class="page-subtitle">
+                Update developer profile and CRM information
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="{% url 'property_meetings' %}"
+        class="back-btn"
+    >
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Meetings
+    </a>
+
+</div>
+
+
+
+<!-- =========================================================
+     FORM
+========================================================= -->
+
+<form
+    method="post"
+    enctype="multipart/form-data"
+>
+
+{% csrf_token %}
+
+
+<div class="form-layout">
+
+
+<!-- =========================================================
+     LEFT COLUMN
+========================================================= -->
+
+<div>
+
+
+<!-- =========================================================
+     BASIC INFORMATION
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="card-header">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-id-card"></i>
+        </div>
+
+        <div>
+
+            <h3 class="card-title">
+                Basic Information
+            </h3>
+
+            <p class="card-subtitle">
+                Developer and contact information
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+
+        <!-- ROW 1 -->
+
+        <div class="form-row">
+
+            <!-- Developer Name -->
+
+            <div class="field {% if form.title.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Developer Name / Title
+                    {% if form.title.field.required %}
+                        <span class="required">*</span>
+                    {% endif %}
+                </label>
+
+                {{ form.title }}
+
+                {% for error in form.title.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Contact Person -->
+
+            <div class="field {% if form.contact_person.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Contact Person
+                </label>
+
+                {{ form.contact_person }}
+
+                {% for error in form.contact_person.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ROW 2 -->
+
+        <div class="form-row three">
+
+            <!-- Contact -->
+
+            <div class="field {% if form.contact_no.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Contact Number
+                </label>
+
+                {{ form.contact_no }}
+
+                {% for error in form.contact_no.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="field {% if form.email.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Email Address
+                </label>
+
+                {{ form.email }}
+
+                {% for error in form.email.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Website -->
+
+            <div class="field {% if form.web_site.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Website
+                </label>
+
+                {{ form.web_site }}
+
+                {% for error in form.web_site.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     LOCATION
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="card-header">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-location-dot"></i>
+        </div>
+
+        <div>
+
+            <h3 class="card-title">
+                Location Details
+            </h3>
+
+            <p class="card-subtitle">
+                Developer location and address
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+
+        <!-- CITY / LOCALITY / AREA -->
+
+        <div class="form-row three">
+
+
+            <!-- City -->
+
+            <div class="field {% if form.city.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    City
+                </label>
+
+                {{ form.city }}
+
+                {% for error in form.city.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Locality -->
+
+            <div class="field {% if form.locality.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Locality
+                </label>
+
+                {{ form.locality }}
+
+                {% for error in form.locality.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Area -->
+
+            <div class="field {% if form.area.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Area
+                </label>
+
+                {{ form.area }}
+
+                {% for error in form.area.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- POSTAL / ADDRESS -->
+
+        <div class="form-row">
+
+
+            <!-- Postal Code -->
+
+            <div class="field {% if form.postal_code.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Postal Code
+                </label>
+
+                {{ form.postal_code }}
+
+                {% for error in form.postal_code.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- Google Map -->
+
+            <div class="field {% if form.google_map.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Google Maps URL
+                </label>
+
+                {{ form.google_map }}
+
+                {% for error in form.google_map.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="form-row">
+
+            <div class="field full {% if form.address.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Complete Address
+                </label>
+
+                {{ form.address }}
+
+                {% for error in form.address.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     DEVELOPER DETAILS
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="card-header">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-align-left"></i>
+        </div>
+
+        <div>
+
+            <h3 class="card-title">
+                Developer Details
+            </h3>
+
+            <p class="card-subtitle">
+                Keywords, description and internal notes
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+
+        <!-- KEYWORDS -->
+
+        <div class="form-row">
+
+            <div class="field full {% if form.keywords.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Keywords
+                </label>
+
+                {{ form.keywords }}
+
+                <div class="help-text">
+                    Add keywords for search and CRM filtering.
+                </div>
+
+                {% for error in form.keywords.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ABOUT -->
+
+        <div class="form-row">
+
+            <div class="field full {% if form.about_developer.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    About Developer
+                </label>
+
+                {{ form.about_developer }}
+
+                {% for error in form.about_developer.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTE -->
+
+        <div class="form-row">
+
+            <div class="field full {% if form.note.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Internal Note
+                </label>
+
+                {{ form.note }}
+
+                <div class="help-text">
+                    Internal CRM note.
+                </div>
+
+                {% for error in form.note.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     CRM STATUS
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="card-header">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-chart-line"></i>
+        </div>
+
+        <div>
+
+            <h3 class="card-title">
+                CRM Status & Assignment
+            </h3>
+
+            <p class="card-subtitle">
+                Manage developer follow-up
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+
+        <div class="form-row">
+
+
+            <!-- CALLING STATUS -->
+
+            <div class="field {% if form.calling_status.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Calling Status
+                </label>
+
+                {{ form.calling_status }}
+
+                <div class="help-text">
+                    Select the current CRM stage.
+                </div>
+
+                {% for error in form.calling_status.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+
+            <!-- ASSIGNED -->
+
+            <div class="field {% if form.assigned_to.errors %}error-field{% endif %}">
+
+                <label class="field-label">
+                    Assigned To
+                </label>
+
+                {{ form.assigned_to }}
+
+                <div class="help-text">
+                    Select the team member responsible.
+                </div>
+
+                {% for error in form.assigned_to.errors %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     OPTIONS
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="card-header">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-sliders"></i>
+        </div>
+
+        <div>
+
+            <h3 class="card-title">
+                Developer Options
+            </h3>
+
+            <p class="card-subtitle">
+                Visibility and feature settings
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="checkbox-row">
+
+
+            <label class="checkbox-item">
+
+                {{ form.featured_builder }}
+
+                <span class="checkbox-text">
+                    <i class="fa-solid fa-star"></i>
+                    Featured Builder
+                </span>
+
+            </label>
+
+
+            <label class="checkbox-item">
+
+                {{ form.is_verified }}
+
+                <span class="checkbox-text">
+                    <i class="fa-solid fa-circle-check"></i>
+                    Verified Developer
+                </span>
+
+            </label>
+
+
+            <label class="checkbox-item">
+
+                {{ form.is_featured }}
+
+                <span class="checkbox-text">
+                    <i class="fa-solid fa-bolt"></i>
+                    Featured
+                </span>
+
+            </label>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+<!-- END LEFT COLUMN -->
+
+
+
+<!-- =========================================================
+     RIGHT COLUMN
+========================================================= -->
+
+<div class="right-column">
+
+
+<!-- =========================================================
+     DEVELOPER SUMMARY
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="summary-card">
+
+
+        <div class="developer-avatar">
+
+            {% if form.instance.logo %}
+
+                <img
+                    src="{{ form.instance.logo.url }}"
+                    alt="{{ form.instance.title }}"
+                >
+
+            {% else %}
+
+                <i class="fa-solid fa-building"></i>
+
+            {% endif %}
+
+        </div>
+
+
+        <h3 class="developer-name">
+
+            {{ form.instance.title|default:"Developer" }}
+
+        </h3>
+
+
+        {% if form.instance.pk %}
+
+            <div class="developer-id">
+
+                ID: {{ form.instance.pk }}
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="summary-divider"></div>
+
+
+        {% if form.instance.contact_no %}
+
+        <div class="info-row">
+
+            <div class="info-icon">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+
+            <div>
+
+                <div class="info-label">
+                    CONTACT
+                </div>
+
+                <div class="info-value">
+                    {{ form.instance.contact_no }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if form.instance.email %}
+
+        <div class="info-row">
+
+            <div class="info-icon">
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+
+            <div>
+
+                <div class="info-label">
+                    EMAIL
+                </div>
+
+                <div class="info-value">
+                    {{ form.instance.email }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if form.instance.city %}
+
+        <div class="info-row">
+
+            <div class="info-icon">
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+
+            <div>
+
+                <div class="info-label">
+                    CITY
+                </div>
+
+                <div class="info-value">
+                    {{ form.instance.city }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     LOGO
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="card-header">
+
+        <div class="card-icon">
+            <i class="fa-solid fa-image"></i>
+        </div>
+
+        <div>
+
+            <h3 class="card-title">
+                Developer Logo
+            </h3>
+
+            <p class="card-subtitle">
+                Upload developer logo
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="logo-box">
+
+
+            {% if form.instance.logo %}
+
+                <img
+                    src="{{ form.instance.logo.url }}"
+                    class="logo-preview"
+                    alt="Developer Logo"
+                >
+
+            {% else %}
+
+                <div class="logo-placeholder">
+                    <i class="fa-solid fa-building"></i>
+                </div>
+
+            {% endif %}
+
+
+            <label class="field-label">
+                Change Logo
+            </label>
+
+            {{ form.logo }}
+
+            {% for error in form.logo.errors %}
+
+                <div class="error-message">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     CURRENT STATUS
+========================================================= -->
+
+<div class="form-card">
+
+    <div class="card-body">
+
+
+        <div class="status-box">
+
+            <div class="status-label">
+                CURRENT CALLING STATUS
+            </div>
+
+            <div class="status-value">
+
+                {{ form.instance.calling_status|default:"Not Set" }}
+
+            </div>
+
+        </div>
+
+
+        {% if form.instance.created_at %}
+
+        <div class="info-row">
+
+            <div class="info-icon">
+                <i class="fa-regular fa-calendar"></i>
+            </div>
+
+            <div>
+
+                <div class="info-label">
+                    CREATED
+                </div>
+
+                <div class="info-value">
+                    {{ form.instance.created_at|date:"d M Y, h:i A" }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        {% if form.instance.updated_at %}
+
+        <div class="info-row">
+
+            <div class="info-icon">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+            </div>
+
+            <div>
+
+                <div class="info-label">
+                    LAST UPDATED
+                </div>
+
+                <div class="info-value">
+                    {{ form.instance.updated_at|date:"d M Y, h:i A" }}
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+</div>
+<!-- END RIGHT COLUMN -->
+
+
+</div>
+<!-- END FORM LAYOUT -->
+
+
+
+<!-- =========================================================
+     ACTION BAR
+========================================================= -->
+
+<div class="action-bar">
+
+    <div class="action-note">
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        Changes will be saved to the developer profile.
+
+    </div>
+
+
+    <div class="action-buttons">
+
+        <a
+            href="{% url 'property_meetings' %}"
+            class="btn btn-cancel"
+        >
+            <i class="fa-solid fa-xmark"></i>
+            Cancel
+        </a>
+
+
+        <button
+            type="submit"
+            class="btn btn-save"
+        >
+            <i class="fa-solid fa-check"></i>
+            Save Changes
+        </button>
+
+    </div>
+
+</div>
+
+
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}

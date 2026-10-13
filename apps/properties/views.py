@@ -1,280 +1,588 @@
-from django.http import JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
-from django.core.paginator import Paginator
-from django.db.models import Q, Min, Max
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from .models import (
+    Developer,
+    Architects,
+    Engineer,
     Project,
-    Configuration,
-    Gallery,
-    RERA_Info,
-    BookingOffer,
-    Overview,
-    USP,
-    Amenities,
-    Header,
-    WelcomeTo,
-    Connectivity,
-    WhyInvest,
-    Enquiry,
-    ProjectFAQ,
+    Meeting,
 )
 
-from utility.models import City, Locality, ProjectAmenities, PropertyType
+from .forms import (
+    DeveloperEditForm,
+    ArchitectEditForm,
+    EngineerEditForm,
+    ProjectEditForm,
+    MeetingEditForm,
+)
 
-def index(request):
-    queryset_list = Project.objects.filter(active=True).order_by('project_name')
-    
-    if 'city_id' in request.GET and request.GET['city_id']:
-        city_id = request.GET['city_id']
-        queryset_list = queryset_list.filter(city_id=city_id)
 
-    if 'locality_id' in request.GET and request.GET['locality_id']:
-        locality_id = request.GET['locality_id']
-        try:
-            selected_locality = Locality.objects.get(pk=locality_id)
-            descendant_localities = selected_locality.get_descendants(include_self=True)
-            queryset_list = queryset_list.filter(locality__in=descendant_localities)
-        except Locality.DoesNotExist:
-            pass
+# ============================================================
+# PROPERTY MEETINGS
+# ============================================================
 
-    if 'status' in request.GET and request.GET['status']:
-        status = request.GET['status']
-        queryset_list = queryset_list.filter(construction_status__iexact=status)
+@login_required
+def property_meetings(request):
 
-    if 'keywords' in request.GET and request.GET['keywords']:
-        keywords = request.GET['keywords']
-        queryset_list = queryset_list.filter(
-            Q(project_name__icontains=keywords) | 
-            Q(developer__name__icontains=keywords)
+    today = timezone.localdate()
+    tomorrow = today + timezone.timedelta(days=1)
+
+    # --------------------------------------------------------
+    # BASE QUERY
+    # --------------------------------------------------------
+
+    meetings = (
+        Meeting.objects
+        .select_related(
+            "developer",
+            "architect",
+            "engineer",
+            "project",
+            "assigned_to",
         )
-        
-    available_cities = City.objects.all().order_by('name')
-    amenities = ProjectAmenities.objects.all()
-    available_localities = Locality.objects.filter(parent__isnull=True).order_by('title')
-    construction_statuses = Project.Construction_Status
-    
-    context = {
-        'projects': queryset_list,
-        'available_cities': available_cities,
-        "amenities": amenities,
-        'construction_statuses': construction_statuses,
-        'values': request.GET,
-    }
-    
-    return render(request, 'properties/index.html', context)
+        .order_by("-meeting_date", "-created_at")
+    )
 
-def get_bhk_choices():
-    return [choice[0] for choice in Project.BHK_CHOICES]
+    # --------------------------------------------------------
+    # NOT MANAGE
+    #
+    # Past meeting + parent still has:
+    # Meeting / Meeting_FollowUp
+    # --------------------------------------------------------
 
-
-def search_suggestions(request):
-    q = request.GET.get("q", "").strip()
-    results = []
-
-    if q:
-
-        projects = Project.objects.filter(
-            project_name__icontains=q
-        )[:5]
-
-        for p in projects:
-            results.append({
-                "name": p.project_name,
-                "type": "Project"
-            })
-
-        localities = Locality.objects.filter(
-            title__icontains=q
-        )[:5]
-
-        for l in localities:
-            results.append({
-                "name": l.title,
-                "type": "Locality"
-            })
-
-    return JsonResponse(results, safe=False)
-
-
-def search_projects(request):
-    location = request.GET.get("q", "").strip()
-    city = request.GET.get("city", "").strip()
-    amenities = request.GET.get("amenities")
-    status = request.GET.get("construction_status")
-    bhk = request.GET.get("bhk")
-    developer_slug = request.GET.get("developer") 
-    locality_ids = request.GET.getlist("locality")
-    projects = Project.objects.filter(active=True)
-
-
-    # 🔍 Single Clean Search Block
-    if location:
-        search_term = location.split(",")[0].strip()
-
-        projects = projects.filter(
-            Q(project_name__icontains=search_term) |
-            Q(locality__title__icontains=search_term) |
-            Q(city__name__icontains=search_term) |
-            Q(developer__title__icontains=search_term)
+    not_manage_q = (
+        Q(
+            meeting_date__date__lt=today,
+            developer__calling_status__in=[
+                "Meeting",
+                "Meeting_FollowUp",
+            ],
         )
-
-    # 🌆 City
-    if city:
-        projects = projects.filter(city__name__iexact=city)
- 
-
-    # 📍 Locality (MPTT)
-    if locality_ids:
-        selected_localities = Locality.objects.filter(id__in=locality_ids)
-        all_localities = Locality.objects.none()
-        for loc in selected_localities:
-            all_localities |= loc.get_descendants(include_self=True)
-        projects = projects.filter(locality__in=all_localities).distinct()
-
-    if developer_slug:
-        projects = projects.filter(developer__slug=developer_slug)
-
-    if amenities:
-        amenity_list = [a.strip() for a in amenities.split(",") if a.strip()]
-        if amenity_list:
-            projects = projects.filter(
-                project_amenities__amenities__title__in=amenity_list
-            ).distinct()
-
-    if status:
-        status_list = [s.strip() for s in status.split(",") if s.strip()]
-        if status_list:
-            projects = projects.filter(construction_status__in=status_list).distinct()
-
-    selected_bhk_list = []
-    if bhk:
-        selected_bhk_list = [b.strip() for b in bhk.split(",") if b.strip()]
-        if selected_bhk_list:
-            bhk_query = Q()
-            for b in selected_bhk_list:
-                bhk_query |= Q(bhk_type__icontains=b) | Q(configurations__bhk_type__icontains=b)
-            projects = projects.filter(bhk_query).distinct()
-
-    # ⚡ Optimize + Pagination
-        projects = projects.select_related(
-            "city",
-            "locality",
-            "developer"
-        ).order_by("-create_at")
-
-    paginator = Paginator(projects, 9)
-    projects_page = paginator.get_page(request.GET.get("page"))
-
-    context = {
-        "projects": projects_page,
-        "amenities": ProjectAmenities.objects.all(),
-        "construction_status": [choice[0] for choice in Project.Construction_Status],
-        "bhk_choices": get_bhk_choices(),
-        "selected_amenities": amenities,
-        "selected_status": status,
-        "selected_bhk": bhk,
-        "selected_bhk_list": selected_bhk_list,
-        "available_localities": Locality.objects.all().order_by("title"),
-        "selected_locality_ids": [str(x) for x in locality_ids],
-    }
-
-    return render(request, "properties/residential_list.html", context)
-
-def residential_projects(request):
-
-    projects = (
-        Project.objects
-        .filter(active=True)
-        .annotate(
-            min_price=Min(
-                "configurations__price_in_rupees"
-            ),
-            max_price=Max(
-                "configurations__price_in_rupees"
-            ),
+        |
+        Q(
+            meeting_date__date__lt=today,
+            architect__calling_status__in=[
+                "Meeting",
+                "Meeting_FollowUp",
+            ],
+        )
+        |
+        Q(
+            meeting_date__date__lt=today,
+            engineer__calling_status__in=[
+                "Meeting",
+                "Meeting_FollowUp",
+            ],
+        )
+        |
+        Q(
+            meeting_date__date__lt=today,
+            project__calling_status__in=[
+                "Meeting",
+                "Meeting_FollowUp",
+            ],
         )
     )
 
-    context = {
-        "projects": projects,
-        "page_title": "Residential Projects",
-    }
+    # --------------------------------------------------------
+    # FILTER
+    # --------------------------------------------------------
 
-    return render(request,"projects/residential_list.html",context,)
-
-def commercial_projects(request):
-
-    projects = Project.objects.filter(active=True)
-
-    context = {
-        "projects": projects,
-        "page_title": "Commercial Projects",
-    }
-
-    return render(request,"projects/commercial_list.html",context,)
-
-def project_details(request, id, slug):
-
-    project = get_object_or_404(Project,id=id,slug=slug,active=True)
-
-    carpet_range = (
-        project.configurations.aggregate(
-            min_area=Min("area_sqft"),
-            max_area=Max("area_sqft"),
-        )
+    current_filter = request.GET.get(
+        "filter",
+        "all",
     )
 
-    related_projects = (
-        Project.objects.filter(
-            city=project.city,
-            active=True
-        )
-        .exclude(id=project.id)[:8]
+    current_type = request.GET.get(
+        "type",
+        "all",
     )
 
+    # --------------------------------------------------------
+    # DATE FILTER
+    # --------------------------------------------------------
+
+    if current_filter == "not_manage":
+
+        meetings = meetings.filter(
+            not_manage_q
+        )
+
+    elif current_filter == "today":
+
+        meetings = meetings.filter(
+            meeting_date__date=today
+        )
+
+    elif current_filter == "tomorrow":
+
+        meetings = meetings.filter(
+            meeting_date__date=tomorrow
+        )
+
+    elif current_filter == "upcoming":
+
+        meetings = meetings.filter(
+            meeting_date__date__gt=tomorrow
+        )
+
+    # all = no date filter
+
+    # --------------------------------------------------------
+    # TYPE FILTER
+    # --------------------------------------------------------
+
+    if current_type in [
+        "Developer",
+        "Architect",
+        "Engineer",
+        "Project",
+    ]:
+
+        meetings = meetings.filter(
+            type=current_type
+        )
+
+    # ========================================================
+    # COUNTS
+    # ========================================================
+
+    all_count = Meeting.objects.count()
+
+    today_count = Meeting.objects.filter(
+        meeting_date__date=today
+    ).count()
+
+    tomorrow_count = Meeting.objects.filter(
+        meeting_date__date=tomorrow
+    ).count()
+
+    upcoming_count = Meeting.objects.filter(
+        meeting_date__date__gt=tomorrow
+    ).count()
+
+    not_manage_count = Meeting.objects.filter(
+        not_manage_q
+    ).count()
+
+    # --------------------------------------------------------
+    # TYPE COUNTS
+    # --------------------------------------------------------
+
+    project_meeting_count = Meeting.objects.filter(
+        type="Project"
+    ).count()
+
+    developer_meeting_count = Meeting.objects.filter(
+        type="Developer"
+    ).count()
+
+    architect_meeting_count = Meeting.objects.filter(
+        type="Architect"
+    ).count()
+
+    engineer_meeting_count = Meeting.objects.filter(
+        type="Engineer"
+    ).count()
+
+    # ========================================================
+    # CONTEXT
+    # ========================================================
+
     context = {
-        "project": project,
-        "min_carpet": carpet_range["min_area"],
-        "max_carpet": carpet_range["max_area"],
-        "related_projects": related_projects,
+
+        "meetings": meetings,
+
+        # Date filters
+        "current_filter": current_filter,
+
+        "all_count": all_count,
+        "today_count": today_count,
+        "tomorrow_count": tomorrow_count,
+        "upcoming_count": upcoming_count,
+        "not_manage_count": not_manage_count,
+
+        # Type filters
+        "current_type": current_type,
+
+        "project_meeting_count": project_meeting_count,
+        "developer_meeting_count": developer_meeting_count,
+        "architect_meeting_count": architect_meeting_count,
+        "engineer_meeting_count": engineer_meeting_count,
+
+        # Dates
+        "today": today,
+        "tomorrow": tomorrow,
     }
 
-    return render(request,"projects/project_detail.html",context,)
+    return render(
+        request,
+        "dashboard/meeting/property_meetings.html",
+        context,
+    )
 
-def submit_enquiry(request, id):
 
-    project = get_object_or_404(
-        Project,
-        id=id
+# ============================================================
+# EDIT DEVELOPER
+# ============================================================
+
+@login_required
+def edit_developer(
+    request,
+    developer_id,
+):
+
+    developer = get_object_or_404(
+        Developer,
+        pk=developer_id,
+    )
+
+    # --------------------------------------------------------
+    # GET MEETING ID
+    #
+    # Example:
+    # ?meeting_id=MT000001
+    # --------------------------------------------------------
+
+    meeting_id = request.GET.get(
+        "meeting_id"
     )
 
     if request.method == "POST":
 
-        Enquiry.objects.create(
-            project=project,
-            name=request.POST.get("name"),
-            email=request.POST.get("email"),
-            phone=request.POST.get("phone"),
-            message=request.POST.get("message"),
+        form = DeveloperEditForm(
+            request.POST,
+            request.FILES,
+            instance=developer,
         )
 
-        messages.success(
-            request,
-            "Enquiry Submitted Successfully"
+        if form.is_valid():
+
+            form.save()
+
+            # ----------------------------------------------
+            # Return to meeting if came from meeting card
+            # ----------------------------------------------
+
+            if meeting_id:
+
+                return redirect(
+                    "edit_meeting",
+                    meeting_id=meeting_id,
+                )
+
+            return redirect(
+                "property_meetings"
+            )
+
+    else:
+
+        form = DeveloperEditForm(
+            instance=developer,
         )
 
-        return redirect("thank_you")
-
-    return redirect(
-        "project_details",
-        id=project.id,
-        slug=project.slug,
-    )
-
-def thank_you(request):
     return render(
         request,
-        "projects/thank_you.html"
+        "dashboard/meeting/edit_developer.html",
+        {
+            "form": form,
+            "developer": developer,
+            "meeting_id": meeting_id,
+        },
+    )
+
+
+# ============================================================
+# EDIT ARCHITECT
+# ============================================================
+
+@login_required
+def edit_architect(
+    request,
+    architect_id,
+):
+
+    architect = get_object_or_404(
+        Architects,
+        pk=architect_id,
+    )
+
+    meeting_id = request.GET.get(
+        "meeting_id"
+    )
+
+    if request.method == "POST":
+
+        form = ArchitectEditForm(
+            request.POST,
+            request.FILES,
+            instance=architect,
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            if meeting_id:
+
+                return redirect(
+                    "edit_meeting",
+                    meeting_id=meeting_id,
+                )
+
+            return redirect(
+                "property_meetings"
+            )
+
+    else:
+
+        form = ArchitectEditForm(
+            instance=architect,
+        )
+
+    return render(
+        request,
+        "dashboard/meeting/edit_architect.html",
+        {
+            "form": form,
+            "architect": architect,
+            "meeting_id": meeting_id,
+        },
+    )
+
+
+# ============================================================
+# EDIT ENGINEER
+# ============================================================
+
+@login_required
+def edit_engineer(
+    request,
+    engineer_id,
+):
+
+    engineer = get_object_or_404(
+        Engineer,
+        pk=engineer_id,
+    )
+
+    meeting_id = request.GET.get(
+        "meeting_id"
+    )
+
+    if request.method == "POST":
+
+        form = EngineerEditForm(
+            request.POST,
+            request.FILES,
+            instance=engineer,
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            if meeting_id:
+
+                return redirect(
+                    "edit_meeting",
+                    meeting_id=meeting_id,
+                )
+
+            return redirect(
+                "property_meetings"
+            )
+
+    else:
+
+        form = EngineerEditForm(
+            instance=engineer,
+        )
+
+    return render(
+        request,
+        "dashboard/meeting/edit_engineer.html",
+        {
+            "form": form,
+            "engineer": engineer,
+            "meeting_id": meeting_id,
+        },
+    )
+
+
+# ============================================================
+# EDIT PROJECT
+# ============================================================
+
+@login_required
+def edit_project(
+    request,
+    project_id,
+):
+
+    project = get_object_or_404(
+        Project,
+        pk=project_id,
+    )
+
+    meeting_id = request.GET.get(
+        "meeting_id"
+    )
+
+    if request.method == "POST":
+
+        form = ProjectEditForm(
+            request.POST,
+            request.FILES,
+            instance=project,
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            if meeting_id:
+
+                return redirect(
+                    "edit_meeting",
+                    meeting_id=meeting_id,
+                )
+
+            return redirect(
+                "property_meetings"
+            )
+
+    else:
+
+        form = ProjectEditForm(
+            instance=project,
+        )
+
+    return render(
+        request,
+        "dashboard/meeting/edit_project.html",
+        {
+            "form": form,
+            "project": project,
+            "meeting_id": meeting_id,
+        },
+    )
+
+
+# ============================================================
+# EDIT MEETING
+# ============================================================
+
+@login_required
+def edit_meeting(
+    request,
+    meeting_id,
+):
+
+    meeting = get_object_or_404(
+        Meeting.objects.select_related(
+            "developer",
+            "architect",
+            "engineer",
+            "project",
+            "assigned_to",
+        ),
+        pk=meeting_id,
+    )
+
+    # --------------------------------------------------------
+    # FIND PARENT
+    # --------------------------------------------------------
+
+    parent = None
+    parent_type = None
+
+    if meeting.developer:
+
+        parent = meeting.developer
+        parent_type = "Developer"
+
+    elif meeting.architect:
+
+        parent = meeting.architect
+        parent_type = "Architect"
+
+    elif meeting.engineer:
+
+        parent = meeting.engineer
+        parent_type = "Engineer"
+
+    elif meeting.project:
+
+        parent = meeting.project
+        parent_type = "Project"
+
+    # --------------------------------------------------------
+    # FORM
+    # --------------------------------------------------------
+
+    if request.method == "POST":
+
+        form = MeetingEditForm(
+            request.POST,
+            instance=meeting,
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect(
+                "property_meetings"
+            )
+
+    else:
+
+        form = MeetingEditForm(
+            instance=meeting,
+        )
+
+    # --------------------------------------------------------
+    # PARENT EDIT URL INFORMATION
+    # --------------------------------------------------------
+
+    parent_edit_url = None
+
+    if meeting.developer:
+
+        parent_edit_url = (
+            "edit_developer"
+        )
+
+    elif meeting.architect:
+
+        parent_edit_url = (
+            "edit_architect"
+        )
+
+    elif meeting.engineer:
+
+        parent_edit_url = (
+            "edit_engineer"
+        )
+
+    elif meeting.project:
+
+        parent_edit_url = (
+            "edit_project"
+        )
+
+    return render(
+        request,
+        "dashboard/meeting/edit_meeting.html",
+        {
+            "form": form,
+            "meeting": meeting,
+            "parent": parent,
+            "parent_type": parent_type,
+            "parent_edit_url": parent_edit_url,
+        },
     )

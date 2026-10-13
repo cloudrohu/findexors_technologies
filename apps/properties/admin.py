@@ -460,7 +460,7 @@ class EnquiryInline(BaseCRMInline):
 @admin.register(Developer)
 class DeveloperAdmin(
     BaseAdmin,
-    LogoPreviewMixin,
+    LogoPreviewMixin
     ):
     change_list_template = "admin/properties/developer/change_list.html"
     

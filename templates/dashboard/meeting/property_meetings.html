@@ -6,19 +6,25 @@
 
 <div class="property-meetings-page">
 
-    <!-- =====================================================
+    <!-- =========================================================
          PAGE HEADER
-    ====================================================== -->
+    ========================================================== -->
 
     <div class="pm-page-header">
 
         <div>
 
             <div class="pm-breadcrumb">
-                <span>Dashboard</span>
+                <a href="/dashboard/" class="pm-breadcrumb-link">
+                    Dashboard
+                </a>
+
                 <i class="fa-solid fa-chevron-right"></i>
+
                 <span>Meetings</span>
+
                 <i class="fa-solid fa-chevron-right"></i>
+
                 <strong>Property Meetings</strong>
             </div>
 
@@ -32,9 +38,12 @@
 
         <div class="pm-header-actions">
 
-            <a href="#" class="pm-add-btn">
-                <i class="fa-solid fa-plus"></i>
-                Add Meeting
+            <a
+                href="?filter=all"
+                class="pm-add-btn"
+            >
+                <i class="fa-solid fa-list"></i>
+                All Meetings
             </a>
 
         </div>
@@ -42,16 +51,200 @@
     </div>
 
 
-    <!-- =====================================================
+    <!-- =========================================================
+         GLOBAL MEETING SCHEDULE
+    ========================================================== -->
+
+    <section class="pm-filter-section">
+
+        <div class="pm-section-heading">
+
+            <div>
+
+                <h2>
+                    Meeting Schedule
+                </h2>
+
+                <p>
+                    Filter all property meetings by date and pending status.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="pm-filter-grid">
+
+            <!-- NOT MANAGE -->
+
+            <a
+                href="?filter=not_manage"
+                class="pm-filter-card pm-filter-danger
+                {% if not current_type and current_filter == 'not_manage' %}active{% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>Not Manage</span>
+
+                    <strong>
+                        {{ not_manage_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        Past pending meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- TODAY -->
+
+            <a
+                href="?filter=today"
+                class="pm-filter-card pm-filter-today
+                {% if not current_type and current_filter == 'today' %}active{% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>Today</span>
+
+                    <strong>
+                        {{ today_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        Today's meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- TOMORROW -->
+
+            <a
+                href="?filter=tomorrow"
+                class="pm-filter-card pm-filter-tomorrow
+                {% if not current_type and current_filter == 'tomorrow' %}active{% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>Tomorrow</span>
+
+                    <strong>
+                        {{ tomorrow_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        Tomorrow's meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- UPCOMING -->
+
+            <a
+                href="?filter=upcoming"
+                class="pm-filter-card pm-filter-upcoming
+                {% if not current_type and current_filter == 'upcoming' %}active{% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-calendar-week"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>Upcoming</span>
+
+                    <strong>
+                        {{ upcoming_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        After tomorrow
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- ALL -->
+
+            <a
+                href="?filter=all"
+                class="pm-filter-card pm-filter-all
+                {% if not current_type and current_filter == 'all' %}active{% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>All Meetings</span>
+
+                    <strong>
+                        {{ all_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        All property meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
          PROPERTY MEETING CARDS
-    ====================================================== -->
+    ========================================================== -->
 
     <div class="pm-cards-grid">
 
 
-        <!-- =================================================
-             PROJECT MEETINGS
-        ================================================== -->
+        <!-- =====================================================
+             PROJECT
+        ====================================================== -->
 
         <div class="pm-card pm-card-project">
 
@@ -88,8 +281,6 @@
 
             </div>
 
-
-            <!-- PROJECT FILTERS -->
 
             <div class="pm-inner-filters">
 
@@ -166,10 +357,9 @@
         </div>
 
 
-
-        <!-- =================================================
-             DEVELOPER MEETINGS
-        ================================================== -->
+        <!-- =====================================================
+             DEVELOPER
+        ====================================================== -->
 
         <div class="pm-card pm-card-developer">
 
@@ -206,8 +396,6 @@
 
             </div>
 
-
-            <!-- DEVELOPER FILTERS -->
 
             <div class="pm-inner-filters">
 
@@ -284,10 +472,9 @@
         </div>
 
 
-
-        <!-- =================================================
-             ARCHITECT MEETINGS
-        ================================================== -->
+        <!-- =====================================================
+             ARCHITECT
+        ====================================================== -->
 
         <div class="pm-card pm-card-architect">
 
@@ -324,8 +511,6 @@
 
             </div>
 
-
-            <!-- ARCHITECT FILTERS -->
 
             <div class="pm-inner-filters">
 
@@ -402,10 +587,9 @@
         </div>
 
 
-
-        <!-- =================================================
-             ENGINEER MEETINGS
-        ================================================== -->
+        <!-- =====================================================
+             ENGINEER
+        ====================================================== -->
 
         <div class="pm-card pm-card-engineer">
 
@@ -442,8 +626,6 @@
 
             </div>
 
-
-            <!-- ENGINEER FILTERS -->
 
             <div class="pm-inner-filters">
 
@@ -519,434 +701,686 @@
 
         </div>
 
-
     </div>
 
 
+    <!-- =========================================================
+         RESULTS
+    ========================================================== -->
 
-    <!-- =====================================================
-         GLOBAL MEETING SCHEDULE
-    ====================================================== -->
+    <section class="pm-results-section">
 
-    <section class="pm-filter-section">
+        <div class="pm-results-heading">
 
-        <div class="pm-section-heading">
+            <h2>
+                {% if current_filter == "today" %}
+                    Today's Meetings
 
-            <div>
+                {% elif current_filter == "tomorrow" %}
+                    Tomorrow's Meetings
 
-                <h2>
-                    Meeting Schedule
-                </h2>
+                {% elif current_filter == "upcoming" %}
+                    Upcoming Meetings
+
+                {% elif current_filter == "not_manage" %}
+                    Not Managed Meetings
+
+                {% else %}
+                    All Property Meetings
+                {% endif %}
+            </h2>
+
+            <p>
+
+                {% if current_type %}
+                    {{ current_type }} meetings
+
+                {% else %}
+                    All property meeting records
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        {% if meetings %}
+
+            <div class="pm-meeting-grid">
+
+                {% for meeting in meetings %}
+
+                    <article class="pm-meeting-card">
+
+
+                        <!-- ===============================
+                             CARD HEADER
+                        ================================ -->
+
+                        <div class="pm-card-header">
+
+                            <div class="pm-card-header-left">
+
+                                <div class="pm-meeting-icon">
+
+                                    {% if meeting.type == "Developer" %}
+                                        <i class="fa-solid fa-city"></i>
+
+                                    {% elif meeting.type == "Architect" %}
+                                        <i class="fa-solid fa-compass-drafting"></i>
+
+                                    {% elif meeting.type == "Engineer" %}
+                                        <i class="fa-solid fa-helmet-safety"></i>
+
+                                    {% else %}
+                                        <i class="fa-solid fa-building"></i>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <div class="pm-meeting-title">
+
+                                    <div class="pm-badges">
+
+                                        <span class="pm-badge pm-badge-id">
+                                            {{ meeting.pk }}
+                                        </span>
+
+                                        <span class="pm-badge pm-badge-type">
+                                            {{ meeting.type }}
+                                        </span>
+
+                                        <span class="pm-badge pm-badge-status">
+                                            {{ meeting.status }}
+                                        </span>
+
+                                    </div>
+
+
+                                    <h3>
+
+                                        {% if meeting.developer %}
+                                            {{ meeting.developer.title }}
+
+                                        {% elif meeting.architect %}
+                                            {{ meeting.architect.title }}
+
+                                        {% elif meeting.engineer %}
+                                            {{ meeting.engineer.title }}
+
+                                        {% elif meeting.project %}
+                                            {{ meeting.project.project_name }}
+
+                                        {% else %}
+                                            Property Meeting
+                                        {% endif %}
+
+                                    </h3>
+
+
+                                    <span class="pm-parent-type">
+                                        {{ meeting.type }} Meeting
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ===============================
+                             PARENT DETAILS
+                        ================================ -->
+
+                        <div class="pm-card-section">
+
+                            <div class="pm-section-title">
+
+                                <i class="fa-solid fa-user-tie"></i>
+
+                                Parent Details
+
+                            </div>
+
+
+                            <div class="pm-parent-box">
+
+                                {% if meeting.developer %}
+
+                                    <h4>
+                                        {{ meeting.developer.title }}
+                                    </h4>
+
+                                    {% if meeting.developer.contact_person %}
+                                        <div>
+                                            <i class="fa-solid fa-user"></i>
+                                            <span>
+                                                {{ meeting.developer.contact_person }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.developer.contact_no %}
+                                        <div>
+                                            <i class="fa-solid fa-phone"></i>
+                                            <span>
+                                                {{ meeting.developer.contact_no }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.developer.email %}
+                                        <div>
+                                            <i class="fa-solid fa-envelope"></i>
+                                            <span>
+                                                {{ meeting.developer.email }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.developer.city %}
+                                        <div>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span>
+                                                {{ meeting.developer.city }}
+                                                {% if meeting.developer.locality %}
+                                                    , {{ meeting.developer.locality }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+
+                                {% elif meeting.architect %}
+
+                                    <h4>
+                                        {{ meeting.architect.title }}
+                                    </h4>
+
+                                    {% if meeting.architect.contact_person %}
+                                        <div>
+                                            <i class="fa-solid fa-user"></i>
+                                            <span>
+                                                {{ meeting.architect.contact_person }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.architect.contact_no %}
+                                        <div>
+                                            <i class="fa-solid fa-phone"></i>
+                                            <span>
+                                                {{ meeting.architect.contact_no }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.architect.email %}
+                                        <div>
+                                            <i class="fa-solid fa-envelope"></i>
+                                            <span>
+                                                {{ meeting.architect.email }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.architect.city %}
+                                        <div>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span>
+                                                {{ meeting.architect.city }}
+                                                {% if meeting.architect.locality %}
+                                                    , {{ meeting.architect.locality }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+
+                                {% elif meeting.engineer %}
+
+                                    <h4>
+                                        {{ meeting.engineer.title }}
+                                    </h4>
+
+                                    {% if meeting.engineer.contact_person %}
+                                        <div>
+                                            <i class="fa-solid fa-user"></i>
+                                            <span>
+                                                {{ meeting.engineer.contact_person }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.engineer.contact_no %}
+                                        <div>
+                                            <i class="fa-solid fa-phone"></i>
+                                            <span>
+                                                {{ meeting.engineer.contact_no }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.engineer.email %}
+                                        <div>
+                                            <i class="fa-solid fa-envelope"></i>
+                                            <span>
+                                                {{ meeting.engineer.email }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.engineer.city %}
+                                        <div>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span>
+                                                {{ meeting.engineer.city }}
+                                                {% if meeting.engineer.locality %}
+                                                    , {{ meeting.engineer.locality }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+
+                                {% elif meeting.project %}
+
+                                    <h4>
+                                        {{ meeting.project.project_name }}
+                                    </h4>
+
+                                    {% if meeting.project.developer %}
+                                        <div>
+                                            <i class="fa-solid fa-city"></i>
+                                            <span>
+                                                Developer:
+                                                {{ meeting.project.developer.title }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.project.city %}
+                                        <div>
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span>
+                                                {{ meeting.project.city }}
+
+                                                {% if meeting.project.locality %}
+                                                    , {{ meeting.project.locality }}
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.project.area %}
+                                        <div>
+                                            <i class="fa-solid fa-map-location-dot"></i>
+                                            <span>
+                                                {{ meeting.project.area }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if meeting.project.bhk_type %}
+                                        <div>
+                                            <i class="fa-solid fa-house"></i>
+                                            <span>
+                                                {{ meeting.project.bhk_type }}
+                                            </span>
+                                        </div>
+                                    {% endif %}
+
+                                {% endif %}
+
+
+                                <span class="pm-parent-label">
+                                    {{ meeting.type }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ===============================
+                             MEETING DETAILS
+                        ================================ -->
+
+                        <div class="pm-card-section">
+
+                            <div class="pm-section-title">
+
+                                <i class="fa-solid fa-calendar-check"></i>
+
+                                Meeting Details
+
+                            </div>
+
+
+                            <div class="pm-details-box">
+
+                                <div class="pm-detail-row">
+
+                                    <strong>
+                                        Date
+                                    </strong>
+
+                                    <span>
+                                        {% if meeting.meeting_date %}
+                                            {{ meeting.meeting_date|date:"d M Y, h:i A" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="pm-detail-row">
+
+                                    <strong>
+                                        Status
+                                    </strong>
+
+                                    <span>
+                                        {{ meeting.status|default:"-" }}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="pm-detail-row">
+
+                                    <strong>
+                                        Assigned
+                                    </strong>
+
+                                    <span>
+                                        {% if meeting.assigned_to %}
+                                            {{ meeting.assigned_to }}
+                                        {% else %}
+                                            Not Assigned
+                                        {% endif %}
+                                    </span>
+
+                                </div>
+
+
+                                <div class="pm-detail-row">
+
+                                    <strong>
+                                        Created
+                                    </strong>
+
+                                    <span>
+                                        {% if meeting.created_at %}
+                                            {{ meeting.created_at|date:"d M Y, h:i A" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ===============================
+                             COMMENT
+                        ================================ -->
+
+                        {% if meeting.comment %}
+
+                            <div class="pm-card-section">
+
+                                <div class="pm-section-title">
+
+                                    <i class="fa-solid fa-comment"></i>
+
+                                    Comment
+
+                                </div>
+
+                                <div class="pm-comment-box">
+                                    {{ meeting.comment|linebreaksbr }}
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+
+                        <!-- ===============================
+                             TRACKING
+                        ================================ -->
+
+                        <div class="pm-card-section">
+
+                            <div class="pm-section-title">
+
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+
+                                Tracking
+
+                            </div>
+
+
+                            <div class="pm-tracking-box">
+
+                                <div>
+
+                                    <i class="fa-solid fa-calendar-plus"></i>
+
+                                    Created:
+
+                                    <strong>
+                                        {% if meeting.created_at %}
+                                            {{ meeting.created_at|date:"d M Y, h:i A" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </strong>
+
+                                </div>
+
+
+                                <div>
+
+                                    <i class="fa-solid fa-rotate"></i>
+
+                                    Updated:
+
+                                    <strong>
+                                        {% if meeting.updated_at %}
+                                            {{ meeting.updated_at|date:"d M Y, h:i A" }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ===============================
+                             ACTIONS
+                        ================================ -->
+
+                        <div class="pm-card-actions">
+
+
+                            <!-- CALL -->
+
+                            {% if meeting.developer and meeting.developer.contact_no %}
+
+                                <a
+                                    href="tel:{{ meeting.developer.contact_no }}"
+                                    class="pm-action pm-call"
+                                >
+                                    <i class="fa-solid fa-phone"></i>
+                                    Call
+                                </a>
+
+                            {% elif meeting.architect and meeting.architect.contact_no %}
+
+                                <a
+                                    href="tel:{{ meeting.architect.contact_no }}"
+                                    class="pm-action pm-call"
+                                >
+                                    <i class="fa-solid fa-phone"></i>
+                                    Call
+                                </a>
+
+                            {% elif meeting.engineer and meeting.engineer.contact_no %}
+
+                                <a
+                                    href="tel:{{ meeting.engineer.contact_no }}"
+                                    class="pm-action pm-call"
+                                >
+                                    <i class="fa-solid fa-phone"></i>
+                                    Call
+                                </a>
+
+                            {% endif %}
+
+
+                            <!-- WHATSAPP -->
+
+                            {% if meeting.developer and meeting.developer.contact_no %}
+
+                                <a
+                                    href="https://wa.me/{{ meeting.developer.contact_no }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="pm-action pm-whatsapp"
+                                >
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                    WhatsApp
+                                </a>
+
+                            {% elif meeting.architect and meeting.architect.contact_no %}
+
+                                <a
+                                    href="https://wa.me/{{ meeting.architect.contact_no }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="pm-action pm-whatsapp"
+                                >
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                    WhatsApp
+                                </a>
+
+                            {% elif meeting.engineer and meeting.engineer.contact_no %}
+
+                                <a
+                                    href="https://wa.me/{{ meeting.engineer.contact_no }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="pm-action pm-whatsapp"
+                                >
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                    WhatsApp
+                                </a>
+
+                            {% endif %}
+
+
+                            <!-- EDIT PARENT -->
+
+                            {% if meeting.developer %}
+
+                                <a
+                                    href="/dashboard/meeting/developer/{{ meeting.developer.pk }}/edit/?meeting_id={{ meeting.pk }}"
+                                    class="pm-action pm-edit-parent"
+                                >
+                                    <i class="fa-solid fa-building"></i>
+                                    Edit Developer
+                                </a>
+
+                            {% elif meeting.architect %}
+
+                                <a
+                                    href="/dashboard/meeting/architect/{{ meeting.architect.pk }}/edit/?meeting_id={{ meeting.pk }}"
+                                    class="pm-action pm-edit-parent"
+                                >
+                                    <i class="fa-solid fa-compass-drafting"></i>
+                                    Edit Architect
+                                </a>
+
+                            {% elif meeting.engineer %}
+
+                                <a
+                                    href="/dashboard/meeting/engineer/{{ meeting.engineer.pk }}/edit/?meeting_id={{ meeting.pk }}"
+                                    class="pm-action pm-edit-parent"
+                                >
+                                    <i class="fa-solid fa-helmet-safety"></i>
+                                    Edit Engineer
+                                </a>
+
+                            {% elif meeting.project %}
+
+                                <a
+                                    href="/dashboard/meeting/project/{{ meeting.project.pk }}/edit/?meeting_id={{ meeting.pk }}"
+                                    class="pm-action pm-edit-parent"
+                                >
+                                    <i class="fa-solid fa-building"></i>
+                                    Edit Project
+                                </a>
+
+                            {% endif %}
+
+
+                            <!-- EDIT MEETING -->
+
+                            <a
+                                href="/dashboard/meeting/{{ meeting.pk }}/edit/"
+                                class="pm-action pm-edit-meeting"
+                            >
+                                <i class="fa-solid fa-pen"></i>
+                                Edit Meeting
+                            </a>
+
+                        </div>
+
+                    </article>
+
+                {% endfor %}
+
+            </div>
+
+
+        {% else %}
+
+            <!-- EMPTY -->
+
+            <div class="pm-empty">
+
+                <i class="fa-regular fa-calendar-xmark"></i>
+
+                <h3>
+                    No Meetings Found
+                </h3>
 
                 <p>
-                    Filter all property meetings by date and pending status.
+                    There are no meetings available for this filter.
                 </p>
 
             </div>
 
-        </div>
-
-
-        <div class="pm-filter-grid">
-
-
-            <!-- NOT MANAGE -->
-
-            <a
-                href="?filter=not_manage"
-                class="pm-filter-card pm-filter-danger
-                {% if not current_type and current_filter == 'not_manage' %}active{% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Not Manage
-                    </span>
-
-                    <strong>
-                        {{ not_manage_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        Past pending meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- TODAY -->
-
-            <a
-                href="?filter=today"
-                class="pm-filter-card pm-filter-today
-                {% if not current_type and current_filter == 'today' %}active{% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-calendar-day"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Today
-                    </span>
-
-                    <strong>
-                        {{ today_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        Today's meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- TOMORROW -->
-
-            <a
-                href="?filter=tomorrow"
-                class="pm-filter-card pm-filter-tomorrow
-                {% if not current_type and current_filter == 'tomorrow' %}active{% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-calendar-plus"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Tomorrow
-                    </span>
-
-                    <strong>
-                        {{ tomorrow_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        Tomorrow's meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- UPCOMING -->
-
-            <a
-                href="?filter=upcoming"
-                class="pm-filter-card pm-filter-upcoming
-                {% if not current_type and current_filter == 'upcoming' %}active{% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-calendar-week"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Upcoming
-                    </span>
-
-                    <strong>
-                        {{ upcoming_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        After tomorrow
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- ALL -->
-
-            <a
-                href="?filter=all"
-                class="pm-filter-card pm-filter-all
-                {% if not current_type and current_filter == 'all' %}active{% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        All Meetings
-                    </span>
-
-                    <strong>
-                        {{ all_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        All property meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-        </div>
+        {% endif %}
 
     </section>
 
-
-
-    <!-- =====================================================
-         SELECTED / FILTERED MEETINGS
-    ====================================================== -->
-
-    {% if current_filter %}
-
-        <section class="pm-results-section">
-
-            <div class="pm-results-heading">
-
-                <div>
-
-                    <h2>
-                        {% if current_type %}
-                            {{ selected_type_label }}
-                            —
-                        {% endif %}
-
-                        {{ selected_filter_label }}
-                    </h2>
-
-                    <p>
-                        {{ meetings|length }}
-                        meeting{{ meetings|length|pluralize }}
-                        found.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            {% if meetings %}
-
-                <div class="pm-results-card">
-
-                    <!-- Header -->
-
-                    <div class="pm-result-row pm-result-header">
-
-                        <div>
-                            Meeting
-                        </div>
-
-                        <div>
-                            Property / Person
-                        </div>
-
-                        <div>
-                            Date
-                        </div>
-
-                        <div>
-                            Status
-                        </div>
-
-                        <div>
-                            Assigned To
-                        </div>
-
-                        <div>
-                        </div>
-
-                    </div>
-
-
-                    {% for meeting in meetings %}
-
-                        <div class="pm-result-row">
-
-                            <!-- Meeting -->
-
-                            <div>
-
-                                <span class="pm-result-label">
-                                    Meeting
-                                </span>
-
-                                <strong>
-                                    #{{ meeting.id }}
-                                </strong>
-
-                            </div>
-
-
-                            <!-- Property / Person -->
-
-                            <div>
-
-                                <span class="pm-result-label">
-                                    {{ meeting.get_type_display }}
-                                </span>
-
-                                <strong>
-
-                                    {% if meeting.project %}
-                                        {{ meeting.project }}
-                                    {% elif meeting.developer %}
-                                        {{ meeting.developer }}
-                                    {% elif meeting.architect %}
-                                        {{ meeting.architect }}
-                                    {% elif meeting.engineer %}
-                                        {{ meeting.engineer }}
-                                    {% else %}
-                                        —
-                                    {% endif %}
-
-                                </strong>
-
-                            </div>
-
-
-                            <!-- Date -->
-
-                            <div>
-
-                                <span class="pm-result-label">
-                                    Meeting Date
-                                </span>
-
-                                {% if meeting.meeting_date %}
-
-                                    <strong>
-                                        {{ meeting.meeting_date|date:"d M Y" }}
-                                    </strong>
-
-                                    <small>
-                                        {{ meeting.meeting_date|date:"h:i A" }}
-                                    </small>
-
-                                {% else %}
-
-                                    <strong>
-                                        Not Set
-                                    </strong>
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- Status -->
-
-                            <div>
-
-                                <span class="pm-result-label">
-                                    Status
-                                </span>
-
-                                <strong>
-                                    {{ meeting.get_status_display }}
-                                </strong>
-
-                            </div>
-
-
-                            <!-- Assigned -->
-
-                            <div>
-
-                                <span class="pm-result-label">
-                                    Assigned To
-                                </span>
-
-                                {% if meeting.assigned_to %}
-
-                                    <strong>
-                                        {{ meeting.assigned_to }}
-                                    </strong>
-
-                                {% else %}
-
-                                    <strong>
-                                        Not Assigned
-                                    </strong>
-
-                                {% endif %}
-
-                            </div>
-
-
-                            <!-- Action -->
-
-                            <div>
-
-                                <a
-                                    href="#"
-                                    class="pm-result-action"
-                                    title="Open Meeting"
-                                >
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    {% endfor %}
-
-                </div>
-
-
-            {% else %}
-
-                <div class="pm-empty">
-
-                    <i class="fa-regular fa-calendar-xmark"></i>
-
-                    <h3>
-                        No Meetings Found
-                    </h3>
-
-                    <p>
-                        There are no meetings matching this filter.
-                    </p>
-
-                </div>
-
-            {% endif %}
-
-        </section>
-
-    {% endif %}
-
 </div>
-
 
 
 <style>
@@ -961,16 +1395,8 @@
 
 
 /* =========================================================
-   HEADER
+   BREADCRUMB
 ========================================================= */
-
-.pm-page-header {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 28px;
-}
 
 .pm-breadcrumb {
     display: flex;
@@ -982,12 +1408,34 @@
     font-size: 12px;
 }
 
+.pm-breadcrumb-link {
+    color: #64748b;
+    text-decoration: none;
+}
+
+.pm-breadcrumb-link:hover {
+    color: #2563eb;
+}
+
 .pm-breadcrumb i {
     font-size: 9px;
 }
 
 .pm-breadcrumb strong {
     color: #475569;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.pm-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 28px;
 }
 
 .pm-page-header h1 {
@@ -1003,11 +1451,6 @@
     font-size: 14px;
 }
 
-
-/* =========================================================
-   ADD BUTTON
-========================================================= */
-
 .pm-add-btn {
     display: inline-flex;
     align-items: center;
@@ -1019,13 +1462,163 @@
     font-size: 13px;
     font-weight: 600;
     text-decoration: none;
-    transition: all .2s ease;
+    transition: .2s ease;
 }
 
 .pm-add-btn:hover {
     background: #1d4ed8;
     color: #fff;
     transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.pm-filter-section {
+    margin-top: 30px;
+}
+
+.pm-section-heading {
+    margin-bottom: 15px;
+}
+
+.pm-section-heading h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 20px;
+    font-weight: 750;
+}
+
+.pm-section-heading p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   GLOBAL FILTERS
+========================================================= */
+
+.pm-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.pm-filter-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 15px;
+    border: 1px solid #dbe4ef;
+    border-radius: 13px;
+    background: #fff;
+    text-decoration: none;
+    transition: .2s ease;
+}
+
+.pm-filter-card:hover,
+.pm-filter-card.active {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(15, 23, 42, .06);
+}
+
+.pm-filter-icon {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+}
+
+.pm-filter-info {
+    min-width: 0;
+}
+
+.pm-filter-info span {
+    display: block;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.pm-filter-info strong {
+    display: block;
+    margin-top: 2px;
+    color: #0f172a;
+    font-size: 20px;
+}
+
+.pm-filter-info small {
+    display: block;
+    margin-top: 3px;
+    color: #94a3b8;
+    font-size: 10px;
+}
+
+.pm-filter-arrow {
+    margin-left: auto;
+    color: #cbd5e1;
+    font-size: 10px;
+}
+
+
+/* FILTER COLORS */
+
+.pm-filter-danger .pm-filter-icon {
+    color: #dc2626;
+    background: #fef2f2;
+}
+
+.pm-filter-danger.active,
+.pm-filter-danger:hover {
+    border-color: #fecaca;
+}
+
+.pm-filter-today .pm-filter-icon {
+    color: #2563eb;
+    background: #eff6ff;
+}
+
+.pm-filter-today.active,
+.pm-filter-today:hover {
+    border-color: #bfdbfe;
+}
+
+.pm-filter-tomorrow .pm-filter-icon {
+    color: #d97706;
+    background: #fffbeb;
+}
+
+.pm-filter-tomorrow.active,
+.pm-filter-tomorrow:hover {
+    border-color: #fde68a;
+}
+
+.pm-filter-upcoming .pm-filter-icon {
+    color: #059669;
+    background: #ecfdf5;
+}
+
+.pm-filter-upcoming.active,
+.pm-filter-upcoming:hover {
+    border-color: #a7f3d0;
+}
+
+.pm-filter-all .pm-filter-icon {
+    color: #7c3aed;
+    background: #f5f3ff;
+}
+
+.pm-filter-all.active,
+.pm-filter-all:hover {
+    border-color: #ddd6fe;
 }
 
 
@@ -1037,8 +1630,8 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
+    margin-top: 30px;
 }
-
 
 .pm-card {
     position: relative;
@@ -1048,16 +1641,14 @@
     border-radius: 16px;
     background: #fff;
     overflow: hidden;
-    transition: all .25s ease;
+    transition: .25s ease;
 }
-
 
 .pm-card:hover {
     border-color: #cbd5e1;
-    box-shadow: 0 12px 25px rgba(15,23,42,.06);
+    box-shadow: 0 12px 25px rgba(15, 23, 42, .06);
     transform: translateY(-2px);
 }
-
 
 .pm-card-project {
     border-top: 3px solid #2563eb;
@@ -1075,13 +1666,11 @@
     border-top: 3px solid #f97316;
 }
 
-
 .pm-card-top {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
 }
-
 
 .pm-card-icon {
     width: 48px;
@@ -1092,7 +1681,6 @@
     border-radius: 13px;
     font-size: 19px;
 }
-
 
 .pm-card-project .pm-card-icon {
     color: #2563eb;
@@ -1114,7 +1702,6 @@
     background: #fff7ed;
 }
 
-
 .pm-card-arrow {
     width: 38px;
     height: 38px;
@@ -1127,17 +1714,14 @@
     text-decoration: none;
 }
 
-
 .pm-card-arrow:hover {
     color: #2563eb;
     background: #eff6ff;
 }
 
-
 .pm-card-content {
     margin-top: 22px;
 }
-
 
 .pm-card-label {
     display: block;
@@ -1149,14 +1733,12 @@
     text-transform: uppercase;
 }
 
-
 .pm-card-content h2 {
     margin: 0;
     color: #0f172a;
     font-size: 21px;
     font-weight: 750;
 }
-
 
 .pm-card-content p {
     margin: 9px 0 0;
@@ -1167,7 +1749,7 @@
 
 
 /* =========================================================
-   FILTERS INSIDE PROPERTY CARD
+   INNER FILTERS
 ========================================================= */
 
 .pm-inner-filters {
@@ -1179,7 +1761,6 @@
     border-top: 1px solid #edf2f7;
 }
 
-
 .pm-inner-filter {
     min-width: 0;
     padding: 9px 4px;
@@ -1188,9 +1769,8 @@
     background: #f8fafc;
     text-align: center;
     text-decoration: none;
-    transition: all .2s ease;
+    transition: .2s ease;
 }
-
 
 .pm-inner-filter span {
     display: block;
@@ -1202,7 +1782,6 @@
     white-space: nowrap;
 }
 
-
 .pm-inner-filter strong {
     display: block;
     margin-top: 3px;
@@ -1210,14 +1789,12 @@
     font-size: 16px;
 }
 
-
 .pm-inner-filter:hover,
 .pm-inner-filter.active {
     background: #fff;
-    box-shadow: 0 4px 12px rgba(15,23,42,.07);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, .07);
     transform: translateY(-1px);
 }
-
 
 .pm-inner-danger:hover,
 .pm-inner-danger.active {
@@ -1264,19 +1841,16 @@
     border-top: 1px solid #edf2f7;
 }
 
-
 .pm-card-footer strong {
     color: #0f172a;
     font-size: 25px;
 }
-
 
 .pm-card-footer span {
     margin-left: 5px;
     color: #94a3b8;
     font-size: 12px;
 }
-
 
 .pm-view-link {
     color: #2563eb;
@@ -1285,176 +1859,13 @@
     text-decoration: none;
 }
 
-
 .pm-view-link i {
     margin-left: 5px;
-    transition: transform .2s ease;
+    transition: .2s ease;
 }
-
 
 .pm-view-link:hover i {
     transform: translateX(3px);
-}
-
-
-/* =========================================================
-   GLOBAL MEETING SCHEDULE
-========================================================= */
-
-.pm-filter-section {
-    margin-top: 30px;
-}
-
-
-.pm-section-heading {
-    margin-bottom: 15px;
-}
-
-
-.pm-section-heading h2 {
-    margin: 0;
-    color: #0f172a;
-    font-size: 20px;
-    font-weight: 750;
-}
-
-
-.pm-section-heading p {
-    margin: 5px 0 0;
-    color: #64748b;
-    font-size: 13px;
-}
-
-
-.pm-filter-grid {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 12px;
-}
-
-
-.pm-filter-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 0;
-    padding: 15px;
-    border: 1px solid #dbe4ef;
-    border-radius: 13px;
-    background: #fff;
-    text-decoration: none;
-    transition: all .2s ease;
-}
-
-
-.pm-filter-card:hover,
-.pm-filter-card.active {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(15,23,42,.06);
-}
-
-
-.pm-filter-icon {
-    flex: 0 0 auto;
-    width: 42px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 11px;
-}
-
-
-.pm-filter-info {
-    min-width: 0;
-}
-
-
-.pm-filter-info span {
-    display: block;
-    color: #475569;
-    font-size: 11px;
-    font-weight: 650;
-}
-
-
-.pm-filter-info strong {
-    display: block;
-    margin-top: 2px;
-    color: #0f172a;
-    font-size: 20px;
-}
-
-
-.pm-filter-info small {
-    display: block;
-    margin-top: 3px;
-    color: #94a3b8;
-    font-size: 10px;
-}
-
-
-.pm-filter-arrow {
-    margin-left: auto;
-    color: #cbd5e1;
-    font-size: 10px;
-}
-
-
-/* Schedule Colors */
-
-.pm-filter-danger .pm-filter-icon {
-    color: #dc2626;
-    background: #fef2f2;
-}
-
-.pm-filter-danger.active,
-.pm-filter-danger:hover {
-    border-color: #fecaca;
-}
-
-
-.pm-filter-today .pm-filter-icon {
-    color: #2563eb;
-    background: #eff6ff;
-}
-
-.pm-filter-today.active,
-.pm-filter-today:hover {
-    border-color: #bfdbfe;
-}
-
-
-.pm-filter-tomorrow .pm-filter-icon {
-    color: #d97706;
-    background: #fffbeb;
-}
-
-.pm-filter-tomorrow.active,
-.pm-filter-tomorrow:hover {
-    border-color: #fde68a;
-}
-
-
-.pm-filter-upcoming .pm-filter-icon {
-    color: #059669;
-    background: #ecfdf5;
-}
-
-.pm-filter-upcoming.active,
-.pm-filter-upcoming:hover {
-    border-color: #a7f3d0;
-}
-
-
-.pm-filter-all .pm-filter-icon {
-    color: #7c3aed;
-    background: #f5f3ff;
-}
-
-.pm-filter-all.active,
-.pm-filter-all:hover {
-    border-color: #ddd6fe;
 }
 
 
@@ -1463,14 +1874,12 @@
 ========================================================= */
 
 .pm-results-section {
-    margin-top: 30px;
+    margin-top: 35px;
 }
-
 
 .pm-results-heading {
-    margin-bottom: 14px;
+    margin-bottom: 15px;
 }
-
 
 .pm-results-heading h2 {
     margin: 0;
@@ -1479,7 +1888,6 @@
     font-weight: 750;
 }
 
-
 .pm-results-heading p {
     margin: 5px 0 0;
     color: #64748b;
@@ -1487,98 +1895,352 @@
 }
 
 
-.pm-results-card {
-    overflow: hidden;
-    border: 1px solid #dbe4ef;
-    border-radius: 15px;
-    background: #fff;
-}
+/* =========================================================
+   MEETING GRID
+========================================================= */
 
-
-.pm-result-row {
+.pm-meeting-grid {
     display: grid;
-    grid-template-columns:
-        100px
-        minmax(180px, 1.5fr)
-        145px
-        130px
-        150px
-        45px;
-    align-items: center;
-    gap: 15px;
-    padding: 16px 18px;
-    border-bottom: 1px solid #edf2f7;
-}
-
-
-.pm-result-row:last-child {
-    border-bottom: 0;
-}
-
-
-.pm-result-header {
-    background: #f8fafc;
-    color: #64748b;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-
-.pm-result-label {
-    display: block;
-    margin-bottom: 3px;
-    color: #94a3b8;
-    font-size: 9px;
-    font-weight: 650;
-    text-transform: uppercase;
-}
-
-
-.pm-result-row strong {
-    display: block;
-    overflow: hidden;
-    color: #0f172a;
-    font-size: 12px;
-    font-weight: 650;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-
-.pm-result-row small {
-    display: block;
-    margin-top: 3px;
-    color: #64748b;
-    font-size: 10px;
-}
-
-
-.pm-result-action {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    background: #eff6ff;
-    color: #2563eb;
-    text-decoration: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
 }
 
 
 /* =========================================================
-   EMPTY STATE
+   MEETING CARD
+========================================================= */
+
+.pm-meeting-card {
+    background: #fff;
+    border: 1px solid #dce3ec;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, .05);
+    transition: .2s ease;
+}
+
+.pm-meeting-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .09);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.pm-card-header {
+    padding: 16px;
+    border-bottom: 1px solid #e7edf3;
+}
+
+.pm-card-header-left {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.pm-meeting-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 11px;
+    background: #eef5ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+}
+
+.pm-meeting-title {
+    min-width: 0;
+}
+
+.pm-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 7px;
+}
+
+.pm-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.pm-badge-id {
+    background: #eaf2ff;
+    color: #2563eb;
+}
+
+.pm-badge-type {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+.pm-badge-status {
+    background: #e8f1ff;
+    color: #2563eb;
+}
+
+.pm-meeting-title h3 {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.25;
+    color: #0f172a;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.pm-parent-type {
+    display: block;
+    margin-top: 3px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+
+/* =========================================================
+   CARD SECTIONS
+========================================================= */
+
+.pm-card-section {
+    padding: 13px 16px;
+    border-bottom: 1px solid #e7edf3;
+}
+
+.pm-section-title {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 9px;
+    color: #0f172a;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.pm-section-title i {
+    color: #475569;
+}
+
+
+/* =========================================================
+   PARENT
+========================================================= */
+
+.pm-parent-box {
+    background: #f8fafc;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.pm-parent-box h4 {
+    margin: 0 0 7px;
+    color: #0f172a;
+    font-size: 14px;
+    font-weight: 800;
+    word-break: break-word;
+}
+
+.pm-parent-box > div {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 5px;
+    color: #475569;
+    font-size: 11px;
+}
+
+.pm-parent-box > div i {
+    width: 13px;
+    color: #ec4899;
+}
+
+.pm-parent-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    padding: 5px 9px;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   MEETING DETAILS
+========================================================= */
+
+.pm-details-box {
+    background: #f8fbff;
+    border: 1px solid #dce7f5;
+    border-left: 4px solid #2563eb;
+    border-radius: 10px;
+    padding: 11px 12px;
+}
+
+.pm-detail-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 7px;
+    font-size: 11px;
+}
+
+.pm-detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.pm-detail-row strong {
+    min-width: 82px;
+    color: #0f172a;
+}
+
+.pm-detail-row span {
+    color: #64748b;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   COMMENT
+========================================================= */
+
+.pm-comment-box {
+    background: #f8fafc;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    padding: 11px;
+    color: #475569;
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   TRACKING
+========================================================= */
+
+.pm-tracking-box {
+    background: #f8fafc;
+    border: 1px solid #dce3ec;
+    border-radius: 10px;
+    padding: 11px;
+}
+
+.pm-tracking-box div {
+    margin-bottom: 6px;
+    color: #475569;
+    font-size: 10px;
+}
+
+.pm-tracking-box div:last-child {
+    margin-bottom: 0;
+}
+
+.pm-tracking-box i {
+    width: 14px;
+    color: #64748b;
+}
+
+.pm-tracking-box strong {
+    color: #334155;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.pm-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 12px 16px;
+    background: #fff;
+}
+
+.pm-action {
+    flex: 1 1 auto;
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 8px 9px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: .2s ease;
+}
+
+.pm-action:hover {
+    transform: translateY(-1px);
+}
+
+.pm-call {
+    background: #16a34a;
+    color: #fff;
+}
+
+.pm-call:hover {
+    background: #15803d;
+    color: #fff;
+}
+
+.pm-whatsapp {
+    background: #22c55e;
+    color: #fff;
+}
+
+.pm-whatsapp:hover {
+    background: #16a34a;
+    color: #fff;
+}
+
+.pm-edit-parent {
+    background: #2563eb;
+    color: #fff;
+}
+
+.pm-edit-parent:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.pm-edit-meeting {
+    background: #0f172a;
+    color: #fff;
+}
+
+.pm-edit-meeting:hover {
+    background: #020617;
+    color: #fff;
+}
+
+
+/* =========================================================
+   EMPTY
 ========================================================= */
 
 .pm-empty {
-    padding: 45px 20px;
-    border: 1px dashed #cbd5e1;
-    border-radius: 15px;
-    background: #fff;
+    padding: 55px 20px;
     text-align: center;
+    background: #fff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
 }
-
 
 .pm-empty i {
     width: 48px;
@@ -1586,23 +2248,21 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     border-radius: 12px;
     background: #f8fafc;
     color: #94a3b8;
-    font-size: 19px;
+    font-size: 20px;
 }
 
-
 .pm-empty h3 {
-    margin: 0;
+    margin: 0 0 5px;
     color: #334155;
     font-size: 16px;
 }
 
-
 .pm-empty p {
-    margin: 5px 0 0;
+    margin: 0;
     color: #94a3b8;
     font-size: 12px;
 }
@@ -1616,6 +2276,10 @@
 
     .pm-filter-grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pm-meeting-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
 }
@@ -1645,12 +2309,12 @@
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .pm-results-card {
-        overflow-x: auto;
+    .pm-meeting-grid {
+        grid-template-columns: 1fr;
     }
 
-    .pm-result-row {
-        min-width: 850px;
+    .pm-action {
+        flex: 1 1 calc(50% - 5px);
     }
 
 }
@@ -1664,6 +2328,14 @@
 
     .pm-inner-filters {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pm-card-actions {
+        flex-direction: column;
+    }
+
+    .pm-action {
+        width: 100%;
     }
 
 }
