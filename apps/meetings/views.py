@@ -11,16 +11,13 @@ from apps.properties.models import Meeting
 @login_required
 def property_meetings(request):
 
-    # =========================================================
-    # DATE
-    # =========================================================
     today = timezone.localdate()
     tomorrow = today + timezone.timedelta(days=1)
 
+    # =========================================================
+    # BASE QUERY
+    # =========================================================
 
-    # =========================================================
-    # ALL MEETINGS
-    # =========================================================
     meetings = (
         Meeting.objects
         .select_related(
@@ -34,10 +31,10 @@ def property_meetings(request):
         .order_by("meeting_date")
     )
 
-
     # =========================================================
     # NOT MANAGE QUERY
     # =========================================================
+
     not_manage_q = (
         Q(
             meeting_date__date__lt=today,
@@ -72,35 +69,35 @@ def property_meetings(request):
         )
     )
 
-
     # =========================================================
     # TYPE FILTER
     # =========================================================
+
     current_type = request.GET.get("type")
 
-    if current_type not in [
+    valid_types = [
         "Project",
         "Developer",
         "Architect",
         "Engineer",
-    ]:
-        current_type = None
+    ]
 
+    if current_type not in valid_types:
+        current_type = None
 
     if current_type:
         meetings = meetings.filter(
             type=current_type
         )
 
-
     # =========================================================
     # QUICK FILTER
     # =========================================================
+
     current_filter = request.GET.get(
         "filter",
-        "all"
+        "all",
     )
-
 
     if current_filter == "not_manage":
 
@@ -130,34 +127,34 @@ def property_meetings(request):
 
         current_filter = "all"
 
-
     # =========================================================
     # DATE FILTER
     # =========================================================
+
     date_filter = request.GET.get(
         "date_filter",
-        "all"
+        "all",
     )
 
     selected_date = request.GET.get(
         "selected_date",
-        ""
+        "",
     )
 
     date_from = request.GET.get(
         "date_from",
-        ""
+        "",
     )
 
     date_to = request.GET.get(
         "date_to",
-        ""
+        "",
     )
-
 
     # ---------------------------------------------------------
     # SPECIFIC DATE
     # ---------------------------------------------------------
+
     if (
         date_filter == "date"
         and selected_date
@@ -167,9 +164,8 @@ def property_meetings(request):
 
             selected_date_obj = datetime.strptime(
                 selected_date,
-                "%Y-%m-%d"
+                "%Y-%m-%d",
             ).date()
-
 
             meetings = meetings.filter(
                 meeting_date__date=selected_date_obj
@@ -180,10 +176,10 @@ def property_meetings(request):
             selected_date = ""
             date_filter = "all"
 
-
     # ---------------------------------------------------------
     # DATE RANGE
     # ---------------------------------------------------------
+
     elif (
         date_filter == "range"
         and date_from
@@ -194,17 +190,15 @@ def property_meetings(request):
 
             date_from_obj = datetime.strptime(
                 date_from,
-                "%Y-%m-%d"
+                "%Y-%m-%d",
             ).date()
 
             date_to_obj = datetime.strptime(
                 date_to,
-                "%Y-%m-%d"
+                "%Y-%m-%d",
             ).date()
 
-
-            # Agar From date badi hai
-            # To date se swap kar do
+            # Automatically swap if From > To
             if date_from_obj > date_to_obj:
 
                 date_from_obj, date_to_obj = (
@@ -217,7 +211,6 @@ def property_meetings(request):
                     date_from,
                 )
 
-
             meetings = meetings.filter(
                 meeting_date__date__range=(
                     date_from_obj,
@@ -225,13 +218,11 @@ def property_meetings(request):
                 )
             )
 
-
         except ValueError:
 
             date_from = ""
             date_to = ""
             date_filter = "all"
-
 
     elif date_filter not in [
         "all",
@@ -241,68 +232,62 @@ def property_meetings(request):
 
         date_filter = "all"
 
+    # =========================================================
+    # GLOBAL COUNTS
+    # =========================================================
 
-    # =========================================================
-    # TOTAL TYPE COUNTS
-    # =========================================================
-    project_meeting_count = Meeting.objects.filter(
+    all_count = Meeting.objects.count()
+
+    project_all_count = Meeting.objects.filter(
         type="Project"
     ).count()
 
-
-    developer_meeting_count = Meeting.objects.filter(
+    developer_all_count = Meeting.objects.filter(
         type="Developer"
     ).count()
 
-
-    architect_meeting_count = Meeting.objects.filter(
+    architect_all_count = Meeting.objects.filter(
         type="Architect"
     ).count()
 
-
-    engineer_meeting_count = Meeting.objects.filter(
+    engineer_all_count = Meeting.objects.filter(
         type="Engineer"
     ).count()
 
-
     # =========================================================
-    # QUICK FILTER COUNTS
+    # GLOBAL QUICK FILTER COUNTS
     # =========================================================
-    not_manage_count = Meeting.objects.filter(
-        not_manage_q
-    ).count()
 
+    not_manage_count = (
+        Meeting.objects
+        .filter(not_manage_q)
+        .count()
+    )
 
     today_count = Meeting.objects.filter(
         meeting_date__date=today
     ).count()
 
-
     tomorrow_count = Meeting.objects.filter(
         meeting_date__date=tomorrow
     ).count()
-
 
     upcoming_count = Meeting.objects.filter(
         meeting_date__date__gt=tomorrow
     ).count()
 
-
-    all_count = Meeting.objects.count()
-
-
     # =========================================================
-    # TYPE + QUICK FILTER COUNTS
+    # TYPE + QUICK FILTER COUNT
     # =========================================================
+
     def type_filter_count(
         meeting_type,
-        filter_name
+        filter_name,
     ):
 
         qs = Meeting.objects.filter(
             type=meeting_type
         )
-
 
         if filter_name == "not_manage":
 
@@ -328,111 +313,175 @@ def property_meetings(request):
                 meeting_date__date__gt=tomorrow
             )
 
-
         return qs.count()
 
+    # =========================================================
+    # TYPE COUNTS
+    # =========================================================
+
+    project_not_manage_count = type_filter_count(
+        "Project",
+        "not_manage",
+    )
+
+    project_today_count = type_filter_count(
+        "Project",
+        "today",
+    )
+
+    project_tomorrow_count = type_filter_count(
+        "Project",
+        "tomorrow",
+    )
+
+    project_upcoming_count = type_filter_count(
+        "Project",
+        "upcoming",
+    )
+
+    developer_not_manage_count = type_filter_count(
+        "Developer",
+        "not_manage",
+    )
+
+    developer_today_count = type_filter_count(
+        "Developer",
+        "today",
+    )
+
+    developer_tomorrow_count = type_filter_count(
+        "Developer",
+        "tomorrow",
+    )
+
+    developer_upcoming_count = type_filter_count(
+        "Developer",
+        "upcoming",
+    )
+
+    architect_not_manage_count = type_filter_count(
+        "Architect",
+        "not_manage",
+    )
+
+    architect_today_count = type_filter_count(
+        "Architect",
+        "today",
+    )
+
+    architect_tomorrow_count = type_filter_count(
+        "Architect",
+        "tomorrow",
+    )
+
+    architect_upcoming_count = type_filter_count(
+        "Architect",
+        "upcoming",
+    )
+
+    engineer_not_manage_count = type_filter_count(
+        "Engineer",
+        "not_manage",
+    )
+
+    engineer_today_count = type_filter_count(
+        "Engineer",
+        "today",
+    )
+
+    engineer_tomorrow_count = type_filter_count(
+        "Engineer",
+        "tomorrow",
+    )
+
+    engineer_upcoming_count = type_filter_count(
+        "Engineer",
+        "upcoming",
+    )
+
+    # =========================================================
+    # LABELS
+    # =========================================================
+
+    type_labels = dict(
+        Meeting.TYPE_CHOICES
+    )
+
+    selected_type_label = (
+        type_labels.get(current_type)
+        if current_type
+        else ""
+    )
+
+    selected_filter_label = {
+        "not_manage": "Not Manage",
+        "today": "Today",
+        "tomorrow": "Tomorrow",
+        "upcoming": "Upcoming",
+        "all": "All Meetings",
+    }.get(
+        current_filter,
+        "All Meetings",
+    )
 
     # =========================================================
     # CONTEXT
     # =========================================================
+
     context = {
 
-        # -----------------------------------------------------
-        # MEETINGS
-        # -----------------------------------------------------
         "meetings": meetings,
 
-
-        # -----------------------------------------------------
-        # CURRENT FILTERS
-        # -----------------------------------------------------
+        # Current filters
         "current_filter": current_filter,
         "current_type": current_type,
 
-
-        # -----------------------------------------------------
-        # DATE FILTER
-        # -----------------------------------------------------
+        # Date filter
         "date_filter": date_filter,
         "selected_date": selected_date,
         "date_from": date_from,
         "date_to": date_to,
 
+        # Labels
+        "selected_type_label": selected_type_label,
+        "selected_filter_label": selected_filter_label,
 
-        # -----------------------------------------------------
-        # TYPE COUNTS
-        # -----------------------------------------------------
-        "project_meeting_count":
-            project_meeting_count,
+        # Global counts
+        "all_count": all_count,
+        "not_manage_count": not_manage_count,
+        "today_count": today_count,
+        "tomorrow_count": tomorrow_count,
+        "upcoming_count": upcoming_count,
 
-        "developer_meeting_count":
-            developer_meeting_count,
+        # Project
+        "project_all_count": project_all_count,
+        "project_not_manage_count": project_not_manage_count,
+        "project_today_count": project_today_count,
+        "project_tomorrow_count": project_tomorrow_count,
+        "project_upcoming_count": project_upcoming_count,
 
-        "architect_meeting_count":
-            architect_meeting_count,
+        # Developer
+        "developer_all_count": developer_all_count,
+        "developer_not_manage_count": developer_not_manage_count,
+        "developer_today_count": developer_today_count,
+        "developer_tomorrow_count": developer_tomorrow_count,
+        "developer_upcoming_count": developer_upcoming_count,
 
-        "engineer_meeting_count":
-            engineer_meeting_count,
+        # Architect
+        "architect_all_count": architect_all_count,
+        "architect_not_manage_count": architect_not_manage_count,
+        "architect_today_count": architect_today_count,
+        "architect_tomorrow_count": architect_tomorrow_count,
+        "architect_upcoming_count": architect_upcoming_count,
 
-
-        # -----------------------------------------------------
-        # QUICK FILTER COUNTS
-        # -----------------------------------------------------
-        "not_manage_count":
-            not_manage_count,
-
-        "today_count":
-            today_count,
-
-        "tomorrow_count":
-            tomorrow_count,
-
-        "upcoming_count":
-            upcoming_count,
-
-        "all_count":
-            all_count,
-
-
-        # -----------------------------------------------------
-        # TYPE LABEL
-        # -----------------------------------------------------
-        "selected_type_label": (
-            dict(
-                Meeting.TYPE_CHOICES
-            ).get(
-                current_type
-            )
-            if current_type
-            else ""
-        ),
-
-
-        # -----------------------------------------------------
-        # FILTER LABEL
-        # -----------------------------------------------------
-        "selected_filter_label": {
-
-            "not_manage": "Not Manage",
-
-            "today": "Today",
-
-            "tomorrow": "Tomorrow",
-
-            "upcoming": "Upcoming",
-
-            "all": "All Meetings",
-
-        }.get(
-            current_filter,
-            "All Meetings",
-        ),
+        # Engineer
+        "engineer_all_count": engineer_all_count,
+        "engineer_not_manage_count": engineer_not_manage_count,
+        "engineer_today_count": engineer_today_count,
+        "engineer_tomorrow_count": engineer_tomorrow_count,
+        "engineer_upcoming_count": engineer_upcoming_count,
     }
 
-
-    # =========================================================
-    # RENDER
-    # =========================================================
     return render(
         request,
         "dashboard/meeting/property_meetings.html",
