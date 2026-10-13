@@ -473,15 +473,17 @@
 </aside>
 
 
-<!-- =========================================
-     SIDEBAR CSS
-========================================== -->
-
 <style>
 
-    /* =========================================
+/* =========================================================
+   FINDEXOR SIDEBAR
+   COMPLETE RESPONSIVE CSS
+========================================================= */
+
+
+/* =========================================================
    MEETING DROPDOWN
-========================================= */
+========================================================= */
 
 .fx-nav-dropdown {
     position: relative;
@@ -512,6 +514,8 @@
     transition:
         background 0.2s ease,
         color 0.2s ease;
+
+    box-sizing: border-box;
 }
 
 
@@ -534,15 +538,14 @@
 }
 
 
-.fx-nav-dropdown.open
-.fx-nav-arrow {
+.fx-nav-dropdown.open .fx-nav-arrow {
     transform: rotate(180deg);
 }
 
 
-/* =========================================
+/* =========================================================
    SUBMENU
-========================================= */
+========================================================= */
 
 .fx-submenu {
     display: none;
@@ -574,12 +577,10 @@
 /* Submenu Link */
 
 .fx-submenu-item {
-
     display: flex;
     align-items: center;
 
     width: 100%;
-
     min-height: 36px;
 
     padding: 7px 10px;
@@ -602,11 +603,8 @@
 
 
 .fx-submenu-item:hover {
-
     background: #172554;
-
     color: #ffffff;
-
     padding-left: 14px;
 }
 
@@ -614,7 +612,6 @@
 /* Submenu Icon */
 
 .fx-submenu-icon {
-
     width: 22px;
 
     display: flex;
@@ -627,9 +624,7 @@
 }
 
 
-.fx-submenu-item:hover
-.fx-submenu-icon {
-
+.fx-submenu-item:hover .fx-submenu-icon {
     color: #60a5fa;
 }
 
@@ -640,12 +635,12 @@
     white-space: nowrap;
 }
 
-/* =====================================================
+
+/* =========================================================
    SIDEBAR
-===================================================== */
+========================================================= */
 
 .fx-sidebar {
-
     position: fixed;
 
     top: 0;
@@ -655,30 +650,33 @@
     width: 210px;
 
     display: flex;
-
     flex-direction: column;
 
     background: #0f172a;
-
     color: #cbd5e1;
 
     border-right: 1px solid #1e293b;
 
     z-index: 950;
 
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        width 0.25s ease;
 }
 
 
-/* =====================================================
+/* =========================================================
    BRAND
-===================================================== */
+========================================================= */
 
 .fx-sidebar-brand {
-
     height: 76px;
 
     display: flex;
-
     align-items: center;
 
     padding: 0 16px;
@@ -687,13 +685,12 @@
 
     flex-shrink: 0;
 
+    box-sizing: border-box;
 }
 
 
 .fx-brand-link {
-
     display: flex;
-
     align-items: center;
 
     gap: 11px;
@@ -702,19 +699,16 @@
 
     text-decoration: none;
 
+    min-width: 0;
 }
 
 
 .fx-brand-logo {
-
     width: 38px;
-
     height: 38px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     flex-shrink: 0;
@@ -722,139 +716,127 @@
     border-radius: 10px;
 
     background: #2563eb;
-
     color: #ffffff;
 
     font-size: 17px;
 
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.28);
-
+    box-shadow:
+        0 6px 16px rgba(37, 99, 235, 0.28);
 }
 
 
 .fx-brand-info {
-
     display: flex;
-
     flex-direction: column;
 
     min-width: 0;
 
+    overflow: hidden;
 }
 
 
 .fx-brand-name {
-
     color: #ffffff;
 
     font-size: 15px;
-
     font-weight: 700;
 
     line-height: 1.2;
 
+    white-space: nowrap;
 }
 
 
 .fx-brand-subtitle {
-
     margin-top: 3px;
 
     color: #64748b;
 
     font-size: 9px;
-
     font-weight: 600;
 
     letter-spacing: 0.08em;
 
+    white-space: nowrap;
 }
 
 
-/* =====================================================
+/* =========================================================
    NAVIGATION
-===================================================== */
+========================================================= */
 
 .fx-sidebar-nav {
-
     flex: 1;
 
     overflow-y: auto;
+    overflow-x: hidden;
 
     padding: 18px 10px;
 
+    box-sizing: border-box;
 }
 
 
 .fx-sidebar-nav::-webkit-scrollbar {
-
     width: 4px;
-
 }
 
 
 .fx-sidebar-nav::-webkit-scrollbar-thumb {
-
     background: #334155;
-
     border-radius: 10px;
-
 }
 
 
-/* =====================================================
+.fx-sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+
+/* =========================================================
    SECTION TITLE
-===================================================== */
+========================================================= */
 
 .fx-nav-section-title {
-
     margin: 0 10px 8px;
 
     color: #64748b;
 
     font-size: 9px;
-
     font-weight: 700;
 
     letter-spacing: 0.14em;
 
+    white-space: nowrap;
 }
 
 
-/* =====================================================
+/* =========================================================
    UL
-===================================================== */
+========================================================= */
 
 .fx-nav-list {
-
     list-style: none;
 
     margin: 0;
-
     padding: 0;
-
 }
 
 
 .fx-nav-list > li {
-
     margin: 2px 0;
-
     padding: 0;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    NORMAL NAV ITEM
-===================================================== */
+========================================================= */
 
 .fx-nav-item {
-
     position: relative;
 
     display: flex;
-
     align-items: center;
 
     min-height: 42px;
@@ -866,7 +848,6 @@
     gap: 11px;
 
     border: 0;
-
     border-radius: 9px;
 
     background: transparent;
@@ -878,7 +859,6 @@
     font-family: inherit;
 
     font-size: 13px;
-
     font-weight: 500;
 
     transition:
@@ -886,53 +866,40 @@
         color 0.2s ease;
 
     box-sizing: border-box;
-
 }
 
 
-a.fx-nav-item {
-
+a.fx-nav-item,
+button.fx-nav-item {
     cursor: pointer;
-
 }
 
 
 button.fx-nav-item {
-
-    cursor: pointer;
-
     text-align: left;
-
 }
 
 
 .fx-nav-item:hover {
-
     background: #172554;
-
     color: #ffffff;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    ACTIVE
-===================================================== */
+========================================================= */
 
 .fx-nav-item.active {
-
     background: #2563eb;
-
     color: #ffffff;
 
     box-shadow:
         0 5px 14px rgba(37, 99, 235, 0.25);
-
 }
 
 
 .fx-nav-item.active::before {
-
     content: "";
 
     position: absolute;
@@ -940,7 +907,6 @@ button.fx-nav-item {
     left: -10px;
 
     top: 8px;
-
     bottom: 8px;
 
     width: 3px;
@@ -948,58 +914,49 @@ button.fx-nav-item {
     border-radius: 0 4px 4px 0;
 
     background: #60a5fa;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    ICON
-===================================================== */
+========================================================= */
 
 .fx-nav-icon {
-
     width: 20px;
-
     min-width: 20px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     font-size: 14px;
 
+    flex-shrink: 0;
 }
 
 
 .fx-nav-text {
-
     flex: 1;
+
+    min-width: 0;
 
     white-space: nowrap;
 
     overflow: hidden;
-
     text-overflow: ellipsis;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    BADGES
-===================================================== */
+========================================================= */
 
 .fx-nav-badge {
-
     min-width: 22px;
-
     height: 20px;
 
     display: inline-flex;
-
     align-items: center;
-
     justify-content: center;
 
     padding: 0 6px;
@@ -1007,122 +964,95 @@ button.fx-nav-item {
     border-radius: 6px;
 
     background: #1e293b;
-
     color: #cbd5e1;
 
     font-size: 10px;
-
     font-weight: 700;
 
     box-sizing: border-box;
 
+    flex-shrink: 0;
 }
 
 
 .fx-badge-warning {
-
     background: #422006;
-
     color: #fbbf24;
-
 }
 
 
 .fx-nav-item.active .fx-nav-badge {
-
     background: rgba(255,255,255,0.18);
-
     color: #ffffff;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    DIVIDER
-===================================================== */
+========================================================= */
 
 .fx-nav-divider {
-
     height: 1px;
 
     margin: 18px 10px;
 
     background: #1e293b;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    MEETING DROPDOWN
-===================================================== */
+========================================================= */
 
 .fx-nav-dropdown {
-
     list-style: none;
 
     margin: 2px 0;
-
     padding: 0;
-
 }
 
 
 .fx-nav-dropdown-toggle {
-
     appearance: none;
-
 }
 
 
 /* Arrow */
 
 .fx-nav-arrow {
-
     width: 16px;
-
     min-width: 16px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     color: #64748b;
 
     font-size: 9px;
 
-    transition: transform 0.2s ease;
-
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
 }
 
 
-.fx-nav-dropdown.open
-.fx-nav-arrow {
-
+.fx-nav-dropdown.open .fx-nav-arrow {
     transform: rotate(180deg);
-
 }
 
 
-/* When meeting is open */
-
-.fx-nav-dropdown.open
-.fx-nav-dropdown-toggle {
-
+.fx-nav-dropdown.open .fx-nav-dropdown-toggle {
     background: #172554;
-
     color: #ffffff;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    SUBMENU
-===================================================== */
+========================================================= */
 
-.fx-submenu {
-
+.fx-nav-dropdown .fx-submenu {
     display: none;
 
     list-style: none;
@@ -1132,41 +1062,34 @@ button.fx-nav-item {
     padding: 4px 0 4px 12px;
 
     border-left: 1px solid #26354d;
-
 }
 
 
-.fx-nav-dropdown.open
-.fx-submenu {
-
+.fx-nav-dropdown.open .fx-submenu {
     display: block;
-
 }
 
 
-/* =====================================================
+/* =========================================================
    SUBMENU LI
-===================================================== */
+========================================================= */
 
 .fx-submenu li {
-
     margin: 1px 0;
-
     padding: 0;
 
+    list-style: none;
 }
 
 
-/* =====================================================
+/* =========================================================
    SUBMENU ITEM
-===================================================== */
+========================================================= */
 
 .fx-submenu-item {
-
     min-height: 35px;
 
     display: flex;
-
     align-items: center;
 
     gap: 9px;
@@ -1180,82 +1103,68 @@ button.fx-nav-item {
     text-decoration: none;
 
     font-size: 11px;
-
     font-weight: 500;
 
     transition:
         background 0.2s ease,
         color 0.2s ease;
 
+    box-sizing: border-box;
 }
 
 
 .fx-submenu-item:hover {
-
     background: #172554;
-
     color: #ffffff;
-
 }
 
 
 .fx-submenu-icon {
-
     width: 17px;
-
     min-width: 17px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     color: #64748b;
 
     font-size: 10px;
-
 }
 
 
-.fx-submenu-item:hover
-.fx-submenu-icon {
-
+.fx-submenu-item:hover .fx-submenu-icon {
     color: #60a5fa;
-
 }
 
 
 .fx-submenu-text {
-
     white-space: nowrap;
 
     overflow: hidden;
-
     text-overflow: ellipsis;
 
+    min-width: 0;
 }
 
 
-/* =====================================================
+/* =========================================================
    USER AREA
-===================================================== */
+========================================================= */
 
 .fx-sidebar-user {
-
     padding: 12px;
 
     border-top: 1px solid #1e293b;
 
     flex-shrink: 0;
 
+    box-sizing: border-box;
 }
 
 
 .fx-user-profile {
-
     display: flex;
-
     align-items: center;
 
     gap: 10px;
@@ -1266,28 +1175,22 @@ button.fx-nav-item {
 
     text-decoration: none;
 
-    transition: background 0.2s ease;
-
+    transition:
+        background 0.2s ease;
 }
 
 
 .fx-user-profile:hover {
-
     background: #172033;
-
 }
 
 
 .fx-user-avatar {
-
     width: 36px;
-
     height: 36px;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     flex-shrink: 0;
@@ -1295,93 +1198,807 @@ button.fx-nav-item {
     border-radius: 50%;
 
     background: #2563eb;
-
     color: #ffffff;
 
     font-size: 13px;
-
     font-weight: 700;
-
 }
 
 
 .fx-user-info {
-
     flex: 1;
 
     min-width: 0;
 
     display: flex;
-
     flex-direction: column;
 
+    overflow: hidden;
 }
 
 
 .fx-user-name {
-
     color: #ffffff;
 
     font-size: 12px;
-
     font-weight: 600;
 
     white-space: nowrap;
 
     overflow: hidden;
-
     text-overflow: ellipsis;
-
 }
 
 
 .fx-user-role {
-
     margin-top: 2px;
 
     color: #64748b;
 
     font-size: 10px;
 
+    white-space: nowrap;
 }
 
 
 .fx-user-menu {
-
     color: #64748b;
 
     font-size: 13px;
 
+    flex-shrink: 0;
 }
 
 
-/* =====================================================
+/* =========================================================
+   SIDEBAR OVERLAY
+========================================================= */
+
+.fx-sidebar-overlay {
+    display: none;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: rgba(15, 23, 42, 0.55);
+
+    z-index: 940;
+
+    opacity: 0;
+
+    transition:
+        opacity 0.25s ease;
+
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+}
+
+
+/* =========================================================
+   DASHBOARD MAIN
+========================================================= */
+
+.dashboard-layout {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+
+    overflow-x: hidden;
+
+    box-sizing: border-box;
+}
+
+
+.dashboard-main {
+    flex: 1;
+
+    width: calc(100% - 210px);
+
+    min-width: 0;
+
+    margin-left: 210px;
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+}
+
+
+.dashboard-content {
+    flex: 1;
+
+    width: 100%;
+
+    min-width: 0;
+
+    padding: 24px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TOPBAR SAFETY
+========================================================= */
+
+.fx-topbar {
+    width: 100%;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
    MOBILE
-===================================================== */
+========================================================= */
 
 @media (max-width: 767px) {
 
+    /* -----------------------------------------------------
+       BODY
+    ----------------------------------------------------- */
+
+    html,
+    body {
+        width: 100% !important;
+        max-width: 100% !important;
+
+        overflow-x: hidden !important;
+
+        margin: 0;
+        padding: 0;
+    }
+
+
+    body {
+        overflow-y: auto !important;
+    }
+
+
+    /* -----------------------------------------------------
+       DASHBOARD LAYOUT
+    ----------------------------------------------------- */
+
+    .dashboard-layout {
+        display: block !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        overflow-x: hidden !important;
+    }
+
+
+    /* -----------------------------------------------------
+       SIDEBAR
+    ----------------------------------------------------- */
+
     .fx-sidebar {
 
-        width: 260px;
+        position: fixed !important;
 
-        transform: translateX(-100%);
+        top: 0 !important;
+        left: 0 !important;
+        bottom: 0 !important;
 
-        transition: transform 0.25s ease;
+        width: 260px !important;
+        max-width: 82vw !important;
+
+        height: 100vh !important;
+
+        z-index: 10000 !important;
+
+        transform: translateX(-105%) !important;
+
+        transition:
+            transform 0.25s ease !important;
+
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+
+        box-shadow:
+            8px 0 30px rgba(0, 0, 0, 0.18);
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* Sidebar open */
+
+    .fx-sidebar.fx-sidebar-open {
+        transform: translateX(0) !important;
+    }
+
+
+    /* -----------------------------------------------------
+       SIDEBAR BRAND MOBILE
+    ----------------------------------------------------- */
+
+    .fx-sidebar-brand {
+        height: 68px !important;
+
+        padding:
+            0 14px !important;
+    }
+
+
+    .fx-brand-logo {
+        width: 36px !important;
+        height: 36px !important;
+
+        border-radius: 9px !important;
+    }
+
+
+    .fx-brand-name {
+        font-size: 14px !important;
+    }
+
+
+    .fx-brand-subtitle {
+        font-size: 8px !important;
+    }
+
+
+    /* -----------------------------------------------------
+       SIDEBAR NAV MOBILE
+    ----------------------------------------------------- */
+
+    .fx-sidebar-nav {
+        padding:
+            14px 9px !important;
+    }
+
+
+    .fx-nav-item {
+        min-height: 44px !important;
+
+        padding:
+            0 11px !important;
+
+        font-size: 13px !important;
+    }
+
+
+    .fx-nav-section-title {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+    }
+
+
+    /* -----------------------------------------------------
+       SIDEBAR USER MOBILE
+    ----------------------------------------------------- */
+
+    .fx-sidebar-user {
+        padding: 10px !important;
+    }
+
+
+    /* -----------------------------------------------------
+       OVERLAY
+    ----------------------------------------------------- */
+
+    .fx-sidebar-overlay {
+
+        position: fixed !important;
+
+        inset: 0 !important;
+
+        z-index: 9999 !important;
+
+        display: none !important;
+
+        background:
+            rgba(15, 23, 42, 0.55) !important;
+
+        opacity: 0 !important;
+
+        pointer-events: none !important;
+
+        transition:
+            opacity 0.25s ease !important;
+    }
+
+
+    /*
+     * IMPORTANT:
+     * Overlay will be shown by JavaScript
+     * when sidebar opens.
+     */
+
+    .fx-sidebar-overlay.active,
+    .fx-sidebar-overlay.show {
+
+        display: block !important;
+
+        opacity: 1 !important;
+
+        pointer-events: auto !important;
+    }
+
+
+    /* -----------------------------------------------------
+       MAIN AREA
+    ----------------------------------------------------- */
+
+    .dashboard-main {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        margin-left: 0 !important;
+
+        min-height: 100vh !important;
+
+        box-sizing: border-box !important;
+
+        overflow-x: hidden !important;
+    }
+
+
+    /* -----------------------------------------------------
+       TOPBAR
+    ----------------------------------------------------- */
+
+    .fx-topbar {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* -----------------------------------------------------
+       CONTENT
+    ----------------------------------------------------- */
+
+    .dashboard-content {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        margin-left: 0 !important;
+
+        padding:
+            16px !important;
+
+        box-sizing: border-box !important;
+
+        overflow-x: hidden !important;
+    }
+
+
+    /* -----------------------------------------------------
+       ALL DIRECT CHILDREN
+    ----------------------------------------------------- */
+
+    .dashboard-content > * {
+
+        max-width: 100% !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* -----------------------------------------------------
+       DATE FILTER
+    ----------------------------------------------------- */
+
+    .pm-date-filter-section {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+
+        padding: 16px !important;
+
+        box-sizing: border-box !important;
+
+        overflow: hidden !important;
+    }
+
+
+    .pm-date-filter-heading {
+
+        width: 100% !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        align-items: flex-start !important;
+
+        gap: 12px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .pm-date-filter-heading > div {
+
+        width: 100% !important;
+
+        min-width: 0 !important;
+    }
+
+
+    .pm-date-reset {
+
+        width: 100% !important;
+
+        justify-content: center !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .pm-date-form {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        gap: 12px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .pm-date-field {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .pm-date-input {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        min-height: 44px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .pm-date-submit {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-height: 44px !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    .pm-date-active {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        box-sizing: border-box !important;
+
+        overflow-wrap: anywhere !important;
+
+        line-height: 1.5 !important;
+    }
+
+
+    /* -----------------------------------------------------
+       MEETING CARDS
+    ----------------------------------------------------- */
+
+    .meeting-card,
+    .pm-meeting-card,
+    .meeting-item {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* -----------------------------------------------------
+       GRID
+    ----------------------------------------------------- */
+
+    .dashboard-content .grid {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        min-width: 0 !important;
+
+        box-sizing: border-box !important;
+    }
+
+
+    /* -----------------------------------------------------
+       IMAGES
+    ----------------------------------------------------- */
+
+    .dashboard-content img {
+
+        max-width: 100% !important;
+
+        height: auto;
+    }
+
+
+    /* -----------------------------------------------------
+       TABLE
+    ----------------------------------------------------- */
+
+    .dashboard-content table {
+
+        max-width: 100%;
 
     }
 
 
-    .fx-sidebar.fx-sidebar-open {
+    /* -----------------------------------------------------
+       HEADINGS
+    ----------------------------------------------------- */
 
-        transform: translateX(0);
+    .dashboard-content h1 {
 
+        font-size: 22px !important;
+
+        line-height: 1.25 !important;
+    }
+
+
+    .dashboard-content h2 {
+
+        font-size: 18px !important;
+
+        line-height: 1.3 !important;
+    }
+
+
+    .dashboard-content h3 {
+
+        font-size: 16px !important;
+
+        line-height: 1.35 !important;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .dashboard-content {
+
+        padding:
+            12px !important;
+    }
+
+
+    .pm-date-filter-section {
+
+        padding:
+            14px !important;
+
+        border-radius:
+            12px !important;
+    }
+
+
+    .pm-date-filter-heading h2 {
+
+        font-size:
+            16px !important;
+    }
+
+
+    .pm-date-filter-heading p {
+
+        font-size:
+            12px !important;
+    }
+
+
+    .pm-date-input {
+
+        min-height:
+            42px !important;
+
+        font-size:
+            13px !important;
+    }
+
+
+    .pm-date-submit {
+
+        min-height:
+            42px !important;
+
+        font-size:
+            13px !important;
+    }
+
+
+    .fx-sidebar {
+
+        width:
+            270px !important;
+
+        max-width:
+            85vw !important;
+    }
+
+}
+
+
+/* =========================================================
+   VERY SMALL DEVICES
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .dashboard-content {
+
+        padding:
+            10px !important;
+    }
+
+
+    .fx-sidebar {
+
+        width:
+            250px !important;
+
+        max-width:
+            86vw !important;
+    }
+
+
+    .fx-nav-item {
+
+        font-size:
+            12px !important;
+    }
+
+
+    .fx-nav-icon {
+
+        width:
+            19px !important;
+
+        min-width:
+            19px !important;
+    }
+
+}
+
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+
+@media (min-width: 768px) {
+
+    .fx-sidebar {
+
+        transform:
+            translateX(0) !important;
+    }
+
+
+    .dashboard-main {
+
+        margin-left:
+            210px !important;
+
+        width:
+            calc(100% - 210px) !important;
+    }
+
+
+    .fx-sidebar-overlay {
+
+        display:
+            none !important;
+
+        opacity:
+            0 !important;
+
+        pointer-events:
+            none !important;
+    }
+
+}
+
+
+/* =========================================================
+   PREVENT HORIZONTAL OVERFLOW
+========================================================= */
+
+*,
+*::before,
+*::after {
+
+    box-sizing: border-box;
+}
+
+
+html {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    overflow-x: hidden;
+}
+
+
+body {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    margin: 0;
+
+    overflow-x: hidden;
+}
+
+
+/* =========================================================
+   MOBILE BODY WHEN SIDEBAR IS OPEN
+========================================================= */
+
+@media (max-width: 767px) {
+
+    body.fx-sidebar-menu-open {
+
+        overflow: hidden !important;
     }
 
 }
 
 </style>
-
 
 <!-- =========================================
      MEETING DROPDOWN JAVASCRIPT

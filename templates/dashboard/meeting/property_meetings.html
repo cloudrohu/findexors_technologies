@@ -46,6 +46,674 @@
 
     </div>
 
+    <!-- =========================================================
+     DATE FILTER
+========================================================= -->
+
+<section class="pm-date-filter-section">
+
+    <div class="pm-date-filter-heading">
+
+        <div>
+
+            <h2>
+                <i class="fa-solid fa-calendar-days"></i>
+                Date Filter
+            </h2>
+
+            <p>
+                Find meetings for a specific date or a custom date range.
+            </p>
+
+        </div>
+
+
+        {% if date_filter != "all" %}
+
+            <a
+                href="?{% if current_type %}type={{ current_type }}&{% endif %}filter={{ current_filter }}"
+                class="pm-date-reset"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+                Clear Date
+
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <form
+        method="get"
+        class="pm-date-form"
+    >
+
+        {% if current_type %}
+
+            <input
+                type="hidden"
+                name="type"
+                value="{{ current_type }}"
+            >
+
+        {% endif %}
+
+
+        <input
+            type="hidden"
+            name="filter"
+            value="{{ current_filter }}"
+        >
+
+
+        <!-- DATE FILTER TYPE -->
+
+        <div class="pm-date-field">
+
+            <label for="date_filter">
+                Date Filter
+            </label>
+
+
+            <select
+                name="date_filter"
+                id="date_filter"
+                class="pm-date-input"
+            >
+
+                <option
+                    value="all"
+                    {% if date_filter == "all" %}
+                        selected
+                    {% endif %}
+                >
+                    All Dates
+                </option>
+
+
+                <option
+                    value="date"
+                    {% if date_filter == "date" %}
+                        selected
+                    {% endif %}
+                >
+                    Specific Date
+                </option>
+
+
+                <option
+                    value="range"
+                    {% if date_filter == "range" %}
+                        selected
+                    {% endif %}
+                >
+                    Date Range
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- SPECIFIC DATE -->
+
+        <div
+            class="pm-date-field pm-specific-date
+            {% if date_filter != 'date' %}
+                pm-date-hidden
+            {% endif %}"
+        >
+
+            <label for="selected_date">
+                Select Date
+            </label>
+
+
+            <input
+                type="date"
+                id="selected_date"
+                name="selected_date"
+                value="{{ selected_date|default:'' }}"
+                class="pm-date-input"
+            >
+
+        </div>
+
+
+        <!-- FROM DATE -->
+
+        <div
+            class="pm-date-field pm-range-date
+            {% if date_filter != 'range' %}
+                pm-date-hidden
+            {% endif %}"
+        >
+
+            <label for="date_from">
+                From Date
+            </label>
+
+
+            <input
+                type="date"
+                id="date_from"
+                name="date_from"
+                value="{{ date_from|default:'' }}"
+                class="pm-date-input"
+            >
+
+        </div>
+
+
+        <!-- TO DATE -->
+
+        <div
+            class="pm-date-field pm-range-date
+            {% if date_filter != 'range' %}
+                pm-date-hidden
+            {% endif %}"
+        >
+
+            <label for="date_to">
+                To Date
+            </label>
+
+
+            <input
+                type="date"
+                id="date_to"
+                name="date_to"
+                value="{{ date_to|default:'' }}"
+                class="pm-date-input"
+            >
+
+        </div>
+
+
+        <!-- SUBMIT -->
+
+        <button
+            type="submit"
+            class="pm-date-submit"
+        >
+
+            <i class="fa-solid fa-filter"></i>
+
+            Apply Filter
+
+        </button>
+
+    </form>
+
+
+    <!-- ACTIVE FILTER -->
+
+    {% if date_filter == "date" and selected_date %}
+
+        <div class="pm-date-active">
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            Showing meetings for
+
+            <strong>
+                {{ selected_date }}
+            </strong>
+
+        </div>
+
+
+    {% elif date_filter == "range" and date_from and date_to %}
+
+        <div class="pm-date-active">
+
+            <i class="fa-solid fa-calendar-check"></i>
+
+            Showing meetings from
+
+            <strong>
+                {{ date_from }}
+            </strong>
+
+            to
+
+            <strong>
+                {{ date_to }}
+            </strong>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- =========================================================
+     FILTERED MEETING RESULTS
+========================================================= -->
+
+<section class="pm-results-section">
+
+    <div class="pm-results-heading">
+
+        <div>
+
+            <h2>
+
+                {% if date_filter == "date" and selected_date %}
+
+                    Meetings for
+                    <span class="pm-results-date">
+                        {{ selected_date }}
+                    </span>
+
+                {% elif date_filter == "range" and date_from and date_to %}
+
+                    Meetings from
+                    <span class="pm-results-date">
+                        {{ date_from }}
+                    </span>
+
+                    to
+
+                    <span class="pm-results-date">
+                        {{ date_to }}
+                    </span>
+
+                {% elif current_filter == "today" %}
+
+                    Today's Meetings
+
+                {% elif current_filter == "tomorrow" %}
+
+                    Tomorrow's Meetings
+
+                {% elif current_filter == "upcoming" %}
+
+                    Upcoming Meetings
+
+                {% elif current_filter == "not_manage" %}
+
+                    Not Managed Meetings
+
+                {% else %}
+
+                    All Property Meetings
+
+                {% endif %}
+
+            </h2>
+
+
+            <p>
+
+                {% if meetings %}
+
+                    {{ meetings|length }}
+                    meeting{{ meetings|length|pluralize }}
+                    found.
+
+                {% else %}
+
+                    No meetings found for the selected filter.
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        <!-- RESULT COUNT -->
+
+        <div class="pm-result-count">
+
+            <span>
+                Results
+            </span>
+
+            <strong>
+                {{ meetings|length }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MEETING LIST
+    ====================================================== -->
+
+    {% if meetings %}
+
+        <div class="pm-meeting-grid">
+
+            {% for meeting in meetings %}
+
+                <article class="pm-meeting-card">
+
+
+                    <!-- ===============================
+                         CARD HEADER
+                    ================================ -->
+
+                    <div class="pm-card-header">
+
+                        <div class="pm-card-header-left">
+
+
+                            <!-- ICON -->
+
+                            <div class="pm-meeting-icon">
+
+                                {% if meeting.type == "Developer" %}
+
+                                    <i class="fa-solid fa-city"></i>
+
+                                {% elif meeting.type == "Architect" %}
+
+                                    <i class="fa-solid fa-compass-drafting"></i>
+
+                                {% elif meeting.type == "Engineer" %}
+
+                                    <i class="fa-solid fa-helmet-safety"></i>
+
+                                {% else %}
+
+                                    <i class="fa-solid fa-building"></i>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- TITLE -->
+
+                            <div class="pm-meeting-title">
+
+                                <div class="pm-badges">
+
+                                    <span class="pm-badge pm-badge-id">
+
+                                        #{{ meeting.pk }}
+
+                                    </span>
+
+
+                                    <span class="pm-badge pm-badge-type">
+
+                                        {{ meeting.type }}
+
+                                    </span>
+
+
+                                    {% if meeting.status %}
+
+                                        <span class="pm-badge pm-badge-status">
+
+                                            {{ meeting.status }}
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <h3>
+
+                                    {% if meeting.developer %}
+
+                                        {{ meeting.developer.title }}
+
+                                    {% elif meeting.architect %}
+
+                                        {{ meeting.architect.title }}
+
+                                    {% elif meeting.engineer %}
+
+                                        {{ meeting.engineer.title }}
+
+                                    {% elif meeting.project %}
+
+                                        {{ meeting.project.project_name }}
+
+                                    {% else %}
+
+                                        Property Meeting
+
+                                    {% endif %}
+
+                                </h3>
+
+
+                                <span class="pm-parent-type">
+
+                                    {{ meeting.type }} Meeting
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ===============================
+                         MEETING DATE
+                    ================================ -->
+
+                    <div class="pm-card-section">
+
+                        <div class="pm-section-title">
+
+                            <i class="fa-solid fa-calendar-days"></i>
+
+                            Meeting Schedule
+
+                        </div>
+
+
+                        <div class="pm-date-result-box">
+
+                            <div class="pm-date-result-icon">
+
+                                <i class="fa-solid fa-calendar-check"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+
+                                    {{ meeting.meeting_date|date:"d M Y" }}
+
+                                </strong>
+
+
+                                {% if meeting.meeting_date %}
+
+                                    <span>
+
+                                        {{ meeting.meeting_date|date:"h:i A" }}
+
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ===============================
+                         PARENT DETAILS
+                    ================================ -->
+
+                    <div class="pm-card-section">
+
+                        <div class="pm-section-title">
+
+                            <i class="fa-solid fa-user-tie"></i>
+
+                            Details
+
+                        </div>
+
+
+                        <div class="pm-parent-box">
+
+
+                            {% if meeting.developer %}
+
+                                <h4>
+                                    {{ meeting.developer.title }}
+                                </h4>
+
+                            {% elif meeting.architect %}
+
+                                <h4>
+                                    {{ meeting.architect.title }}
+                                </h4>
+
+                            {% elif meeting.engineer %}
+
+                                <h4>
+                                    {{ meeting.engineer.title }}
+                                </h4>
+
+                            {% elif meeting.project %}
+
+                                <h4>
+                                    {{ meeting.project.project_name }}
+                                </h4>
+
+                            {% else %}
+
+                                <h4>
+                                    Property Meeting
+                                </h4>
+
+                            {% endif %}
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ===============================
+                         ASSIGNED TO
+                    ================================ -->
+
+                    {% if meeting.assigned_to %}
+
+                        <div class="pm-card-section">
+
+                            <div class="pm-section-title">
+
+                                <i class="fa-solid fa-user-check"></i>
+
+                                Assigned To
+
+                            </div>
+
+
+                            <div class="pm-assigned-box">
+
+                                <div class="pm-assigned-avatar">
+
+                                    {{ meeting.assigned_to.first_name|default:meeting.assigned_to.username|first|upper }}
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+
+                                        {% if meeting.assigned_to.get_full_name %}
+
+                                            {{ meeting.assigned_to.get_full_name }}
+
+                                        {% else %}
+
+                                            {{ meeting.assigned_to.username }}
+
+                                        {% endif %}
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+
+                </article>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <!-- =================================================
+             NO RESULT
+        ================================================== -->
+
+        <div class="pm-no-results">
+
+            <div class="pm-no-results-icon">
+
+                <i class="fa-solid fa-calendar-xmark"></i>
+
+            </div>
+
+
+            <h3>
+                No Meetings Found
+            </h3>
+
+
+            <p>
+
+                There are no meetings matching your selected
+                date or filter.
+
+            </p>
+
+
+            <a
+                href="?filter=all"
+                class="pm-no-results-btn"
+            >
+
+                <i class="fa-solid fa-list"></i>
+
+                View All Meetings
+
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
 
     <!-- =========================================================
          GLOBAL MEETING SCHEDULE
@@ -1382,6 +2050,228 @@
 <style>
 
 /* =========================================================
+   DATE FILTER
+========================================================= */
+
+.pm-date-filter-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+}
+
+
+.pm-date-filter-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+
+.pm-date-filter-heading h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+
+.pm-date-filter-heading h2 i {
+    margin-right: 8px;
+    color: #2563eb;
+}
+
+
+.pm-date-filter-heading p {
+    margin: 5px 0 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+.pm-date-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 14px;
+    border-radius: 10px;
+    background: #fef2f2;
+    color: #dc2626;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+
+.pm-date-reset:hover {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+
+.pm-date-form {
+    display: grid;
+    grid-template-columns:
+        minmax(150px, 1fr)
+        minmax(170px, 1fr)
+        minmax(170px, 1fr)
+        minmax(170px, 1fr)
+        auto;
+
+    gap: 14px;
+    align-items: end;
+}
+
+
+.pm-date-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.pm-date-field label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #475569;
+}
+
+
+.pm-date-input {
+    width: 100%;
+    min-height: 44px;
+    padding: 0 12px;
+    border: 1px solid #dbe1ea;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s ease;
+    box-sizing: border-box;
+}
+
+
+.pm-date-input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+.pm-date-submit {
+    min-height: 44px;
+    padding: 0 18px;
+    border: 0;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+    white-space: nowrap;
+}
+
+
+.pm-date-submit:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+
+.pm-date-hidden {
+    display: none !important;
+}
+
+
+.pm-date-active {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 16px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    background: #eff6ff;
+    color: #1e40af;
+    font-size: 13px;
+}
+
+
+.pm-date-active i {
+    color: #2563eb;
+}
+
+
+.pm-date-active strong {
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .pm-date-form {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .pm-date-submit {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 640px) {
+
+    .pm-date-filter-section {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+
+    .pm-date-filter-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+
+    .pm-date-reset {
+        width: 100%;
+        justify-content: center;
+    }
+
+
+    .pm-date-form {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+
+    .pm-date-submit {
+        width: 100%;
+    }
+
+
+    .pm-date-active {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        line-height: 1.5;
+    }
+
+}
+
+/* =========================================================
    PROPERTY MEETINGS PAGE
 ========================================================= */
 
@@ -2337,5 +3227,67 @@
 }
 
 </style>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const dateFilter =
+        document.getElementById("date_filter");
+
+    const specificDate =
+        document.querySelector(".pm-specific-date");
+
+    const rangeDates =
+        document.querySelectorAll(".pm-range-date");
+
+
+    function updateDateFields() {
+
+        if (!dateFilter) {
+            return;
+        }
+
+
+        /* Specific Date */
+
+        if (specificDate) {
+
+            specificDate.classList.toggle(
+                "pm-date-hidden",
+                dateFilter.value !== "date"
+            );
+
+        }
+
+
+        /* Date Range */
+
+        rangeDates.forEach(function (field) {
+
+            field.classList.toggle(
+                "pm-date-hidden",
+                dateFilter.value !== "range"
+            );
+
+        });
+
+    }
+
+
+    if (dateFilter) {
+
+        dateFilter.addEventListener(
+            "change",
+            updateDateFields
+        );
+
+
+        updateDateFields();
+
+    }
+
+});
+</script>
 
 {% endblock %}
