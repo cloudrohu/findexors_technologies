@@ -59,7 +59,7 @@
                 <li>
 
                     <a
-                        href="{% url 'dashboard:index' %}"
+                        href="{% url 'dashboard' %}"
                         class="fx-nav-item active"
                     >
 
@@ -131,84 +131,140 @@
                 <!-- =================================
                      MEETINGS
                 ================================== -->
-            <!-- Meetings -->
-            <li class="fx-nav-dropdown">
+            
+                <!-- =========================================
+     MEETINGS
+========================================= -->
+
+<li class="fx-nav-dropdown">
+
+    <!-- Meeting Main Button -->
+    <button
+        type="button"
+        class="fx-nav-item fx-nav-dropdown-toggle"
+        aria-expanded="false"
+        aria-controls="propertyMeetingSubmenu"
+    >
+
+        <span class="fx-nav-icon">
+            <i class="fa-regular fa-calendar-check"></i>
+        </span>
+
+        <span class="fx-nav-text">
+            Meetings
+        </span>
+
+        <span class="fx-nav-arrow">
+            <i class="fa-solid fa-chevron-down"></i>
+        </span>
+
+    </button>
+
+
+    <!-- Meeting Submenu -->
+    <ul
+        id="propertyMeetingSubmenu"
+        class="fx-submenu"
+    >
+
+            <!-- All Property Meetings -->
+            <li>
                 <a
                     href="{% url 'property_meetings' %}"
-    `               class="fx-submenu-item"
-
-                <button
-                    type="button"
-                    class="fx-nav-item fx-nav-dropdown-toggle"
-                    aria-expanded="false"
-                    aria-controls="propertyMeetingSubmenu"
+                    class="fx-submenu-item"
                 >
-                    <span class="fx-nav-icon">
-                        <i class="fa-regular fa-calendar-check"></i>
+
+                    <span class="fx-submenu-icon">
+                        <i class="fa-solid fa-calendar-days"></i>
                     </span>
 
-                    <span class="fx-nav-text">Meetings</span>
-
-                    <span class="fx-nav-arrow">
-                        <i class="fa-solid fa-chevron-down"></i>
+                    <span class="fx-submenu-text">
+                        All Meetings
                     </span>
-                </button>
 
-                <!-- Properties -->
-                <ul id="propertyMeetingSubmenu" class="fx-submenu">
-
-                    <!-- Project Meetings -->
-                    <li>
-                        <a href="#" class="fx-submenu-item">
-                            <span class="fx-submenu-icon">
-                                <i class="fa-solid fa-building"></i>
-                            </span>
-                            <span class="fx-submenu-text">
-                                Project Meetings
-                            </span>
-                        </a>
-                    </li>
-
-                    <!-- Developer Meetings -->
-                    <li>
-                        <a href="#" class="fx-submenu-item">
-                            <span class="fx-submenu-icon">
-                                <i class="fa-solid fa-city"></i>
-                            </span>
-                            <span class="fx-submenu-text">
-                                Developer Meetings
-                            </span>
-                        </a>
-                    </li>
-
-                    <!-- Architect Meetings -->
-                    <li>
-                        <a href="#" class="fx-submenu-item">
-                            <span class="fx-submenu-icon">
-                                <i class="fa-solid fa-compass-drafting"></i>
-                            </span>
-                            <span class="fx-submenu-text">
-                                Architect Meetings
-                            </span>
-                        </a>
-                    </li>
-
-                    <!-- Engineer Meetings -->
-                    <li>
-                        <a href="#" class="fx-submenu-item">
-                            <span class="fx-submenu-icon">
-                                <i class="fa-solid fa-helmet-safety"></i>
-                            </span>
-                            <span class="fx-submenu-text">
-                                Engineer Meetings
-                            </span>
-                        </a>
-                    </li>
-
-                </ul>
                 </a>
             </li>
 
+
+        <!-- Project Meetings -->
+        <li>
+            <a
+                href="{% url 'property_meetings' %}?type=Project&filter=all"
+                class="fx-submenu-item"
+            >
+
+                <span class="fx-submenu-icon">
+                    <i class="fa-solid fa-building"></i>
+                </span>
+
+                <span class="fx-submenu-text">
+                    Project Meetings
+                </span>
+
+            </a>
+        </li>
+
+
+        <!-- Developer Meetings -->
+        <li>
+            <a
+                href="{% url 'property_meetings' %}?type=Developer&filter=all"
+                class="fx-submenu-item"
+            >
+
+                <span class="fx-submenu-icon">
+                    <i class="fa-solid fa-city"></i>
+                </span>
+
+                <span class="fx-submenu-text">
+                    Developer Meetings
+                </span>
+
+            </a>
+        </li>
+
+
+        <!-- Architect Meetings -->
+        <li>
+            <a
+                href="{% url 'property_meetings' %}?type=Architect&filter=all"
+                class="fx-submenu-item"
+            >
+
+                <span class="fx-submenu-icon">
+                    <i class="fa-solid fa-compass-drafting"></i>
+                </span>
+
+                <span class="fx-submenu-text">
+                    Architect Meetings
+                </span>
+
+            </a>
+        </li>
+
+
+        <!-- Engineer Meetings -->
+        <li>
+            <a
+                href="{% url 'property_meetings' %}?type=Engineer&filter=all"
+                class="fx-submenu-item"
+            >
+
+                <span class="fx-submenu-icon">
+                    <i class="fa-solid fa-helmet-safety"></i>
+                </span>
+
+                <span class="fx-submenu-text">
+                    Engineer Meetings
+                </span>
+
+            </a>
+        </li>
+
+    </ul>
+
+</li>
+            
                 <!-- =================================
                      TASKS
                 ================================== -->
@@ -422,6 +478,167 @@
 ========================================== -->
 
 <style>
+
+    /* =========================================
+   MEETING DROPDOWN
+========================================= */
+
+.fx-nav-dropdown {
+    position: relative;
+}
+
+
+/* Main Meeting Button */
+
+.fx-nav-dropdown-toggle {
+    width: 100%;
+    border: 0;
+    cursor: pointer;
+    text-align: left;
+
+    display: flex;
+    align-items: center;
+
+    background: transparent;
+    color: #94a3b8;
+
+    padding: 10px 12px;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    border-radius: 8px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.fx-nav-dropdown-toggle:hover {
+    background: #172554;
+    color: #ffffff;
+}
+
+
+/* Arrow */
+
+.fx-nav-arrow {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.25s ease;
+}
+
+
+.fx-nav-dropdown.open
+.fx-nav-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* =========================================
+   SUBMENU
+========================================= */
+
+.fx-submenu {
+    display: none;
+
+    list-style: none;
+
+    margin: 4px 0 6px;
+    padding: 4px 0 4px 16px;
+
+    border-left: 1px solid #263554;
+}
+
+
+.fx-nav-dropdown.open > .fx-submenu {
+    display: block;
+}
+
+
+/* Submenu LI */
+
+.fx-submenu li {
+    list-style: none;
+
+    margin: 2px 0;
+    padding: 0;
+}
+
+
+/* Submenu Link */
+
+.fx-submenu-item {
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+
+    min-height: 36px;
+
+    padding: 7px 10px;
+
+    box-sizing: border-box;
+
+    text-decoration: none;
+
+    color: #94a3b8;
+
+    border-radius: 7px;
+
+    font-size: 12px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        padding-left 0.2s ease;
+}
+
+
+.fx-submenu-item:hover {
+
+    background: #172554;
+
+    color: #ffffff;
+
+    padding-left: 14px;
+}
+
+
+/* Submenu Icon */
+
+.fx-submenu-icon {
+
+    width: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 7px;
+
+    color: #64748b;
+}
+
+
+.fx-submenu-item:hover
+.fx-submenu-icon {
+
+    color: #60a5fa;
+}
+
+
+/* Submenu Text */
+
+.fx-submenu-text {
+    white-space: nowrap;
+}
 
 /* =====================================================
    SIDEBAR
@@ -1170,44 +1387,129 @@ button.fx-nav-item {
      MEETING DROPDOWN JAVASCRIPT
 ========================================== -->
 
+
+
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    const meetingDropdown =
-        document.querySelector(".fx-nav-dropdown");
+    /*
+    =========================================
+    ALL SIDEBAR DROPDOWNS
+    =========================================
+    */
 
-    if (!meetingDropdown) {
-        return;
-    }
-
-
-    const meetingButton =
-        meetingDropdown.querySelector(
-            ".fx-nav-dropdown-toggle"
-        );
+    const dropdowns =
+        document.querySelectorAll(".fx-nav-dropdown");
 
 
-    if (!meetingButton) {
-        return;
-    }
+    dropdowns.forEach(function (dropdown) {
 
-
-    meetingButton.addEventListener(
-        "click",
-        function () {
-
-            const isOpen =
-                meetingDropdown.classList.toggle("open");
-
-
-            meetingButton.setAttribute(
-                "aria-expanded",
-                isOpen ? "true" : "false"
+        const button =
+            dropdown.querySelector(
+                ".fx-nav-dropdown-toggle"
             );
 
+        if (!button) {
+            return;
         }
-    );
+
+
+        button.addEventListener("click", function (event) {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+
+            const isOpen =
+                dropdown.classList.contains("open");
+
+
+            /*
+            Close other dropdowns
+            */
+
+            dropdowns.forEach(function (otherDropdown) {
+
+                if (otherDropdown !== dropdown) {
+
+                    otherDropdown.classList.remove("open");
+
+                    const otherButton =
+                        otherDropdown.querySelector(
+                            ".fx-nav-dropdown-toggle"
+                        );
+
+                    if (otherButton) {
+
+                        otherButton.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                    }
+
+                }
+
+            });
+
+
+            /*
+            Toggle current dropdown
+            */
+
+            dropdown.classList.toggle(
+                "open",
+                !isOpen
+            );
+
+
+            button.setAttribute(
+                "aria-expanded",
+                !isOpen ? "true" : "false"
+            );
+
+        });
+
+    });
+
+
+    /*
+    =========================================
+    CLOSE WHEN CLICK OUTSIDE
+    =========================================
+    */
+
+    document.addEventListener("click", function (event) {
+
+        dropdowns.forEach(function (dropdown) {
+
+            if (!dropdown.contains(event.target)) {
+
+                dropdown.classList.remove("open");
+
+
+                const button =
+                    dropdown.querySelector(
+                        ".fx-nav-dropdown-toggle"
+                    );
+
+
+                if (button) {
+
+                    button.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                }
+
+            }
+
+        });
+
+    });
 
 });
 
