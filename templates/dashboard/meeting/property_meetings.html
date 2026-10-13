@@ -60,25 +60,227 @@ Property Meetings | Findexors CRM
 
 
     <!-- =====================================================
-         DATE FILTER
+         GLOBAL MEETING SCHEDULE
     ====================================================== -->
 
-    <section class="pm-date-filter-section">
+    <section class="pm-filter-section">
 
-        <div class="pm-date-filter-heading">
+        <div class="pm-section-heading">
 
             <div>
 
                 <h2>
-                    <i class="fa-solid fa-calendar-days"></i>
-                    Date Filter
+                    Meeting Schedule
                 </h2>
 
                 <p>
-                    Find meetings for a specific date or custom date range.
+                    Filter all property meetings by date and pending status.
                 </p>
 
             </div>
+
+        </div>
+
+
+        <div class="pm-filter-grid">
+
+
+            <!-- =================================================
+                 NOT MANAGE
+            ================================================== -->
+
+            <a
+                href="?filter=not_manage{% if current_type %}&type={{ current_type }}{% endif %}"
+                class="pm-filter-card pm-filter-danger
+                {% if current_filter == 'not_manage' %}
+                    active
+                {% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>
+                        Not Manage
+                    </span>
+
+                    <strong>
+                        {{ not_manage_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        Past pending meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- =================================================
+                 TODAY
+            ================================================== -->
+
+            <a
+                href="?filter=today{% if current_type %}&type={{ current_type }}{% endif %}"
+                class="pm-filter-card pm-filter-today
+                {% if current_filter == 'today' %}
+                    active
+                {% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>
+                        Today
+                    </span>
+
+                    <strong>
+                        {{ today_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        Today's meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- =================================================
+                 TOMORROW
+            ================================================== -->
+
+            <a
+                href="?filter=tomorrow{% if current_type %}&type={{ current_type }}{% endif %}"
+                class="pm-filter-card pm-filter-tomorrow
+                {% if current_filter == 'tomorrow' %}
+                    active
+                {% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>
+                        Tomorrow
+                    </span>
+
+                    <strong>
+                        {{ tomorrow_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        Tomorrow's meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- =================================================
+                 UPCOMING
+            ================================================== -->
+
+            <a
+                href="?filter=upcoming{% if current_type %}&type={{ current_type }}{% endif %}"
+                class="pm-filter-card pm-filter-upcoming
+                {% if current_filter == 'upcoming' %}
+                    active
+                {% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-calendar-week"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>
+                        Upcoming
+                    </span>
+
+                    <strong>
+                        {{ upcoming_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        After tomorrow
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+
+            <!-- =================================================
+                 ALL
+            ================================================== -->
+
+            <a
+                href="?filter=all{% if current_type %}&type={{ current_type }}{% endif %}"
+                class="pm-filter-card pm-filter-all
+                {% if current_filter == 'all' %}
+                    active
+                {% endif %}"
+            >
+
+                <div class="pm-filter-icon">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+
+                <div class="pm-filter-info">
+
+                    <span>
+                        All Meetings
+                    </span>
+
+                    <strong>
+                        {{ all_count|default:"0" }}
+                    </strong>
+
+                    <small>
+                        All property meetings
+                    </small>
+
+                </div>
+
+                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         DATE FILTER
+    ====================================================== -->
+<br>
+    <section class="pm-date-filter-section">
+
+        <div class="pm-date-filter-heading">
 
 
             {% if date_filter != "all" %}
@@ -295,221 +497,6 @@ Property Meetings | Findexors CRM
             </div>
 
         {% endif %}
-
-    </section>
-
-
-    <!-- =====================================================
-         GLOBAL MEETING SCHEDULE
-    ====================================================== -->
-
-    <section class="pm-filter-section">
-
-        <div class="pm-section-heading">
-
-            <div>
-
-                <h2>
-                    Meeting Schedule
-                </h2>
-
-                <p>
-                    Filter all property meetings by date and pending status.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="pm-filter-grid">
-
-
-            <!-- =================================================
-                 NOT MANAGE
-            ================================================== -->
-
-            <a
-                href="?filter=not_manage{% if current_type %}&type={{ current_type }}{% endif %}"
-                class="pm-filter-card pm-filter-danger
-                {% if current_filter == 'not_manage' %}
-                    active
-                {% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Not Manage
-                    </span>
-
-                    <strong>
-                        {{ not_manage_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        Past pending meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- =================================================
-                 TODAY
-            ================================================== -->
-
-            <a
-                href="?filter=today{% if current_type %}&type={{ current_type }}{% endif %}"
-                class="pm-filter-card pm-filter-today
-                {% if current_filter == 'today' %}
-                    active
-                {% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-calendar-day"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Today
-                    </span>
-
-                    <strong>
-                        {{ today_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        Today's meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- =================================================
-                 TOMORROW
-            ================================================== -->
-
-            <a
-                href="?filter=tomorrow{% if current_type %}&type={{ current_type }}{% endif %}"
-                class="pm-filter-card pm-filter-tomorrow
-                {% if current_filter == 'tomorrow' %}
-                    active
-                {% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-calendar-plus"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Tomorrow
-                    </span>
-
-                    <strong>
-                        {{ tomorrow_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        Tomorrow's meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- =================================================
-                 UPCOMING
-            ================================================== -->
-
-            <a
-                href="?filter=upcoming{% if current_type %}&type={{ current_type }}{% endif %}"
-                class="pm-filter-card pm-filter-upcoming
-                {% if current_filter == 'upcoming' %}
-                    active
-                {% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-calendar-week"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        Upcoming
-                    </span>
-
-                    <strong>
-                        {{ upcoming_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        After tomorrow
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-
-            <!-- =================================================
-                 ALL
-            ================================================== -->
-
-            <a
-                href="?filter=all{% if current_type %}&type={{ current_type }}{% endif %}"
-                class="pm-filter-card pm-filter-all
-                {% if current_filter == 'all' %}
-                    active
-                {% endif %}"
-            >
-
-                <div class="pm-filter-icon">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
-
-                <div class="pm-filter-info">
-
-                    <span>
-                        All Meetings
-                    </span>
-
-                    <strong>
-                        {{ all_count|default:"0" }}
-                    </strong>
-
-                    <small>
-                        All property meetings
-                    </small>
-
-                </div>
-
-                <i class="fa-solid fa-chevron-right pm-filter-arrow"></i>
-
-            </a>
-
-        </div>
 
     </section>
 
