@@ -815,14 +815,6 @@ def property_projects(request):
             calling_status=calling
         )
 
-
-    # =====================================================
-    # ORDERING
-    # =====================================================
-
-    projects = projects.order_by("-id")
-
-
     # =====================================================
     # PAGINATION
     # =====================================================
@@ -832,19 +824,33 @@ def property_projects(request):
         12
     )
 
-    page_number = request.GET.get(
-        "page",
-        1
-    )
+    page_number = request.GET.get("page", 1)
 
-    page_obj = paginator.get_page(
-        page_number
+    page_obj = paginator.get_page(page_number)
+
+
+    # Compact pagination
+    page_range = paginator.get_elided_page_range(
+        number=page_obj.number,
+        on_each_side=2,
+        on_ends=1,
     )
 
 
     # =====================================================
-    # FILTER OPTIONS
+    # PAGINATION QUERY STRING
     # =====================================================
+
+    pagination_params = request.GET.copy()
+
+    if "page" in pagination_params:
+        pagination_params.pop("page")
+
+    pagination_query = pagination_params.urlencode()
+
+        # =====================================================
+        # FILTER OPTIONS
+        # =====================================================
 
     developers = (
         Developer.objects
@@ -945,9 +951,11 @@ def property_projects(request):
         # PAGINATED PROJECTS
         "projects": page_obj,
 
-        # PAGINATION
+
         "page_obj": page_obj,
         "paginator": paginator,
+        "page_range": page_range,
+        "pagination_query": pagination_query,
 
 
         # FILTER VALUES
