@@ -70,3 +70,7 @@ LOGGING = {
         "level": "INFO",
     },
 }
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = Path("/mnt/media/uploads/")
