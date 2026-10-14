@@ -128,30 +128,23 @@
                 </li>
 
 
-                <!-- =================================
-                     MEETINGS
-                ================================== -->
-            
-                <!-- =========================================
-     MEETINGS
-========================================= -->
 
-<li class="fx-nav-dropdown">
+                <li class="fx-nav-dropdown">
 
-    <!-- Meeting Main Button -->
+    <!-- Properties Main Button -->
     <button
         type="button"
         class="fx-nav-item fx-nav-dropdown-toggle"
         aria-expanded="false"
-        aria-controls="propertyMeetingSubmenu"
+        aria-controls="propertySubmenu"
     >
 
         <span class="fx-nav-icon">
-            <i class="fa-regular fa-calendar-check"></i>
+            <i class="fa-solid fa-building"></i>
         </span>
 
         <span class="fx-nav-text">
-            Meetings
+            Properties
         </span>
 
         <span class="fx-nav-arrow">
@@ -161,109 +154,234 @@
     </button>
 
 
-    <!-- Meeting Submenu -->
+    <!-- Properties Submenu -->
     <ul
-        id="propertyMeetingSubmenu"
+        id="propertySubmenu"
         class="fx-submenu"
     >
 
-            <!-- All Property Meetings -->
-            <li>
-                <a
-                    href="{% url 'property_meetings' %}"
-                    class="fx-submenu-item"
-                >
-
-                    <span class="fx-submenu-icon">
-                        <i class="fa-solid fa-calendar-days"></i>
-                    </span>
-
-                    <span class="fx-submenu-text">
-                        All Meetings
-                    </span>
-
-                </a>
-            </li>
-
-
-        <!-- Project Meetings -->
+        <!-- Projects -->
         <li>
             <a
-                href="{% url 'property_meetings' %}?type=Project&filter=all"
+                href="{% url 'property_projects' %}"
                 class="fx-submenu-item"
             >
-
                 <span class="fx-submenu-icon">
                     <i class="fa-solid fa-building"></i>
                 </span>
 
                 <span class="fx-submenu-text">
-                    Project Meetings
+                    All Projects
                 </span>
-
             </a>
         </li>
 
 
-        <!-- Developer Meetings -->
+        <!-- Developers -->
         <li>
             <a
-                href="{% url 'property_meetings' %}?type=Developer&filter=all"
+                href="{% url 'property_developers' %}"
                 class="fx-submenu-item"
             >
-
                 <span class="fx-submenu-icon">
                     <i class="fa-solid fa-city"></i>
                 </span>
 
                 <span class="fx-submenu-text">
-                    Developer Meetings
+                    Developers
                 </span>
-
             </a>
         </li>
 
 
-        <!-- Architect Meetings -->
+        <!-- Architects -->
         <li>
             <a
-                href="{% url 'property_meetings' %}?type=Architect&filter=all"
+                href="{% url 'property_architects' %}"
                 class="fx-submenu-item"
             >
-
                 <span class="fx-submenu-icon">
                     <i class="fa-solid fa-compass-drafting"></i>
                 </span>
 
                 <span class="fx-submenu-text">
-                    Architect Meetings
+                    Architects
                 </span>
-
             </a>
         </li>
 
 
-        <!-- Engineer Meetings -->
+        <!-- Engineers -->
         <li>
             <a
-                href="{% url 'property_meetings' %}?type=Engineer&filter=all"
+                href="{% url 'property_engineers' %}"
                 class="fx-submenu-item"
             >
-
                 <span class="fx-submenu-icon">
                     <i class="fa-solid fa-helmet-safety"></i>
                 </span>
 
                 <span class="fx-submenu-text">
-                    Engineer Meetings
+                    Engineers
+                </span>
+            </a>
+        </li>
+
+
+        <!-- Meetings -->
+        <li>
+            <a
+                href="{% url 'property_meetings' %}"
+                class="fx-submenu-item"
+            >
+                <span class="fx-submenu-icon">
+                    <i class="fa-solid fa-calendar-days"></i>
                 </span>
 
+                <span class="fx-submenu-text">
+                    All Meetings
+                </span>
             </a>
         </li>
 
     </ul>
 
 </li>
+
+                <!-- =================================
+                     MEETINGS
+                ================================== -->
+            
+
+
+                <li class="fx-nav-dropdown">
+
+                    <!-- Meeting Main Button -->
+                    <button
+                        type="button"
+                        class="fx-nav-item fx-nav-dropdown-toggle"
+                        aria-expanded="false"
+                        aria-controls="propertyMeetingSubmenu"
+                    >
+
+                        <span class="fx-nav-icon">
+                            <i class="fa-regular fa-calendar-check"></i>
+                        </span>
+
+                        <span class="fx-nav-text">
+                            Meetings
+                        </span>
+
+                        <span class="fx-nav-arrow">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </span>
+
+                    </button>
+
+
+                    <!-- Meeting Submenu -->
+                    <ul
+                        id="propertyMeetingSubmenu"
+                        class="fx-submenu"
+                    >
+
+                            <!-- All Property Meetings -->
+                            <li>
+                                <a
+                                    href="{% url 'property_meetings' %}"
+                                    class="fx-submenu-item"
+                                >
+
+                                    <span class="fx-submenu-icon">
+                                        <i class="fa-solid fa-calendar-days"></i>
+                                    </span>
+
+                                    <span class="fx-submenu-text">
+                                        All Meetings
+                                    </span>
+
+                                </a>
+                            </li>
+
+
+                        <!-- Project Meetings -->
+                        <li>
+                            <a
+                                href="{% url 'property_meetings' %}?type=Project&filter=all"
+                                class="fx-submenu-item"
+                            >
+
+                                <span class="fx-submenu-icon">
+                                    <i class="fa-solid fa-building"></i>
+                                </span>
+
+                                <span class="fx-submenu-text">
+                                    Project Meetings
+                                </span>
+
+                            </a>
+                        </li>
+
+
+                        <!-- Developer Meetings -->
+                        <li>
+                            <a
+                                href="{% url 'property_meetings' %}?type=Developer&filter=all"
+                                class="fx-submenu-item"
+                            >
+
+                                <span class="fx-submenu-icon">
+                                    <i class="fa-solid fa-city"></i>
+                                </span>
+
+                                <span class="fx-submenu-text">
+                                    Developer Meetings
+                                </span>
+
+                            </a>
+                        </li>
+
+
+                        <!-- Architect Meetings -->
+                        <li>
+                            <a
+                                href="{% url 'property_meetings' %}?type=Architect&filter=all"
+                                class="fx-submenu-item"
+                            >
+
+                                <span class="fx-submenu-icon">
+                                    <i class="fa-solid fa-compass-drafting"></i>
+                                </span>
+
+                                <span class="fx-submenu-text">
+                                    Architect Meetings
+                                </span>
+
+                            </a>
+                        </li>
+
+
+                        <!-- Engineer Meetings -->
+                        <li>
+                            <a
+                                href="{% url 'property_meetings' %}?type=Engineer&filter=all"
+                                class="fx-submenu-item"
+                            >
+
+                                <span class="fx-submenu-icon">
+                                    <i class="fa-solid fa-helmet-safety"></i>
+                                </span>
+
+                                <span class="fx-submenu-text">
+                                    Engineer Meetings
+                                </span>
+
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li>
             
                 <!-- =================================
                      TASKS

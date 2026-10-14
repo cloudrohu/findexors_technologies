@@ -136,4 +136,6 @@ urlpatterns = [
         views.project_details,
         name="project_details",
     ),
+
+    
 ]

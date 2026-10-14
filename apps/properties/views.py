@@ -586,3 +586,291 @@ def edit_meeting(
             "parent_edit_url": parent_edit_url,
         },
     )
+
+
+
+
+
+# ============================================================
+# PROPERTY DEVELOPERS
+# ============================================================
+
+@login_required
+def property_developers(request):
+
+    developers = Developer.objects.all().order_by("-id")
+
+    return render(
+        request,
+        "dashboard/property/developers.html",
+        {
+            "developers": developers,
+        }
+    )
+
+
+# ============================================================
+# PROPERTY ARCHITECTS
+# ============================================================
+
+@login_required
+def property_architects(request):
+
+    architects = Architects.objects.all().order_by("-id")
+
+    return render(
+        request,
+        "dashboard/property/architects.html",
+        {
+            "architects": architects,
+        }
+    )
+
+
+# ============================================================
+# PROPERTY ENGINEERS
+# ============================================================
+
+@login_required
+def property_engineers(request):
+
+    engineers = Engineer.objects.all().order_by("-id")
+
+    return render(
+        request,
+        "dashboard/property/engineers.html",
+        {
+            "engineers": engineers,
+        }
+    )
+
+
+
+@login_required
+def property_projects(request):
+
+    search = request.GET.get("search", "").strip()
+    developer_id = request.GET.get("developer", "").strip()
+    property_type = request.GET.get("property_type", "").strip()
+    city = request.GET.get("city", "").strip()
+    locality = request.GET.get("locality", "").strip()
+    bhk = request.GET.get("bhk", "").strip()
+    construction_status = request.GET.get("construction_status", "").strip()
+    featured = request.GET.get("featured", "").strip()
+    active = request.GET.get("active", "").strip()
+    calling = request.GET.get("calling", "").strip()
+
+    projects = (
+        Project.objects
+        .select_related(
+            "developer",
+            "architect",
+            "engineer",
+            "city",
+            "locality",
+            "area",
+            "postal_code",
+            "property_type",
+            "possession_year",
+        )
+        .prefetch_related(
+            "contact_persons",
+            "headers",
+            "welcomes",
+            "sliders",
+            "overviews",
+            "aboutus",
+            "usps",
+            "configurations",
+            "configs",
+            "amenities",
+            "gallery",
+            "rera",
+            "why_invest",
+            "bank_offers",
+            "faqs",
+            "enquiries",
+            "comments",
+            "voice_recordings",
+            "visits",
+        )
+        .order_by("-id")
+    )
+
+    # SEARCH
+    if search:
+        projects = projects.filter(
+            project_name__icontains=search
+        )
+
+    # DEVELOPER
+    if developer_id:
+        projects = projects.filter(
+            developer_id=developer_id
+        )
+
+    # PROPERTY TYPE
+    if property_type:
+        projects = projects.filter(
+            property_type_id=property_type
+        )
+
+    # CITY
+    if city:
+        projects = projects.filter(
+            city_id=city
+        )
+
+    # LOCALITY
+    if locality:
+        projects = projects.filter(
+            locality_id=locality
+        )
+
+    # BHK
+    if bhk:
+        projects = projects.filter(
+            bhk_type=bhk
+        )
+
+    # CONSTRUCTION STATUS
+    if construction_status:
+        projects = projects.filter(
+            construction_status=construction_status
+        )
+
+    # FEATURED
+    if featured == "yes":
+        projects = projects.filter(
+            featured_property=True
+        )
+    elif featured == "no":
+        projects = projects.filter(
+            featured_property=False
+        )
+
+    # ACTIVE
+    if active == "yes":
+        projects = projects.filter(
+            is_active=True
+        )
+    elif active == "no":
+        projects = projects.filter(
+            is_active=False
+        )
+
+    # CALLING
+    if calling:
+        projects = projects.filter(
+            calling_status=calling
+        )
+
+    context = {
+        "projects": projects,
+
+        "search": search,
+        "developer_id": developer_id,
+        "property_type": property_type,
+        "city": city,
+        "locality": locality,
+        "bhk": bhk,
+        "construction_status": construction_status,
+        "featured": featured,
+        "active": active,
+        "calling": calling,
+
+        "developers": Developer.objects.all().order_by("title"),
+
+        "property_types": (
+            Project.objects
+            .exclude(property_type__isnull=True)
+            .values(
+                "property_type_id",
+                "property_type__name",
+            )
+            .distinct()
+            .order_by("property_type__name")
+        ),
+
+        "cities": (
+            Project.objects
+            .exclude(city__isnull=True)
+            .values(
+                "city_id",
+                "city__name",
+            )
+            .distinct()
+            .order_by("city__name")
+        ),
+
+        "localities": (
+            Project.objects
+            .exclude(locality__isnull=True)
+            .values(
+                "locality_id",
+                "locality__name",
+            )
+            .distinct()
+            .order_by("locality__name")
+        ),
+
+        "bhk_choices": (
+            Project.objects
+            .exclude(bhk_type__isnull=True)
+            .exclude(bhk_type="")
+            .values_list(
+                "bhk_type",
+                flat=True
+            )
+            .distinct()
+            .order_by("bhk_type")
+        ),
+
+        "construction_choices": (
+            Project.objects
+            .exclude(construction_status__isnull=True)
+            .exclude(construction_status="")
+            .values_list(
+                "construction_status",
+                flat=True
+            )
+            .distinct()
+            .order_by("construction_status")
+        ),
+
+        "calling_choices": (
+            Project.objects
+            .exclude(calling_status__isnull=True)
+            .exclude(calling_status="")
+            .values_list(
+                "calling_status",
+                flat=True
+            )
+            .distinct()
+            .order_by("calling_status")
+        ),
+    }
+
+    return render(
+        request,
+        "dashboard/property/projects.html",
+        context,
+    )
+
+
+
+@login_required
+def property_project_detail(request, project_id):
+
+    project = get_object_or_404(
+        Project,
+        id=project_id
+    )
+
+    return render(
+        request,
+        "dashboard/property/project_detail.html",
+        {
+            "project": project,
+        }
+    )

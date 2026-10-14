@@ -1,0 +1,2527 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="pm-page">
+
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+
+    <div class="pm-page-header">
+
+        <div>
+            <h1>
+                All Projects
+            </h1>
+
+            <p>
+                All property project records.
+            </p>
+        </div>
+
+        <div class="pm-page-count">
+
+            <i class="fa-solid fa-building"></i>
+
+            <strong>{{ projects|length }}</strong>
+
+            Projects
+
+        </div>
+
+    </div>
+
+
+
+    <div class="pm-filter-card">
+
+    <form method="GET" class="pm-filter-form-wrapper">
+
+        <!-- =====================================================
+             SEARCH
+        ====================================================== -->
+
+        <div class="pm-filter-search">
+
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                name="search"
+                value="{{ search }}"
+                placeholder="Search Project Name..."
+            >
+
+        </div>
+
+
+        <!-- =====================================================
+             FILTER ROW
+        ====================================================== -->
+
+        <div class="pm-filter-grid">
+
+            <!-- ================= DEVELOPER ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="developer"
+                    class="pm-filter-select pm-searchable"
+                    data-placeholder="All Developers"
+                >
+
+                    <option value="">
+                        All Developers
+                    </option>
+
+                    {% for developer in developers %}
+
+                        <option
+                            value="{{ developer.id }}"
+                            {% if developer_id == developer.id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ developer.title }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= PROPERTY TYPE ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="property_type"
+                    class="pm-filter-select pm-searchable"
+                    data-placeholder="All Property Types"
+                >
+
+                    <option value="">
+                        All Property Types
+                    </option>
+
+                    {% for item in property_types %}
+
+                        <option
+                            value="{{ item.property_type_id }}"
+                            {% if property_type == item.property_type_id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item.property_type__name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= CITY ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="city"
+                    class="pm-filter-select pm-searchable"
+                    data-placeholder="All Cities"
+                >
+
+                    <option value="">
+                        All Cities
+                    </option>
+
+                    {% for item in cities %}
+
+                        <option
+                            value="{{ item.city_id }}"
+                            {% if city == item.city_id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item.city__name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= LOCALITY ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="locality"
+                    class="pm-filter-select pm-searchable"
+                    data-placeholder="All Localities"
+                >
+
+                    <option value="">
+                        All Localities
+                    </option>
+
+                    {% for item in localities %}
+
+                        <option
+                            value="{{ item.locality_id }}"
+                            {% if locality == item.locality_id|stringformat:"s" %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item.locality__name }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= BHK ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="bhk"
+                    class="pm-filter-select pm-searchable"
+                    data-placeholder="All BHK"
+                >
+
+                    <option value="">
+                        All BHK
+                    </option>
+
+                    {% for item in bhk_choices %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if bhk == item %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= CONSTRUCTION ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="construction_status"
+                    class="pm-filter-select pm-searchable"
+                    data-placeholder="Construction Status"
+                >
+
+                    <option value="">
+                        Construction Status
+                    </option>
+
+                    {% for item in construction_choices %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if construction_status == item %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= FEATURED ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="featured"
+                    class="pm-filter-select"
+                >
+
+                    <option value="">
+                        Featured: All
+                    </option>
+
+                    <option
+                        value="yes"
+                        {% if featured == "yes" %}
+                            selected
+                        {% endif %}
+                    >
+                        ⭐ Featured
+                    </option>
+
+                    <option
+                        value="no"
+                        {% if featured == "no" %}
+                            selected
+                        {% endif %}
+                    >
+                        Not Featured
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= ACTIVE ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="active"
+                    class="pm-filter-select"
+                >
+
+                    <option value="">
+                        Status: All
+                    </option>
+
+                    <option
+                        value="yes"
+                        {% if active == "yes" %}
+                            selected
+                        {% endif %}
+                    >
+                        🟢 Active
+                    </option>
+
+                    <option
+                        value="no"
+                        {% if active == "no" %}
+                            selected
+                        {% endif %}
+                    >
+                        🔴 Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= CALLING ================= -->
+
+            <div class="pm-filter-item">
+
+                <select
+                    name="calling"
+                    class="pm-filter-select pm-searchable"
+                    data-placeholder="Calling: All"
+                >
+
+                    <option value="">
+                        Calling: All
+                    </option>
+
+                    {% for item in calling_choices %}
+
+                        <option
+                            value="{{ item }}"
+                            {% if calling == item %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ item }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- ================= FILTER BUTTON ================= -->
+
+            <div class="pm-filter-actions">
+
+                <button
+                    type="submit"
+                    class="pm-filter-button"
+                >
+
+                    <i class="fa-solid fa-filter"></i>
+
+                    <span>Filter</span>
+
+                </button>
+
+
+                <a
+                    href="{% url 'property_projects' %}"
+                    class="pm-reset-button"
+                >
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                    <span>Reset</span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+
+
+
+
+    <!-- =========================================================
+         PROJECT GRID
+    ========================================================== -->
+
+    {% if projects %}
+
+    <div class="pm-grid">
+
+        {% for project in projects %}
+
+        <article class="pm-card">
+
+
+            <!-- =================================================
+                 CARD HEADER
+            ================================================== -->
+
+            <div class="pm-card-header">
+
+                <div class="pm-card-header-left">
+
+
+                    <!-- PROJECT IMAGE -->
+
+                    <div class="pm-project-image">
+
+                        {% if project.image %}
+
+                        <img
+                            src="{{ project.image.url }}"
+                            alt="{{ project.project_name }}"
+                        >
+
+                        {% else %}
+
+                        <i class="fa-solid fa-building"></i>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- PROJECT TITLE -->
+
+                    <div class="pm-heading">
+
+                        <div class="pm-badges">
+
+                            <span class="pm-id">
+                                #{{ project.id }}
+                            </span>
+
+
+                            {% if project.property_type %}
+
+                            <span class="pm-badge pm-badge-type">
+
+                                {{ project.property_type }}
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if project.construction_status %}
+
+                            <span class="pm-badge pm-badge-status">
+
+                                {{ project.construction_status }}
+
+                            </span>
+
+                            {% endif %}
+
+
+                            {% if project.featured_property %}
+
+                            <span class="pm-badge pm-badge-featured">
+
+                                <i class="fa-solid fa-star"></i>
+
+                                Featured
+
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <h2>
+                            {{ project.project_name|default:"Unnamed Project" }}
+                        </h2>
+
+
+                        <span class="pm-subtitle">
+
+                            {% if project.developer %}
+                                {{ project.developer }}
+                            {% else %}
+                                Property Project
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIVE STATUS -->
+
+                <div>
+
+                    {% if project.is_active %}
+
+                    <span class="pm-active">
+                        Active
+                    </span>
+
+                    {% else %}
+
+                    <span class="pm-inactive">
+                        Inactive
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BASIC INFORMATION
+            ================================================== -->
+
+            <div class="pm-section">
+
+                <div class="pm-section-title">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Basic Information
+
+                </div>
+
+
+                <div class="pm-info-box">
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-building"></i>
+                            Project Name
+                        </span>
+
+                        <strong>
+                            {{ project.project_name|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-house"></i>
+                            Property Type
+                        </span>
+
+                        <strong>
+                            {{ project.property_type|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-city"></i>
+                            Developer
+                        </span>
+
+                        <strong>
+                            {{ project.developer|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-compass-drafting"></i>
+                            Architect
+                        </span>
+
+                        <strong>
+                            {{ project.architect|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-helmet-safety"></i>
+                            Engineer
+                        </span>
+
+                        <strong>
+                            {{ project.engineer|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-city"></i>
+                            City
+                        </span>
+
+                        <strong>
+                            {{ project.city|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-location-dot"></i>
+                            Locality
+                        </span>
+
+                        <strong>
+                            {{ project.locality|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-house"></i>
+                            BHK
+                        </span>
+
+                        <strong>
+                            {{ project.bhk_type|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-person-digging"></i>
+                            Construction
+                        </span>
+
+                        <strong>
+                            {{ project.construction_status|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Possession
+                        </span>
+
+                        <strong>
+
+                            {% if project.possession_month %}
+                                {{ project.possession_month }}
+                            {% endif %}
+
+                            {% if project.possession_year %}
+                                {{ project.possession_year }}
+                            {% endif %}
+
+                            {% if not project.possession_month and not project.possession_year %}
+                                —
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-phone"></i>
+                            Calling Status
+                        </span>
+
+                        <strong>
+                            {{ project.calling_status|default:"—" }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOCATION
+            ================================================== -->
+
+            <div class="pm-section">
+
+                <div class="pm-section-title">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Location
+
+                </div>
+
+
+                <div class="pm-info-box">
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-map"></i>
+                            Area
+                        </span>
+
+                        <strong>
+                            {{ project.area|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-envelope"></i>
+                            Postal Code
+                        </span>
+
+                        <strong>
+                            {{ project.postal_code|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row pm-info-row-full">
+
+                        <span>
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            Address
+                        </span>
+
+                        <strong>
+                            {{ project.address|default:"—" }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONFIGURATION
+            ================================================== -->
+
+            <div class="pm-section">
+
+                <div class="pm-section-title">
+
+                    <i class="fa-solid fa-sliders"></i>
+
+                    Configuration
+
+                </div>
+
+
+                <div class="pm-info-box">
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-layer-group"></i>
+                            Floor
+                        </span>
+
+                        <strong>
+                            {{ project.floor|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-expand"></i>
+                            Land Parcel
+                        </span>
+
+                        <strong>
+                            {{ project.land_parcel|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-gem"></i>
+                            Luxurious
+                        </span>
+
+                        <strong>
+                            {{ project.luxurious|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                            Pricing
+                        </span>
+
+                        <strong>
+                            {{ project.pricing|default:"—" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pm-info-row">
+
+                        <span>
+                            <i class="fa-solid fa-door-open"></i>
+                            Balcony
+                        </span>
+
+                        <strong>
+                            {{ project.balcony|default:"—" }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONTACT PERSONS
+            ================================================== -->
+
+            <div class="pm-section">
+
+                <div class="pm-section-title">
+
+                    <i class="fa-solid fa-address-book"></i>
+
+                    Contacts
+
+                    <span class="pm-section-count">
+                        {{ project.contact_persons.count }}
+                    </span>
+
+                </div>
+
+
+                <div class="pm-contacts">
+
+                    {% for contact in project.contact_persons.all %}
+
+                    <div class="pm-contact">
+
+
+                        <div class="pm-contact-top">
+
+                            <div class="pm-contact-name">
+
+                                <i class="fa-solid fa-user"></i>
+
+                                {{ contact.name }}
+
+                                {% if contact.is_primary %}
+
+                                <span class="pm-primary">
+                                    Primary
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="pm-contact-actions">
+
+
+                                {% if contact.mobile %}
+
+                                <a
+                                    href="tel:{{ contact.mobile }}"
+                                    class="pm-contact-call"
+                                >
+
+                                    <i class="fa-solid fa-phone"></i>
+
+                                    Call
+
+                                </a>
+
+                                {% endif %}
+
+
+                                {% if contact.whatsapp %}
+
+                                <a
+                                    href="https://wa.me/91{{ contact.whatsapp }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="pm-contact-whatsapp"
+                                >
+
+                                    <i class="fa-brands fa-whatsapp"></i>
+
+                                    WhatsApp
+
+                                </a>
+
+                                {% elif contact.mobile %}
+
+                                <a
+                                    href="https://wa.me/91{{ contact.mobile }}"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    class="pm-contact-whatsapp"
+                                >
+
+                                    <i class="fa-brands fa-whatsapp"></i>
+
+                                    WhatsApp
+
+                                </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+
+                        {% if contact.designation %}
+
+                        <div class="pm-contact-line">
+
+                            <i class="fa-solid fa-briefcase"></i>
+
+                            {{ contact.designation }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if contact.mobile %}
+
+                        <div class="pm-contact-line">
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            {{ contact.mobile }}
+
+                        </div>
+
+                        {% endif %}
+
+
+                        {% if contact.email %}
+
+                        <div class="pm-contact-line">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            {{ contact.email }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% empty %}
+
+                    <div class="pm-empty-small">
+
+                        <i class="fa-regular fa-address-book"></i>
+
+                        No contacts added.
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CONTENT / WEBSITE
+            ================================================== -->
+
+            <div class="pm-section">
+
+                <div class="pm-section-title">
+
+                    <i class="fa-solid fa-layer-group"></i>
+
+                    Content / CRM
+
+                </div>
+
+
+                <div class="pm-content-grid">
+
+
+                    <!-- HEADER -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-heading"></i>
+
+                        <span>
+                            Header
+                        </span>
+
+                        <strong>
+                            {{ project.headers.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- WELCOME -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-hand-wave"></i>
+
+                        <span>
+                            Welcome
+                        </span>
+
+                        <strong>
+                            {{ project.welcomes.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- SLIDER -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-images"></i>
+
+                        <span>
+                            Web Slider
+                        </span>
+
+                        <strong>
+                            {{ project.sliders.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- OVERVIEW -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-file-lines"></i>
+
+                        <span>
+                            Overview
+                        </span>
+
+                        <strong>
+                            {{ project.overviews.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ABOUT -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        <span>
+                            About
+                        </span>
+
+                        <strong>
+                            {{ project.aboutus.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- USP -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <span>
+                            USP
+                        </span>
+
+                        <strong>
+                            {{ project.usps.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- CONFIGURATIONS -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-sliders"></i>
+
+                        <span>
+                            Configurations
+                        </span>
+
+                        <strong>
+                            {{ project.configurations.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- CONNECTIVITY -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-road"></i>
+
+                        <span>
+                            Connectivity
+                        </span>
+
+                        <strong>
+                            {{ project.configs.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- AMENITIES -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-list-check"></i>
+
+                        <span>
+                            Amenities
+                        </span>
+
+                        <strong>
+                            {{ project.amenities.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- GALLERY -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-photo-film"></i>
+
+                        <span>
+                            Gallery
+                        </span>
+
+                        <strong>
+                            {{ project.gallery.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- WHY INVEST -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        <span>
+                            Why Invest
+                        </span>
+
+                        <strong>
+                            {{ project.why_invest.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- BANK OFFERS -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-building-columns"></i>
+
+                        <span>
+                            Bank Offers
+                        </span>
+
+                        <strong>
+                            {{ project.bank_offers.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- FAQ -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-circle-question"></i>
+
+                        <span>
+                            FAQ
+                        </span>
+
+                        <strong>
+                            {{ project.faqs.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- RERA -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-file-shield"></i>
+
+                        <span>
+                            RERA
+                        </span>
+
+                        <strong>
+
+                            {% if project.rera %}
+                                1
+                            {% else %}
+                                0
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- ENQUIRIES -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-user-plus"></i>
+
+                        <span>
+                            Enquiries
+                        </span>
+
+                        <strong>
+                            {{ project.enquiries.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- COMMENTS -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-comments"></i>
+
+                        <span>
+                            Comments
+                        </span>
+
+                        <strong>
+                            {{ project.comments.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- VOICE -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-microphone"></i>
+
+                        <span>
+                            Voice
+                        </span>
+
+                        <strong>
+                            {{ project.voice_recordings.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- VISITS -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <span>
+                            Visits
+                        </span>
+
+                        <strong>
+                            {{ project.visits.count }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- FOLLOWUP -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+
+                        <span>
+                            Followup
+                        </span>
+
+                        <strong>
+
+                            {% if project.followup %}
+                                1
+                            {% else %}
+                                0
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+
+                    <!-- MEETING -->
+
+                    <div class="pm-content-item">
+
+                        <i class="fa-solid fa-calendar-check"></i>
+
+                        <span>
+                            Meeting
+                        </span>
+
+                        <strong>
+
+                            {% if project.meeting %}
+                                1
+                            {% else %}
+                                0
+                            {% endif %}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TRACKING
+            ================================================== -->
+
+            <div class="pm-section">
+
+                <div class="pm-section-title">
+
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+
+                    Tracking
+
+                </div>
+
+
+                <div class="pm-tracking">
+
+
+                    <div>
+
+                        <i class="fa-solid fa-calendar-plus"></i>
+
+                        Created:
+
+                        <strong>
+                            {{ project.created_at|date:"d M Y, h:i A" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <i class="fa-solid fa-clock"></i>
+
+                        Updated:
+
+                        <strong>
+                            {{ project.updated_at|date:"d M Y, h:i A" }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 CARD FOOTER
+            ================================================== -->
+
+            <div class="pm-card-footer">
+
+
+                <!-- CALL -->
+
+                {% if project.contact_persons.all|length > 0 %}
+
+                {% with contact=project.contact_persons.all|first %}
+
+                {% if contact.mobile %}
+
+                <a
+                    href="tel:{{ contact.mobile }}"
+                    class="pm-action pm-action-call"
+                >
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    Call
+
+                </a>
+
+                {% else %}
+
+                <span class="pm-action pm-action-disabled">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    Call
+
+                </span>
+
+                {% endif %}
+
+                {% endwith %}
+
+                {% else %}
+
+                <span class="pm-action pm-action-disabled">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    Call
+
+                </span>
+
+                {% endif %}
+
+
+                <!-- WHATSAPP -->
+
+                {% if project.contact_persons.all|length > 0 %}
+
+                {% with contact=project.contact_persons.all|first %}
+
+                {% if contact.whatsapp %}
+
+                <a
+                    href="https://wa.me/91{{ contact.whatsapp }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="pm-action pm-action-whatsapp"
+                >
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    WhatsApp
+
+                </a>
+
+                {% elif contact.mobile %}
+
+                <a
+                    href="https://wa.me/91{{ contact.mobile }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="pm-action pm-action-whatsapp"
+                >
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    WhatsApp
+
+                </a>
+
+                {% else %}
+
+                <span class="pm-action pm-action-disabled">
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    WhatsApp
+
+                </span>
+
+                {% endif %}
+
+                {% endwith %}
+
+                {% else %}
+
+                <span class="pm-action pm-action-disabled">
+
+                    <i class="fa-brands fa-whatsapp"></i>
+
+                    WhatsApp
+
+                </span>
+
+                {% endif %}
+
+
+                <!-- EDIT -->
+
+                <a
+                    href="{% url 'edit_project' project.id %}"
+                    class="pm-action pm-action-edit"
+                >
+
+                    <i class="fa-solid fa-pen"></i>
+
+                    Edit
+
+                </a>
+
+
+                <!-- MANAGE -->
+
+                <a
+                    href="{% url 'admin:properties_project_change' project.id %}"
+                    class="pm-action pm-action-manage"
+                >
+
+                    <i class="fa-solid fa-gear"></i>
+
+                    Manage
+
+                </a>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+    <!-- =========================================================
+         EMPTY
+    ========================================================== -->
+
+    <div class="pm-empty">
+
+        <div class="pm-empty-icon">
+
+            <i class="fa-solid fa-building"></i>
+
+        </div>
+
+        <h3>
+            No Projects Found
+        </h3>
+
+        <p>
+            There are no property projects available.
+        </p>
+
+        <a
+            href="{% url 'admin:properties_project_add' %}"
+            class="pm-empty-button"
+        >
+
+            <i class="fa-solid fa-plus"></i>
+
+            Add Project
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+
+
+<style>
+
+/* =========================================================
+   PROJECT FILTER
+========================================================= */
+
+.pm-filter-card {
+    width: 100%;
+    margin: 18px 0 24px;
+}
+
+.pm-filter-form-wrapper {
+    width: 100%;
+}
+
+
+/* =========================================================
+   PROJECT SEARCH
+========================================================= */
+
+.pm-filter-search {
+    width: 100%;
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.pm-filter-search i {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #0f355f;
+    font-size: 19px;
+    z-index: 2;
+}
+
+.pm-filter-search input {
+    width: 100%;
+    height: 56px;
+
+    border: 1px solid #d5dfeb;
+    border-radius: 12px;
+
+    background: #fff;
+
+    padding: 0 18px 0 48px;
+
+    color: #17385e;
+    font-size: 16px;
+
+    outline: none;
+    box-sizing: border-box;
+}
+
+.pm-filter-search input::placeholder {
+    color: #8192aa;
+}
+
+.pm-filter-search input:focus {
+    border-color: #315d8f;
+    box-shadow: 0 0 0 3px rgba(49, 93, 143, .08);
+}
+
+
+/* =========================================================
+   FILTER GRID
+========================================================= */
+
+.pm-filter-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   NORMAL SELECT
+========================================================= */
+
+.pm-filter-select {
+    width: 100%;
+    height: 52px;
+
+    border: 1px solid #d5dfeb;
+    border-radius: 10px;
+
+    background: #fff;
+
+    color: #17385e;
+
+    padding: 0 38px 0 14px;
+
+    font-size: 15px;
+
+    outline: none;
+    cursor: pointer;
+
+    box-sizing: border-box;
+}
+
+.pm-filter-select:focus {
+    border-color: #315d8f;
+}
+
+
+/* =========================================================
+   CUSTOM SEARCHABLE SELECT
+========================================================= */
+
+.pm-searchable-wrap {
+    width: 100%;
+    position: relative;
+}
+
+.pm-searchable-original {
+    display: none !important;
+}
+
+
+/* Main box */
+
+.pm-searchable-box {
+    width: 100%;
+    height: 52px;
+
+    border: 1px solid #d5dfeb;
+    border-radius: 10px;
+
+    background: #fff;
+
+    padding: 0 40px 0 14px;
+
+    display: flex;
+    align-items: center;
+
+    position: relative;
+
+    color: #17385e;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition: .15s ease;
+}
+
+.pm-searchable-box:hover {
+    border-color: #b9c8d9;
+}
+
+.pm-searchable-wrap.open .pm-searchable-box {
+    border-color: #315d8f;
+
+    box-shadow:
+        0 0 0 3px rgba(49, 93, 143, .08);
+}
+
+
+/* Arrow */
+
+.pm-searchable-arrow {
+    position: absolute;
+
+    right: 14px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #17385e;
+
+    font-size: 12px;
+
+    transition: .2s ease;
+}
+
+.pm-searchable-wrap.open .pm-searchable-arrow {
+    transform:
+        translateY(-50%)
+        rotate(180deg);
+}
+
+
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
+.pm-searchable-dropdown {
+    display: none;
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: calc(100% + 6px);
+
+    background: #fff;
+
+    border: 1px solid #d5dfeb;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 15px 35px rgba(15, 39, 71, .16);
+
+    overflow: hidden;
+
+    z-index: 999999;
+}
+
+.pm-searchable-wrap.open .pm-searchable-dropdown {
+    display: block;
+}
+
+
+/* =========================================================
+   DROPDOWN SEARCH
+========================================================= */
+
+.pm-searchable-search {
+    position: relative;
+
+    padding: 10px;
+
+    border-bottom: 1px solid #e5eaf0;
+
+    background: #fff;
+}
+
+.pm-searchable-search i {
+    position: absolute;
+
+    left: 22px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #71849b;
+
+    font-size: 14px;
+
+    pointer-events: none;
+}
+
+.pm-searchable-search input {
+    width: 100%;
+    height: 40px;
+
+    border: 1px solid #d5dfeb;
+
+    border-radius: 7px;
+
+    background: #f8fafc;
+
+    padding: 0 12px 0 35px;
+
+    color: #17385e;
+
+    font-size: 14px;
+
+    outline: none;
+
+    box-sizing: border-box;
+}
+
+.pm-searchable-search input:focus {
+    border-color: #315d8f;
+    background: #fff;
+}
+
+
+/* =========================================================
+   OPTIONS
+========================================================= */
+
+.pm-searchable-options {
+    max-height: 270px;
+
+    overflow-y: auto;
+}
+
+.pm-searchable-option {
+    padding: 10px 14px;
+
+    color: #263b57;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: .12s ease;
+}
+
+.pm-searchable-option:hover {
+    background: #edf3fa;
+
+    color: #102e52;
+}
+
+.pm-searchable-option.selected {
+    background: #102e52;
+
+    color: #fff;
+}
+
+
+/* Empty */
+
+.pm-searchable-no-result {
+    padding: 16px;
+
+    text-align: center;
+
+    color: #8492a6;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   FILTER BUTTONS
+========================================================= */
+
+.pm-filter-actions {
+    display: flex;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+.pm-filter-button,
+.pm-reset-button {
+    height: 52px;
+
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    box-sizing: border-box;
+}
+
+
+/* Filter */
+
+.pm-filter-button {
+    flex: 1;
+
+    border: none;
+
+    background: #102e52;
+
+    color: #fff;
+
+    cursor: pointer;
+}
+
+.pm-filter-button:hover {
+    background: #173f70;
+}
+
+
+/* Reset */
+
+.pm-reset-button {
+    flex: 1;
+
+    border: 1px solid #d5dfeb;
+
+    background: #fff;
+
+    color: #17385e;
+
+    text-decoration: none;
+}
+
+.pm-reset-button:hover {
+    background: #f7f9fc;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.pm-searchable-options::-webkit-scrollbar {
+    width: 7px;
+}
+
+.pm-searchable-options::-webkit-scrollbar-track {
+    background: #f5f7fa;
+}
+
+.pm-searchable-options::-webkit-scrollbar-thumb {
+    background: #bcc7d4;
+    border-radius: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .pm-filter-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    .pm-filter-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .pm-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pm-filter-actions {
+        flex-direction: column;
+    }
+
+    .pm-filter-button,
+    .pm-reset-button {
+        width: 100%;
+        flex: none;
+    }
+
+}
+
+</style>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const selects =
+        document.querySelectorAll(
+            ".pm-searchable"
+        );
+
+
+    selects.forEach(function (select) {
+
+        /* =========================================
+           WRAPPER
+        ========================================= */
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "pm-searchable-wrap";
+
+
+        select.parentNode.insertBefore(
+            wrapper,
+            select
+        );
+
+        wrapper.appendChild(select);
+
+
+        select.classList.add(
+            "pm-searchable-original"
+        );
+
+
+        /* =========================================
+           MAIN SELECT BOX
+        ========================================= */
+
+        const box =
+            document.createElement("div");
+
+        box.className =
+            "pm-searchable-box";
+
+
+        const text =
+            document.createElement("span");
+
+        text.className =
+            "pm-searchable-text";
+
+
+        const arrow =
+            document.createElement("span");
+
+        arrow.className =
+            "pm-searchable-arrow";
+
+        arrow.innerHTML =
+            '<i class="fa-solid fa-chevron-down"></i>';
+
+
+        box.appendChild(text);
+        box.appendChild(arrow);
+
+        wrapper.appendChild(box);
+
+
+        /* =========================================
+           DROPDOWN
+        ========================================= */
+
+        const dropdown =
+            document.createElement("div");
+
+        dropdown.className =
+            "pm-searchable-dropdown";
+
+
+        /* Search */
+
+        const search =
+            document.createElement("div");
+
+        search.className =
+            "pm-searchable-search";
+
+        search.innerHTML = `
+            <i class="fa-solid fa-magnifying-glass"></i>
+
+            <input
+                type="text"
+                placeholder="Search..."
+                autocomplete="off"
+            >
+        `;
+
+
+        /* Options */
+
+        const options =
+            document.createElement("div");
+
+        options.className =
+            "pm-searchable-options";
+
+
+        dropdown.appendChild(search);
+        dropdown.appendChild(options);
+
+        wrapper.appendChild(dropdown);
+
+
+        const searchInput =
+            search.querySelector("input");
+
+
+        /* =========================================
+           UPDATE SELECTED TEXT
+        ========================================= */
+
+        function updateText() {
+
+            const selected =
+                select.options[
+                    select.selectedIndex
+                ];
+
+
+            if (
+                selected &&
+                selected.value !== ""
+            ) {
+
+                text.textContent =
+                    selected.textContent.trim();
+
+            } else {
+
+                text.textContent =
+                    select.dataset.placeholder ||
+                    select.options[0]?.textContent.trim() ||
+                    "Select";
+
+            }
+
+        }
+
+
+        /* =========================================
+           BUILD OPTIONS
+        ========================================= */
+
+        function buildOptions(
+            searchValue = ""
+        ) {
+
+            options.innerHTML = "";
+
+
+            const query =
+                searchValue
+                    .toLowerCase()
+                    .trim();
+
+
+            let found = false;
+
+
+            Array.from(
+                select.options
+            ).forEach(function (option) {
+
+                const label =
+                    option.textContent.trim();
+
+
+                if (
+                    query &&
+                    !label
+                        .toLowerCase()
+                        .includes(query)
+                ) {
+
+                    return;
+
+                }
+
+
+                found = true;
+
+
+                const item =
+                    document.createElement("div");
+
+
+                item.className =
+                    "pm-searchable-option";
+
+
+                if (option.selected) {
+
+                    item.classList.add(
+                        "selected"
+                    );
+
+                }
+
+
+                item.textContent =
+                    label;
+
+
+                item.addEventListener(
+                    "click",
+                    function (event) {
+
+                        event.stopPropagation();
+
+
+                        select.value =
+                            option.value;
+
+
+                        select.dispatchEvent(
+                            new Event(
+                                "change",
+                                {
+                                    bubbles: true
+                                }
+                            )
+                        );
+
+
+                        updateText();
+
+                        closeDropdown();
+
+                    }
+                );
+
+
+                options.appendChild(item);
+
+            });
+
+
+            if (!found) {
+
+                options.innerHTML = `
+                    <div class="pm-searchable-no-result">
+                        No results found
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           OPEN
+        ========================================= */
+
+        function openDropdown() {
+
+            /* Close all other dropdowns */
+
+            document
+                .querySelectorAll(
+                    ".pm-searchable-wrap.open"
+                )
+                .forEach(function (item) {
+
+                    if (item !== wrapper) {
+
+                        item.classList.remove(
+                            "open"
+                        );
+
+                    }
+
+                });
+
+
+            wrapper.classList.add(
+                "open"
+            );
+
+
+            searchInput.value = "";
+
+            buildOptions();
+
+
+            setTimeout(function () {
+
+                searchInput.focus();
+
+            }, 50);
+
+        }
+
+
+        /* =========================================
+           CLOSE
+        ========================================= */
+
+        function closeDropdown() {
+
+            wrapper.classList.remove(
+                "open"
+            );
+
+            searchInput.value = "";
+
+        }
+
+
+        /* =========================================
+           MAIN BOX CLICK
+        ========================================= */
+
+        box.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+
+                if (
+                    wrapper.classList.contains(
+                        "open"
+                    )
+                ) {
+
+                    closeDropdown();
+
+                } else {
+
+                    openDropdown();
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           SEARCH
+        ========================================= */
+
+        searchInput.addEventListener(
+            "input",
+            function (event) {
+
+                event.stopPropagation();
+
+                buildOptions(
+                    this.value
+                );
+
+            }
+        );
+
+
+        searchInput.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+            }
+        );
+
+
+        /* =========================================
+           INITIAL
+        ========================================= */
+
+        updateText();
+
+    });
+
+
+    /* =============================================
+       OUTSIDE CLICK
+    ============================================= */
+
+    document.addEventListener(
+        "click",
+        function () {
+
+            document
+                .querySelectorAll(
+                    ".pm-searchable-wrap.open"
+                )
+                .forEach(function (wrapper) {
+
+                    wrapper.classList.remove(
+                        "open"
+                    );
+
+                });
+
+        }
+    );
+
+});
+
+</script>
+
+{% endblock %}
