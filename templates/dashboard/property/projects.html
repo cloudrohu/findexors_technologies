@@ -1647,13 +1647,322 @@
     </div>
 
     {% endif %}
+   
+
+</div>
+<!-- =========================================================
+     PAGINATION
+========================================================= -->
+
+{% if page_obj.paginator.num_pages > 1 %}
+
+<div class="pm-pagination">
+
+    <!-- PREVIOUS -->
+
+    {% if page_obj.has_previous %}
+
+        <a
+            href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.previous_page_number }}"
+            class="pm-page-btn"
+            aria-label="Previous Page"
+        >
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+
+    {% else %}
+
+        <span class="pm-page-btn disabled">
+            <i class="fa-solid fa-chevron-left"></i>
+        </span>
+
+    {% endif %}
+
+
+    <!-- PAGE NUMBERS -->
+
+    {% for num in page_obj.paginator.page_range %}
+
+        {% if num == page_obj.number %}
+
+            <span class="pm-page-btn active">
+                {{ num }}
+            </span>
+
+        {% else %}
+
+            <a
+                href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ num }}"
+                class="pm-page-btn"
+            >
+                {{ num }}
+            </a>
+
+        {% endif %}
+
+    {% endfor %}
+
+
+    <!-- NEXT -->
+
+    {% if page_obj.has_next %}
+
+        <a
+            href="?{% if pagination_query %}{{ pagination_query }}&{% endif %}page={{ page_obj.next_page_number }}"
+            class="pm-page-btn"
+            aria-label="Next Page"
+        >
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+
+    {% else %}
+
+        <span class="pm-page-btn disabled">
+            <i class="fa-solid fa-chevron-right"></i>
+        </span>
+
+    {% endif %}
 
 </div>
 
+{% endif %}
 
 
 
+<!-- =============================================================
+     CSS
+============================================================= -->
 <style>
+
+.pm-filter-card {
+    width: 100%;
+    margin: 18px 0 24px;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.pm-filter-form-wrapper {
+    width: 100%;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.pm-filter-search {
+    width: 100%;
+    position: relative;
+    margin-bottom: 12px;
+}
+
+.pm-filter-search i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #0f355f;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+.pm-filter-search input {
+    width: 100%;
+    height: 54px;
+
+    border: 1px solid #d5dfeb;
+    border-radius: 11px;
+
+    background: #ffffff;
+
+    padding: 0 18px 0 46px;
+
+    color: #172b4d;
+    font-size: 16px;
+
+    outline: none;
+
+    transition: all .2s ease;
+}
+
+.pm-filter-search input::placeholder {
+    color: #8291a7;
+}
+
+.pm-filter-search input:focus {
+    border-color: #315d8f;
+
+    box-shadow:
+        0 0 0 3px rgba(49, 93, 143, .08);
+}
+
+
+/* =========================================================
+   FILTER GRID
+========================================================= */
+
+.pm-filter-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(180px, 1fr));
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   FILTER ITEM
+========================================================= */
+
+.pm-filter-item {
+    width: 100%;
+    min-width: 0;
+}
+
+
+/* =========================================================
+   NORMAL SELECT
+========================================================= */
+
+.pm-filter-select {
+
+    width: 100%;
+    height: 52px;
+
+    border: 1px solid #d5dfeb;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #172b4d;
+
+    padding: 0 38px 0 14px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
+}
+
+.pm-filter-select:hover {
+    border-color: #b9c8d9;
+}
+
+.pm-filter-select:focus {
+    border-color: #315d8f;
+
+    box-shadow:
+        0 0 0 3px rgba(49, 93, 143, .08);
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.pm-filter-actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    width: 100%;
+}
+
+
+/* FILTER */
+
+.pm-filter-button {
+
+    flex: 1;
+
+    height: 52px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #102e52;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
+}
+
+.pm-filter-button:hover {
+    background: #173f70;
+}
+
+
+/* RESET */
+
+.pm-reset-button {
+
+    flex: 1;
+
+    height: 52px;
+
+    border: 1px solid #d5dfeb;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #17385e;
+
+    text-decoration: none;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    transition: all .2s ease;
+}
+
+.pm-reset-button:hover {
+    background: #f7f9fc;
+
+    border-color: #b9c8d9;
+}
+
+
+/* =========================================================
+   TOM SELECT
+========================================================= */
+
 
 /* =========================================================
    PROJECT FILTER
@@ -2107,8 +2416,904 @@
 
 }
 
-</style>
 
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .pm-filter-grid {
+
+        grid-template-columns:
+            repeat(3, minmax(180px, 1fr));
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    .pm-filter-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(160px, 1fr));
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .pm-filter-grid {
+
+        grid-template-columns: 1fr;
+    }
+
+    .pm-filter-actions {
+
+        flex-direction: column;
+    }
+
+    .pm-filter-button,
+    .pm-reset-button {
+
+        width: 100%;
+        flex: none;
+    }
+
+}
+
+
+
+
+
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 1250px) {
+
+    .pm-filter-form {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .pm-filter-search {
+        grid-column: 1 / -1;
+    }
+
+    .pm-filter-second-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .pm-filter-form {
+        grid-template-columns: 1fr;
+    }
+
+    .pm-filter-search {
+        grid-column: auto;
+    }
+
+    .pm-filter-second-row {
+        grid-template-columns: 1fr;
+    }
+
+    .pm-filter-button,
+    .pm-reset-button {
+        width: 100%;
+    }
+}
+
+.pm-page {
+    width: 100%;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.pm-page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+}
+
+.pm-page-header h1 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 22px;
+    font-weight: 750;
+}
+
+.pm-page-header p {
+    margin: 4px 0 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.pm-page-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 7px 11px;
+
+    border: 1px solid #dbe4ef;
+    border-radius: 8px;
+
+    background: #fff;
+
+    color: #475569;
+
+    font-size: 10px;
+}
+
+.pm-page-count i {
+    color: #2563eb;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.pm-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.pm-card {
+    overflow: hidden;
+
+    background: #fff;
+
+    border: 1px solid #dbe4ef;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 2px 6px rgba(15, 23, 42, .04);
+
+    transition: .2s ease;
+}
+
+.pm-card:hover {
+    box-shadow:
+        0 8px 20px rgba(15, 23, 42, .08);
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.pm-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 14px 15px;
+
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.pm-card-header-left {
+    display: flex;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+.pm-project-image {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 9px;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 17px;
+}
+
+.pm-project-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.pm-heading {
+    min-width: 0;
+}
+
+.pm-heading h2 {
+    margin: 5px 0 2px;
+
+    color: #0f172a;
+
+    font-size: 15px;
+    font-weight: 750;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pm-subtitle {
+    color: #64748b;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.pm-badges {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 4px;
+}
+
+.pm-id,
+.pm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+
+    padding: 4px 7px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+    font-weight: 650;
+}
+
+.pm-id {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.pm-badge-type {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+.pm-badge-status {
+    background: #eff6ff;
+    color: #2563eb;
+}
+
+.pm-badge-featured {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.pm-active,
+.pm-inactive {
+    display: inline-block;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.pm-active {
+    background: #ecfdf5;
+    color: #15803d;
+}
+
+.pm-inactive {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.pm-section {
+    padding: 11px 15px;
+
+    border-bottom: 1px solid #e8edf3;
+}
+
+.pm-section-title {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-bottom: 7px;
+
+    color: #0f172a;
+
+    font-size: 10px;
+    font-weight: 750;
+}
+
+.pm-section-title i {
+    color: #475569;
+
+    font-size: 9px;
+}
+
+.pm-section-count {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 17px;
+    height: 17px;
+
+    margin-left: 2px;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   INFO BOX
+========================================================= */
+
+.pm-info-box {
+    overflow: hidden;
+
+    border: 1px solid #dbe4ef;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+}
+
+.pm-info-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 7px 9px;
+
+    border-bottom: 1px solid #e5eaf0;
+}
+
+.pm-info-row:last-child {
+    border-bottom: 0;
+}
+
+.pm-info-row span {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    flex: 0 0 42%;
+
+    color: #64748b;
+
+    font-size: 9px;
+}
+
+.pm-info-row span i {
+    width: 11px;
+
+    text-align: center;
+}
+
+.pm-info-row strong {
+    flex: 1;
+
+    color: #334155;
+
+    text-align: right;
+
+    font-size: 9px;
+    font-weight: 650;
+
+    word-break: break-word;
+}
+
+.pm-info-row-full {
+    display: block;
+}
+
+.pm-info-row-full span {
+    margin-bottom: 4px;
+}
+
+.pm-info-row-full strong {
+    display: block;
+
+    text-align: left;
+}
+
+
+/* =========================================================
+   CONTACTS
+========================================================= */
+
+.pm-contacts {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.pm-contact {
+    padding: 8px 9px;
+
+    border: 1px solid #dbe4ef;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+}
+
+.pm-contact-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 7px;
+}
+
+.pm-contact-name {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    min-width: 0;
+
+    color: #0f172a;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.pm-contact-name i {
+    color: #64748b;
+}
+
+.pm-primary {
+    padding: 2px 5px;
+
+    border-radius: 10px;
+
+    background: #dbeafe;
+
+    color: #2563eb;
+
+    font-size: 7px;
+}
+
+.pm-contact-actions {
+    display: flex;
+
+    gap: 4px;
+
+    flex-shrink: 0;
+}
+
+.pm-contact-call,
+.pm-contact-whatsapp {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 3px;
+
+    padding: 4px 7px;
+
+    border-radius: 14px;
+
+    color: #fff;
+
+    font-size: 8px;
+    font-weight: 650;
+
+    text-decoration: none;
+}
+
+.pm-contact-call {
+    background: #16a34a;
+}
+
+.pm-contact-whatsapp {
+    background: #22c55e;
+}
+
+.pm-contact-line {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+
+    margin-top: 4px;
+
+    color: #64748b;
+
+    font-size: 9px;
+}
+
+.pm-contact-line i {
+    width: 11px;
+
+    text-align: center;
+}
+
+.pm-empty-small {
+    padding: 9px;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 8px;
+
+    color: #94a3b8;
+
+    text-align: center;
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   CONTENT / CRM
+========================================================= */
+
+.pm-content-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 5px;
+}
+
+.pm-content-item {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    min-width: 0;
+
+    padding: 7px 8px;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 7px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 8px;
+}
+
+.pm-content-item i {
+    width: 12px;
+
+    color: #64748b;
+
+    text-align: center;
+}
+
+.pm-content-item span {
+    flex: 1;
+
+    min-width: 0;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.pm-content-item strong {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 17px;
+    height: 17px;
+
+    border-radius: 50%;
+
+    background: #e2e8f0;
+
+    color: #334155;
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   TRACKING
+========================================================= */
+
+.pm-tracking {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 8px 9px;
+
+    border: 1px solid #dbe4ef;
+
+    border-left: 3px solid #2563eb;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 8px;
+}
+
+.pm-tracking i {
+    margin-right: 4px;
+
+    color: #475569;
+}
+
+.pm-tracking strong {
+    color: #334155;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.pm-card-footer {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 5px;
+
+    padding: 10px 14px;
+
+    background: #fff;
+}
+
+.pm-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    min-width: 0;
+
+    padding: 8px 4px;
+
+    border-radius: 20px;
+
+    color: #fff;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+}
+
+.pm-action:hover {
+    color: #fff;
+
+    opacity: .9;
+}
+
+.pm-action-call {
+    background: #16a34a;
+}
+
+.pm-action-whatsapp {
+    background: #22c55e;
+}
+
+.pm-action-edit {
+    background: #2563eb;
+}
+
+.pm-action-manage {
+    background: #0f172a;
+}
+
+.pm-action-disabled {
+    background: #cbd5e1;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.pm-empty {
+    padding: 60px 20px;
+
+    border: 1px dashed #cbd5e1;
+
+    border-radius: 12px;
+
+    background: #fff;
+
+    text-align: center;
+}
+
+.pm-empty-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 12px;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: #2563eb;
+
+    font-size: 20px;
+}
+
+.pm-empty h3 {
+    margin: 0 0 5px;
+
+    color: #334155;
+
+    font-size: 15px;
+}
+
+.pm-empty p {
+    margin: 0 0 15px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+.pm-empty-button {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+
+    background: #2563eb;
+
+    color: #fff;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1200px) {
+
+    .pm-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .pm-page-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .pm-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .pm-card-footer {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .pm-contact-top {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+}
+
+</style>
 
 <script>
 
@@ -2523,5 +3728,4 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
-
 {% endblock %}

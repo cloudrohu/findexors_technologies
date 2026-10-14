@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-
+from django.core.paginator import Paginator
 from .models import (
     Developer,
     Architects,
@@ -645,7 +645,6 @@ def property_engineers(request):
     )
 
 
-
 @login_required
 def property_projects(request):
 
@@ -659,6 +658,11 @@ def property_projects(request):
     featured = request.GET.get("featured", "").strip()
     active = request.GET.get("active", "").strip()
     calling = request.GET.get("calling", "").strip()
+
+
+    # =====================================================
+    # PROJECT QUERYSET
+    # =====================================================
 
     projects = (
         Project.objects
@@ -697,77 +701,256 @@ def property_projects(request):
         .order_by("-id")
     )
 
+
+    # =====================================================
     # SEARCH
+    # =====================================================
+
     if search:
         projects = projects.filter(
             project_name__icontains=search
         )
 
+
+    # =====================================================
     # DEVELOPER
+    # =====================================================
+
     if developer_id:
         projects = projects.filter(
             developer_id=developer_id
         )
 
+
+    # =====================================================
     # PROPERTY TYPE
+    # =====================================================
+
     if property_type:
         projects = projects.filter(
             property_type_id=property_type
         )
 
+
+    # =====================================================
     # CITY
+    # =====================================================
+
     if city:
         projects = projects.filter(
             city_id=city
         )
 
+
+    # =====================================================
     # LOCALITY
+    # =====================================================
+
     if locality:
         projects = projects.filter(
             locality_id=locality
         )
 
+
+    # =====================================================
     # BHK
+    # =====================================================
+
     if bhk:
         projects = projects.filter(
             bhk_type=bhk
         )
 
+
+    # =====================================================
     # CONSTRUCTION STATUS
+    # =====================================================
+
     if construction_status:
         projects = projects.filter(
             construction_status=construction_status
         )
 
+
+    # =====================================================
     # FEATURED
+    # =====================================================
+
     if featured == "yes":
+
         projects = projects.filter(
             featured_property=True
         )
+
     elif featured == "no":
+
         projects = projects.filter(
             featured_property=False
         )
 
-    # ACTIVE
+
+    # =====================================================
+    # ACTIVE / INACTIVE
+    # =====================================================
+
     if active == "yes":
+
         projects = projects.filter(
             is_active=True
         )
+
     elif active == "no":
+
         projects = projects.filter(
             is_active=False
         )
 
+
+    # =====================================================
     # CALLING
+    # =====================================================
+
     if calling:
         projects = projects.filter(
             calling_status=calling
         )
 
-    context = {
-        "projects": projects,
 
+    # =====================================================
+    # ORDERING
+    # =====================================================
+
+    projects = projects.order_by("-id")
+
+
+    # =====================================================
+    # PAGINATION
+    # =====================================================
+
+    paginator = Paginator(
+        projects,
+        12
+    )
+
+    page_number = request.GET.get(
+        "page",
+        1
+    )
+
+    page_obj = paginator.get_page(
+        page_number
+    )
+
+
+    # =====================================================
+    # FILTER OPTIONS
+    # =====================================================
+
+    developers = (
+        Developer.objects
+        .all()
+        .order_by("title")
+    )
+
+
+    property_types = (
+        Project.objects
+        .exclude(property_type__isnull=True)
+        .values(
+            "property_type_id",
+            "property_type__name",
+        )
+        .distinct()
+        .order_by("property_type__name")
+    )
+
+
+    cities = (
+        Project.objects
+        .exclude(city__isnull=True)
+        .values(
+            "city_id",
+            "city__name",
+        )
+        .distinct()
+        .order_by("city__name")
+    )
+
+
+    localities = (
+        Project.objects
+        .exclude(locality__isnull=True)
+        .values(
+            "locality_id",
+            "locality__name",
+        )
+        .distinct()
+        .order_by("locality__name")
+    )
+
+
+    bhk_choices = (
+        Project.objects
+        .exclude(bhk_type__isnull=True)
+        .exclude(bhk_type="")
+        .values_list(
+            "bhk_type",
+            flat=True
+        )
+        .distinct()
+        .order_by("bhk_type")
+    )
+
+
+    construction_choices = (
+        Project.objects
+        .exclude(
+            construction_status__isnull=True
+        )
+        .exclude(
+            construction_status=""
+        )
+        .values_list(
+            "construction_status",
+            flat=True
+        )
+        .distinct()
+        .order_by("construction_status")
+    )
+
+
+    calling_choices = (
+        Project.objects
+        .exclude(
+            calling_status__isnull=True
+        )
+        .exclude(
+            calling_status=""
+        )
+        .values_list(
+            "calling_status",
+            flat=True
+        )
+        .distinct()
+        .order_by("calling_status")
+    )
+
+
+    # =====================================================
+    # CONTEXT
+    # =====================================================
+
+    context = {
+
+        # PAGINATED PROJECTS
+        "projects": page_obj,
+
+        # PAGINATION
+        "page_obj": page_obj,
+        "paginator": paginator,
+
+
+        # FILTER VALUES
         "search": search,
         "developer_id": developer_id,
         "property_type": property_type,
@@ -779,86 +962,23 @@ def property_projects(request):
         "active": active,
         "calling": calling,
 
-        "developers": Developer.objects.all().order_by("title"),
 
-        "property_types": (
-            Project.objects
-            .exclude(property_type__isnull=True)
-            .values(
-                "property_type_id",
-                "property_type__name",
-            )
-            .distinct()
-            .order_by("property_type__name")
-        ),
-
-        "cities": (
-            Project.objects
-            .exclude(city__isnull=True)
-            .values(
-                "city_id",
-                "city__name",
-            )
-            .distinct()
-            .order_by("city__name")
-        ),
-
-        "localities": (
-            Project.objects
-            .exclude(locality__isnull=True)
-            .values(
-                "locality_id",
-                "locality__name",
-            )
-            .distinct()
-            .order_by("locality__name")
-        ),
-
-        "bhk_choices": (
-            Project.objects
-            .exclude(bhk_type__isnull=True)
-            .exclude(bhk_type="")
-            .values_list(
-                "bhk_type",
-                flat=True
-            )
-            .distinct()
-            .order_by("bhk_type")
-        ),
-
-        "construction_choices": (
-            Project.objects
-            .exclude(construction_status__isnull=True)
-            .exclude(construction_status="")
-            .values_list(
-                "construction_status",
-                flat=True
-            )
-            .distinct()
-            .order_by("construction_status")
-        ),
-
-        "calling_choices": (
-            Project.objects
-            .exclude(calling_status__isnull=True)
-            .exclude(calling_status="")
-            .values_list(
-                "calling_status",
-                flat=True
-            )
-            .distinct()
-            .order_by("calling_status")
-        ),
+        # FILTER OPTIONS
+        "developers": developers,
+        "property_types": property_types,
+        "cities": cities,
+        "localities": localities,
+        "bhk_choices": bhk_choices,
+        "construction_choices": construction_choices,
+        "calling_choices": calling_choices,
     }
+
 
     return render(
         request,
         "dashboard/property/projects.html",
         context,
     )
-
-
-
 @login_required
 def property_project_detail(request, project_id):
 
